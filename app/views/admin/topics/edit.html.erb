@@ -1,0 +1,24 @@
+<h1>Editing topic</h1>
+
+<% form_for(@topic, :url => admin_site_topic_path(@site, @gallery)) do |f| %>
+  <%= f.error_messages %>
+
+  <p>
+    <%= f.label :title %><br />
+    <%= f.text_field :title %>
+  </p>
+  <p>
+    <%= f.label :display_in_menu %><br />
+    <%= f.check_box :display_in_menu %>
+  </p>
+  <p>
+    <%= f.label :body %><br />
+    <%= f.text_area :body %>
+  </p>
+  <p>
+    <%= f.submit "Update" %>
+  </p>
+<% end %>
+
+<%= link_to 'Show', admin_site_topic_path(@site, @topic) %> |
+<%= link_to 'Back', admin_site_topics_path(@site) %>

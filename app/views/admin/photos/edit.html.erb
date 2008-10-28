@@ -1,0 +1,24 @@
+<h1>Editing photo</h1>
+
+<% form_for(@photo, :url => admin_site_photo_path(@site, @photo)) do |f| %>
+  <%= f.error_messages %>
+
+  <p>
+    <b>File name: </b>
+    <%= @photo.file_name -%>
+  </p>
+  <p>
+    <%= f.label :title %><br />
+    <%= f.text_field :title %>
+  </p>
+  <p>
+    <%= f.label :description %><br />
+    <%= f.text_field :description %>
+  </p>
+  <p>
+    <%= f.submit "Update" %>
+  </p>
+<% end %>
+
+<%= link_to 'Show', admin_site_photo_path(@site, @photo) %> |
+<%= link_to 'Back', admin_site_photos_path(@site) %>

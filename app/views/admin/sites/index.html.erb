@@ -1,0 +1,27 @@
+<h1>Listing sites</h1>
+
+<table>
+  <tr>
+    <th>Brand</th>
+    <th>Name</th>
+  </tr>
+
+<% for site in @sites %>
+  <tr>
+    <td><%=h site.brand %></td>
+    <td><%=h site.name %></td>
+    <td><%= link_to 'Show', admin_site_path(site) %></td>
+    <td><%= link_to 'Photos', admin_site_photos_path(site) %></td>
+    <td><%= link_to 'Galleries', admin_site_galleries_path(site) %></td>
+    <td><%= link_to 'Layout', layout_admin_site_path(site) %></td>
+    <td><%= link_to 'Topics', admin_site_topics_path(site) %></td>
+    <td><%= link_to 'Show', admin_site_path(site) %></td>
+    <td><%= link_to 'Edit', edit_admin_site_path(site) %></td>
+    <td><%= link_to 'Destroy', admin_site_path(site), :confirm => 'Are you sure?', :method => :delete %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New site', new_admin_site_path %>

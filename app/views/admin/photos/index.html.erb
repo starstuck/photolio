@@ -1,0 +1,28 @@
+<h1>Listing photos in <%= @site.name -%></h1>
+
+<table>
+  <tr>
+    <th>File name</th>
+    <th>Title</th>
+  </tr>
+
+<% for photo in @photos %>
+  <tr>
+    <td><%=h photo.file_name %></td>
+    <td><%=h photo.title %></td>
+    <td><%= link_to 'Show', admin_site_photo_path(@site, photo) %></td>
+    <td><%= link_to 'Participants',
+    admin_site_photo_participants_path(@site, photo) %></td>
+    <td><%= link_to 'Keywords', admin_site_photo_keywords_path(@site, photo) %></td>
+    <td><%= link_to 'Show', admin_site_photo_path(@site, photo) %></td>
+    <td><%= link_to 'Edit', edit_admin_site_photo_path(@site, photo) %></td>
+    <td><%= link_to 'Destroy', admin_site_photo_path(@site, photo), :confirm => 'Are you sure?', :method => :delete %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New photo', new_admin_site_photo_path(@site) %> |
+<%= link_to 'Back', admin_sites_path -%>
+

@@ -1,4 +1,5 @@
 ActionController::Routing::Routes.draw do |map|
+
   # The priority is based upon order of creation: first created -> highest priority.
 
   # Sample of regular route:
@@ -35,9 +36,63 @@ ActionController::Routing::Routes.draw do |map|
 
   # See how all your routes lay out with "rake routes"
 
+  # Map published pages without brand (polinostudio)
+  map.published_gallery('gallery/:name.:format', 
+                        :controller => 'gallery', 
+                        :action => 'show',
+                        :site_name => 'studio',
+                        :defaults => {:format => 'html'}
+                        )
+  map.published_photo('gallery/:gallery_name/:id.:format', 
+                      :controller => 'photo', 
+                      :action => 'show',
+                      :site_name => 'studio',
+                      :defaults => {:format => 'html'}
+                      )
+  map.published_topic('topic/:name.:format',
+                      :controller => 'topic',
+                      :action => 'show',
+                      :site_name => 'studio',
+                      :defaults => {:format => 'html'}
+                      )
+
+  # Map branded published pages (polinostudio/models, polinostudio/artists/..)
+  map.published_gallery_with_brand(':site_brand/:site_name/gallery/:name.:format', 
+                                   :controller => 'gallery', 
+                                   :action => 'show',
+                                   :site_brand => /(models|artists)/,
+                                   :defaults => {:format => 'html'}
+                                   )
+  map.published_photo_with_brand(':site_brand/:site_name/gallery/:gallery_name/:id.:format', 
+                                 :controller => 'photo', 
+                                 :action => 'show',
+                                 :site_brand => /(models|artists)/,
+                                 :defaults => {:format => 'html'}
+                                 )
+  map.published_topic_with_brand(':site_brand/:site_name/topic/:name.:format',
+                                 :controller => 'topic',
+                                 :action => 'show',
+                                 :site_brand => /(models|artists)/,
+                                 :defaults => {:format => 'html'}
+                                 )
+  
+  # Map resources for admin screens
+  map.namespace :admin do |admin|
+    admin.resources :sites, :member => 'layout' do |site|
+      site.resources :galleries
+      site.resources :photos do |photo|
+        photo.resources :photo_keywords, :as => 'keywords', :name_prefix => 'admin_site_'
+        photo.resources :photo_participants, :as => 'participants', :name_prefix => 'admin_site_'
+      end
+      site.resources :topics
+    end
+  end
+  
+  #map.root :controller => 'gallery', :action => 'show'
+
   # Install the default routes as the lowest priority.
   # Note: These default routes make all actions in every controller accessible via GET requests. You should
   # consider removing the them or commenting them out if you're using named routes and resources.
-  map.connect ':controller/:action/:id'
-  map.connect ':controller/:action/:id.:format'
+  #   map.connect ':controller/:action/:id'
+  #   map.connect ':controller/:action/:id.:format'
 end
