@@ -1,0 +1,14 @@
+<% @content_for_layout = capture do -%>
+
+  <div id="admin-frame">
+    <div id="admin-content">
+
+      <p><%= flash[:notice] %></p>
+      <%= yield  %>
+
+    </div>
+  </div>
+
+<% end -%>
+
+<%= render 'layouts/application', {'content_for_layout' => @content_for_layout } -%>

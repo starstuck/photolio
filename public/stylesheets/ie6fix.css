@@ -1,0 +1,56 @@
+/* Fix gallery switches layout */
+
+div.gallery-switch {
+    width: 10px;
+}
+
+
+/* Fix gallery scroller transparency */
+
+#gallery-scrollbar-left {
+    background-image: none;
+    filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src=res/img/scrollbar-left.png);
+}
+    
+#gallery-scrollbar-space {
+    background-image: none;
+    filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src=res/img/scrollbar-space.png, sizingMethod='scale');*/
+    /*border-top: solid 1px #2f2f2f;*/
+}
+
+#gallery-scrollbar-right {
+    background-image: none;
+    filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src=res/img/scrollbar-right.png);
+}
+
+#gallery-scroller-left {
+    background-image: none;
+    filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src=res/img/scroller-left.png);
+}
+
+#gallery-scroller-space {
+    /*background-image: none;*/
+    /*filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src=res/img/scroller-space.png);*/
+}
+
+#gallery-scroller-right {
+    background-image: none;
+    filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src=res/img/scroller-right.png);
+}
+
+
+/* Fix transparency in controlls and site menu */
+
+#gallery-controls, #site-menu {
+    filter: alpha(opacity=70);
+}
+
+#gallery-play-button {
+    background-image: none;
+    filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src=res/img/button-play.png);
+}
+
+.playing#gallery-play-button {
+    background-image: none;
+    filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src=res/img/button-pause.png);
+}

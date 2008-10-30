@@ -1,0 +1,358 @@
+/* 
+ * Body
+ */
+
+body {
+    margin: 0px;
+    padding: 0px;
+    overflow: hidden;
+}
+
+
+/*
+ * Header box 
+ */
+
+div#header{
+    width: 930px;
+    height: 36px;
+    margin: 0px auto;
+    padding-top: 34px;
+    padding-left: 65px;
+}
+
+div#header h1{
+    padding: 0px;
+    margin: 0px;
+}
+
+span#header-studio{
+    font-size: 32px;
+}
+
+span#header-brand{
+    font-size: 26px;
+}
+
+/* 
+ * Content box and content during loading box
+ */
+
+div#content,
+div#content-preloading
+{
+    width: 930px;
+    height: 570px;
+    background-image: url(../images/content-corner-tl.gif);
+    background-repeat: no-repeat;
+}
+
+div#content{
+    position: relative;
+    margin-left: auto;
+    margin-right: auto;
+    overflow: hidden;
+}
+
+div#content-preloading{
+    position: fixed;
+    top: 70px;
+    z-index: 20;
+    display: none;
+}
+
+span.content-corner-tr, span.content-corner-bl, span.content-corner-br{
+    position: absolute;
+    width: 13px;
+    height: 13px;
+    display: block;
+    /* margin-bottom: -1px this is for IE */
+    background-repeat: no-repeat;
+}
+
+span.content-corner-tr{
+    top: 0px;
+    right: 0px;
+    background-image: url(../images/content-corner-tr.gif);
+}
+
+span.content-corner-bl{
+    bottom: 0;
+    left: 0;
+    background-image: url(../images/content-corner-bl.gif); 
+}
+
+span.content-corner-br{
+    bottom: 0;
+    right: 0;
+    background-image: url(../images/content-corner-br.gif); 
+}
+
+
+
+/* 
+ * Gallery
+ */
+
+#gallery, #topic{
+    width: 930px;
+    height: 570px;
+    overflow: hidden;    
+}
+
+
+/* Gallery switches */
+
+#gallery-switches {
+    margin: 15px 25px 20px 25px;
+    height: 20px;
+    width: 880px;
+    font-size: 14px;
+0}
+
+#gallery-switches .sIFR-alternate{
+    display:none;
+}
+
+#gallery-switches ul{
+    height: 20px;
+    padding: 0px;
+    margin: 0px;
+    display: block;
+}
+
+#gallery-switches ul span{
+    display: block;
+    float: left;
+    height: 20px;
+    width: 60px;    
+}
+
+#gallery-switches li{
+    display: block;
+    float: left;
+    list-style: none;
+    text-align: center;
+}
+
+div.gallery-switch {
+    height: 18px;
+    padding: 1px 10px 1px 10px;
+}
+    
+
+/* Gallery images */
+
+#gallery-images{
+    position: relative;
+    left: 0px;
+    width: 100000px;
+    height:500px;
+    padding: 0px;
+}
+
+#gallery-images div.gallery-image{
+    float: left;
+    margin: 0px 2px 0px 2px;
+}
+
+#gallery-images div.gallery-separator{
+    float: left;
+    width: 100px;
+}
+
+#gallery-images img{
+    height: 400px;
+}
+
+
+
+/* Gallery scrollbar */
+
+#gallery-scrollbar {
+    position: relative;
+    left: 150px;
+    top: -40px;
+    height: 12px;
+    width: auto;
+    z-index: 10;
+}
+
+#gallery-scrollbar-left {
+    width: 19px;
+    height: 12px;
+    background-image: url(../img/scrollbar-left.png); 
+    cursor: pointer;
+}
+
+#gallery-scrollbar-space {
+    position: absolute;
+    left: 19px;
+    top: 0px;
+    width: 588px;
+    height: 12px;
+    background-image: url(../img/scrollbar-space.png);
+    background-repeat: repeat-x;
+}
+
+#gallery-scrollbar-right {
+    position: absolute;
+    left: 607px;
+    top: 0px;
+    width: 19px;
+    height: 12px;
+    background-image: url(../img/scrollbar-right.png);
+    cursor: pointer;
+}
+
+#gallery-scroller {
+    position: absolute;
+    top: 1px;
+    left: -4px;
+    height: 10px;
+    width: auto;
+    cursor: move;
+}
+
+#gallery-scroller-left {
+    width: 14px;
+    height: 10px;
+    background-image: url(../img/scroller-left.png);
+}
+
+#gallery-scroller-space {
+    position: absolute;
+    top: 0px;
+    left: 14px;
+    width: 35px;
+    height: 10px;
+    background-image: url(../img/scroller-space.png);
+    background-repeat: repeat-x;
+}
+
+#gallery-scroller-right {
+    position: absolute;
+    top: 0px;
+    left: 49px;
+    width: 14px;
+    height: 10px;
+    background-image: url(../img/scroller-right.png);
+}
+
+
+/* Gallery controlls */
+
+#gallery-controls {
+    position: absolute;
+    top: 530px;
+    left: 0px;
+    width: 50px;
+    height: 20px;
+    z-index: 100;
+    opacity: 0.7;
+}
+
+#gallery-play-button {
+    width: 14px;
+    height: 14px;
+    margin-top: 3px;
+    margin-left: 32px;
+    background-image: url(../img/button-play.png);
+    cursor: pointer;
+}
+
+.playing#gallery-play-button {
+    background-image: url(../img/button-pause.png);
+}
+
+
+/* Site menu */
+
+div#site-menu {
+    position: absolute;
+    top: 530px;
+    left: 868px;
+    width: 70px;
+    font-size: 11px;
+    z-index: 100;
+    opacity: 0.7;
+}
+
+div.site-menu-topic {
+    padding: 4px 5px 0px 5px;
+    height: 16px;
+    width: 70px;
+}
+
+div.site-menu-topic a{
+    margin-top: 2px;
+}
+
+
+/* Topic page */
+
+#topic-header{
+    width: 900px;
+    height: 45px;
+    margin: 5px 15px 5px 15px;
+}
+
+#close-button{
+    position: relative;
+    left: 885px;
+    top: 5px;
+    width: 14px;
+    height: 11px;
+}
+
+#topic-content{
+    height: 515px;
+    margin: 0px 15px 0px 15px;
+}
+
+
+/* Photo page */
+
+#photo-box{
+    height: 400px;
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
+}
+
+#photo-description-box{
+    position: relative;
+    left: 319px; 
+    width: 260px;
+    height: 76px;
+    margin-top: 10px;
+    font-size: 11px;
+}
+
+#photo-description-box table{
+    width: 100%;
+    margin-top: 5px;
+}
+
+#photo-description-box td{
+    padding: 0px 5px 0px 5px;
+}
+
+#photo-description-box td.col1{
+    text-align: right;
+}
+
+
+/* FOOTER */
+
+div#footer{
+    width: 930px;
+    margin: 0px auto;
+    padding-right: 15px;
+    text-align: right;
+}
+
+div#footer p{
+    font-size: 7pt;
+    margin: 0px;
+}

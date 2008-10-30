@@ -1,0 +1,167 @@
+/* Colors setup
+ *
+ * used:
+ *   
+ * #000000 - black (content backround)
+ * #303232 - gray 1 (frame color)
+ * #393a3c - gray 2 (content text) 
+ * #c6c8ca - gray 3 (highlighted text)
+ */
+
+body{
+    color: #4f4f4f;
+    background-color: #303232;
+}
+
+a {
+    color: #c6c8ca;
+}
+
+a:hover {
+    color: #d6d8da;
+}
+
+pre{
+    background-color: #1111111;
+}  
+
+div#content,
+div#content-preloading
+{
+    background-color: #000000;
+}
+
+div#header,
+div#gallery-switches
+{
+    color: #bfbfbf;
+}
+
+div.gallery-switch a:hover,
+div#footer{
+    color: #7f7f7f;
+}
+
+div.gallery-switch.active{
+    background-color: #2f2f2f;
+}
+
+div#gallery-controlls,
+div#site-menu{
+    background-color: #2f2f2f;
+}
+
+
+/*
+ * Generic text styles 
+ */
+
+body, a, h1, h2, h3, h4, p, ol, ul, td {
+    font-family: verdana, arial, helvetica, sans-serif;
+    font-weight: lighter;
+}
+
+body, a, p, ol, ul, td {
+    font-size:   14px;
+}
+
+a {
+    text-decoration: none;
+}
+
+a img{
+    border: 0px none;
+}
+
+h1, h2, h3, h4{
+    
+}
+
+h1{
+    font-size: 32px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    line-height: 30px;
+}
+
+h2{
+    font-size: 24px;
+}
+
+h3{
+    font-size: 18px;
+}
+
+h4{
+    font-size: 16px;
+}
+
+p{
+    margin: 5px 15px 5px 15px;
+}
+
+pre {
+    padding: 10px;
+    font-size: 11px;
+}
+
+
+/* 
+ * Common text styles 
+ */
+
+.small {
+    font-size: 75%;
+}
+
+.sIFR-alternate {
+    display: none; /* Hide sIFR alternates */
+}
+
+
+/*
+ * Flash message box style 
+ */
+
+/* TODO: Fill me */
+
+
+/*
+ * Errors styles
+ */
+
+.fieldWithErrors {
+  padding: 2px;
+  background-color: red;
+  display: table;
+}
+
+#errorExplanation {
+  width: 400px;
+  border: 2px solid red;
+  padding: 7px;
+  padding-bottom: 12px;
+  margin-bottom: 20px;
+  background-color: #f0f0f0;
+}
+
+#errorExplanation h2 {
+  text-align: left;
+  font-weight: bold;
+  padding: 5px 5px 5px 15px;
+  font-size: 12px;
+  margin: -7px;
+  background-color: #c00;
+  color: #fff;
+}
+
+#errorExplanation p {
+  color: #333;
+  margin-bottom: 0;
+  padding: 5px;
+}
+
+#errorExplanation ul li {
+  font-size: 12px;
+  list-style: square;
+}
