@@ -77,17 +77,16 @@ span.content-corner-tr{
 }
 
 span.content-corner-bl{
-    bottom: 0;
-    left: 0;
+    bottom: 0px;
+    left: 0px;
     background-image: url(../images/content-corner-bl.gif); 
 }
 
 span.content-corner-br{
-    bottom: 0;
-    right: 0;
+    bottom: 0px;
+    right: 0px;
     background-image: url(../images/content-corner-br.gif); 
 }
-
 
 
 /* 
@@ -108,7 +107,7 @@ span.content-corner-br{
     height: 20px;
     width: 880px;
     font-size: 14px;
-0}
+}
 
 #gallery-switches .sIFR-alternate{
     display:none;

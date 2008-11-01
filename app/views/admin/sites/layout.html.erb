@@ -1,5 +1,56 @@
-<h3>Layout photos on <%= @site.name -%> site</h3>
+<h2>Layout photos on <%= @site.name -%> site</h2>
 
+<table id="all_galleries_table">
+  <tbody>
+
+    <% for gallery in @galleries -%>
+      <tr>
+	<th>
+	  <a href="<%= admin_site_gallery_path(gallery) -%>">
+	    <%= gallery.name -%>
+	  </a><br />
+	  <span><%= gallery.title -%></span>
+	</th>
+
+	<td>
+	  <table class="photos_list_table">
+	    <tr id="<%= "gallery_#{gallery.id}_photos_list" %>">
+	      <%= render :partial => "layout_gallery_photos",
+		  :locals => {:gallery => gallery}
+		  -%>
+	    </tr>
+	  </table>
+	</td>
+      </tr>
+    <% end -%>
+
+    <tr>
+      <th>
+	<a href="<%= admin_site_photos_path(@site) -%>">Available Photos</a>
+      </th>
+
+      <td>
+	<table id="unassigned_photos_holder" class="photos_list_table">
+	  <tr id="unassigned_photos_list">
+	    <%= @controller.layout_unassigned_photos_partial -%>
+	  </tr>
+	  <%= drop_receiving_element 'unassigned_photos_holder',
+	      :accept => 'assigned_photo',
+	      :update => 'unassigned_photos_list',
+	      :url => {:action => 'layout_remove_gallery_photo', :id => @site},
+	      :with => "'photo_id=' + encodeURIComponent(element.id)",
+	      :loading => "Element.update('unassigned_photos_list', '<td style=\"width: 100px;\">#{loading_tag}</td>')",
+	      :hoverclass => 'hover',
+	      :scroll => "'admin_frame'"
+	      -%>
+	</table>
+      </td>
+    </tr>
+    
+  </tbody>
+</table>
+
+<hr />
 <%= link_to 'Manage photos', admin_site_photos_path(@site) %> |
 <%= link_to 'Manage galleries', admin_site_galleries_path(@site) %> |
 <%= link_to 'Back', admin_sites_path %>

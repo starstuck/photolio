@@ -1,4 +1,4 @@
-class Admin::PhotoParticipantsController < ApplicationController
+class Admin::PhotoParticipantsController < Admin::AdminBaseController
 
   before_filter(:get_photo)
 

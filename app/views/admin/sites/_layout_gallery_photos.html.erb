@@ -1,0 +1,54 @@
+<% if gallery.photos.size == 0 -%>
+  <td id="<%= "gallery_#{gallery.id}_dropbox" -%>" class="empty_box">
+    Please drag photos here..
+  </td>
+  <%= drop_receiving_element "gallery_#{gallery.id}_dropbox",
+      :accept => 'draggable_photo',
+      :update => "gallery_#{gallery.id}_photos_list",
+      :url => {:action => 'layout_add_gallery_photo', :id => @site, :gallery_id => gallery},
+      :with => "'photo_id=' + encodeURIComponent(element.id)",
+      :loading => "Element.update('gallery_#{gallery.id}_photos_list', 'a<td style=\"width: 100px;\">#{loading_tag}</td>')",
+      :hoverclass => 'hover'
+      -%>
+  
+<% else -%>
+  <% index = 0 -%>
+  <% for photo in gallery.photos -%>
+    <td>
+      <div class="photo_box">
+	<div id="<%= "photo_#{photo.photo_id}_droppable_left" -%>"
+	     class="photo_droppable_left"></div>
+	<%= drop_receiving_element "photo_#{photo.photo_id}_droppable_left",
+	    :accept => 'draggable_photo',
+	    :update => "gallery_#{gallery.id}_photos_list",
+	    :url => {:action => 'layout_add_gallery_photo', :id => @site, :gallery_id => gallery, :photo_position => index},
+	    :with => "'photo_id=' + encodeURIComponent(element.id)",
+	    :loading => "Element.update('gallery_#{gallery.id}_photos_list', 'a<td style=\"width: 100px;\">#{loading_tag}</td>')",
+	    :hoverclass => 'hover',
+	    :scroll => "'admin_frame'"
+	    -%>
+	<%= image_tag compute_photo_path(photo),
+	    :id => "photo_#{photo.photo_id}",
+	    :class => 'assigned_photo draggable_photo'-%>
+	<%= draggable_element "photo_#{photo.photo_id}",
+	    :revert => draggable_revert_js,
+	    :onEnd => draggable_on_end_js(:update => "gallery_#{gallery.id}_photos_list",
+					  :url => {:action => 'layout_gallery_photos_partial', :id => @site, :gallery_id => gallery}),
+	    :scroll => "'admin_frame'"
+	    -%>
+	<div id="<%= "photo_#{photo.photo_id}_droppable_right" -%>"
+	     class="photo_droppable_right"></div>
+	<%= drop_receiving_element "photo_#{photo.photo_id}_droppable_right",
+	    :accept => 'draggable_photo',
+	    :update => "gallery_#{gallery.id}_photos_list",
+	    :url => {:action => 'layout_add_gallery_photo', :id => @site, :gallery_id => gallery, :photo_position => index + 1},
+	    :with => "'photo_id=' + encodeURIComponent(element.id)",
+	    :loading => "Element.update('gallery_#{gallery.id}_photos_list', 'a<td style=\"width: 100px;\">#{loading_tag}</td>')",
+	    :hoverclass => 'hover',
+	    :scroll => "'admin_frame'"
+	    -%>
+      </div>
+    </td>
+    <% index += 1 -%>
+  <% end -%>
+<% end -%>

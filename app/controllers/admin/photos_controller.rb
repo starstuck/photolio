@@ -1,4 +1,4 @@
-class Admin::PhotosController < ApplicationController
+class Admin::PhotosController < Admin::AdminBaseController
 
   before_filter(:get_site)
 
@@ -48,7 +48,7 @@ class Admin::PhotosController < ApplicationController
     respond_to do |format|
       if @photo.save
         flash[:notice] = 'Admin::Photo was successfully created.'
-        format.html { redirect_to admin_site_photo_path(@site, @photo) }
+        format.html { redirect_to admin_site_photos_path(@site) }
         format.xml  { render :xml => @photo, :status => :created, :location => admin_site_photo_path(@site, @photo) }
       else
         format.html { render :action => "new" }

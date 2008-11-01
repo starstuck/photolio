@@ -1,0 +1,19 @@
+<% if unassigned_photos.size == 0  -%>
+  <td class="empty_box">
+    Please drag photos here, to remove from gallery..
+  </td>
+<% else -%>
+  <% for photo in unassigned_photos -%>
+    <td>
+      <%= image_tag compute_photo_path(photo),
+	  :id => "photo_#{photo.id}",
+	  :class => 'unassigned_photo draggable_photo'-%>
+      <%= draggable_element "photo_#{photo.id}", 
+	  :revert => draggable_revert_js,
+	  :onEnd =>  draggable_on_end_js(:update => 'unassigned_photos_list',
+					 :url => {'action' => 'layout_unassigned_photos_partial', :id => @site}),
+	  :scroll => "'admin_frame'" 
+          -%>
+    </td>
+  <% end -%>
+<% end -%>

@@ -1,4 +1,4 @@
-class Admin::TopicsController < ApplicationController
+class Admin::TopicsController < Admin::AdminBaseController
 
   before_filter(:get_site)
   

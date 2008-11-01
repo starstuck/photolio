@@ -1,4 +1,4 @@
-class Admin::GalleriesController < ApplicationController
+class Admin::GalleriesController < Admin::AdminBaseController
 
   before_filter(:get_site)
   
@@ -48,7 +48,7 @@ class Admin::GalleriesController < ApplicationController
     respond_to do |format|
       if @gallery.save
         flash[:notice] = 'Gallery was successfully created.'
-        format.html { redirect_to admin_site_gallery_path(@site, @gallery) }
+        format.html { redirect_to admin_site_galleries_path(@site) }
         format.xml  { render :xml => @gallery, :status => :created, :location => admin_site_gallery_path(@site, @gallery) }
       else
         format.html { render :action => "new" }

@@ -1,4 +1,4 @@
-class Admin::PhotoKeywordsController < ApplicationController
+class Admin::PhotoKeywordsController < Admin::AdminBaseController
  
   before_filter(:get_photo)
 

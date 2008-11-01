@@ -10,6 +10,12 @@
 
 body{
     color: #4f4f4f;
+    border-color: #303232;
+}
+
+body,
+hr
+{
     background-color: #303232;
 }
 
@@ -22,7 +28,7 @@ a:hover {
 }
 
 pre{
-    background-color: #1111111;
+    background-color: #111111;
 }  
 
 div#content,
@@ -100,11 +106,25 @@ p{
     margin: 5px 15px 5px 15px;
 }
 
+hr {
+    border: 0px;
+    height: 1px;
+    width: 99%;
+}
+
 pre {
     padding: 10px;
     font-size: 11px;
 }
 
+
+/*
+ * Common table styles
+ */
+
+table{
+    border-spacing: 0px;
+}
 
 /* 
  * Common text styles 

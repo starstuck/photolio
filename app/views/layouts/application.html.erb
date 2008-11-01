@@ -1,17 +1,61 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-       "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
-<head>
-  <meta http-equiv="content-type" content="text/html;charset=UTF-8" />
-  <title>PhotoParticipants: <%= controller.action_name %></title>
-  <%= stylesheet_link_tag 'scaffold' %>
-</head>
-<body>
+  <head>
+    <title><%= page_title %></title>
 
-<p style="color: green"><%= flash[:notice] %></p>
+    <meta http-equiv="content-type" content="text/html;charset=UTF-8" />
+    <meta name="Keywords" content="Polino studio, Pauline Jakubiuk, Paulina Jakubiuk, Photographer, Portfolio" />
+    <meta name="Description" content="Polino studio, photography by Pauline Jakubiuk." />
 
-<%= yield  %>
+    <%= stylesheet_link_tag 'layout'%>
+    <%= stylesheet_link_tag 'application'%>
+    <%= extra_stylesheets_tags %>
 
-</body>
+    <%= javascript_include_tag :defaults %>
+    <%= javascript_include_tag 'sifr' %>
+    <%= javascript_include_tag 'reflection' %>
+    <%= javascript_include_tag 'scroller' %>
+
+    <!--[if gte IE 7]>
+      <%= stylesheet_link_tag 'ie7fix' %>
+    <![endif]-->
+    <!--[if lte IE 6]>
+      <%= stylesheet_link_tag 'ie6fix' %>
+      <%= javascript_include_tag 'iepngfix' %>
+    <![endif]-->
+  </head>
+
+  <body>
+
+    <div id="header">
+      <h1>
+        <span id="header-studio">Polino Studio</span>
+        <% if brand_name %>
+          <span id="header-brand"><%= brand_name %></span>
+        <% end %>
+      </h1>
+    </div>
+
+    <!--
+    <div id="content-preloading"
+     <span class="content-corner-tr"></span>
+      <span class="content-corner-bl"></span>
+      <span class="content-corner-br"></span>
+      <img alt="Loading..." src="" style="margin: 250px 450px;"/>
+    </div>
+    -->
+
+    <div id="content">
+      <span class="content-corner-tr"></span>
+      <%= yield %>
+      <span class="content-corner-bl"></span>
+      <span class="content-corner-br"></span>
+    </div>
+
+    <div id="footer">
+      <p>&copy; Polino Studio - All rights reserved.</p>
+    </div>
+
+  </body>
 </html>
