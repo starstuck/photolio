@@ -50,6 +50,6 @@ class Photo < ActiveRecord::Base
     if Photo.count(:conditions => {'file_name' => file_name}) <= 1
       FileUtils.rm_rf("#{PHOTOS_ROOT}/#{file_name}")
     end
-  end
+  end  
 
 end

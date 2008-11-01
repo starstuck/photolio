@@ -14,4 +14,16 @@ class Site < ActiveRecord::Base
     return [nil] + BRANDS
   end
 
+  # List of photos not assigned to any gallery
+  def unassigned_photos
+    assigend_photos_ids = {}
+    for gal in galleries
+      for gp in gal.galleries_photos
+        assigend_photos_ids[gp.photo_id] = true unless assigend_photos_ids.key? gp.photo_id
+      end
+    end
+    return Photo.find(photos.reject{|x| assigend_photos_ids.key? x.id}, 
+                      :order => 'file_name')
+  end
+
 end

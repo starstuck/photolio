@@ -1,4 +1,5 @@
-class Admin::SitesController < ApplicationController
+# -*- coding: iso-8859-2 -*-
+class Admin::SitesController < Admin::AdminBaseController
   # GET /admin_sites
   # GET /admin_sites.xml
   def index
@@ -83,8 +84,82 @@ class Admin::SitesController < ApplicationController
     end
   end
 
-  # Assign photos to gallerias and layout them (change order, add separators)
+  # Dispaly screen for layouting photos.
+  # It allows to assign photos to gallerias, change order, add separators
   def layout
     @site = Site.find(params[:id])
+    @galleries = @site.galleries
+    
+    respond_to do |format|
+      format.html # layout.html.erb
+      format.xml  { render :xml =>{
+          'site' => @site, 
+          'galleries' => @galleries
+        }}
+    end
   end
+
+  def layout_gallery_photos_partial
+    @site = Site.find(params[:id])
+    @gallery = @site.galleries.find(params[:gallery_id])
+
+    render(:partial => "layout_gallery_photos",
+           :locals => {:gallery => @gallery})
+  end
+
+  def layout_unassigned_photos_partial
+    @site = Site.find(params[:id])
+    @unassigned_photos = @site.unassigned_photos
+
+    render(:partial => "layout_unassigned_photos",
+           :locals => {:unassigned_photos => @unassigned_photos})
+  end
+
+  # Move gallelry if already exists
+  def layout_add_gallery_photo
+    @site = Site.find(params[:id])
+    @gallery = @site.galleries.find(params[:gallery_id])
+    @photo = @site.photos.find(params[:photo_id].split('_')[-1])
+    photo_position = params[:photo_position].to_i
+
+    if @gallery and @photo
+     @gallery.add_photo(@photo, photo_position)
+    end
+      
+    respond_to do |format|
+      format.html { layout_gallery_photos_partial }
+      format.xml  { head :ok  }
+    end
+  end
+
+  def layout_remove_gallery_photo
+    @site = Site.find(params[:id])
+    # We must query for photo object, because @site.photo.find returns photo
+    # object with joins data, which brakes @photo.id attribute
+    @photo = Photo.find(params[:photo_id].split('_')[-1],
+                        :conditions => {:site_id => @site.id})
+
+    if params.key? :gallery_id
+      
+      # If gallery os provided, remove photo only from this gallery
+      gallery = @site.galleries.find(params[:gallery_id])
+      gallery.remove_photo(@photo)
+    else
+      
+      # If it is not provided, remove photo from all galleries in site
+      @site.galleries.each do |gallery|
+        gallery_photo_ids = gallery.galleries_photos.map{|gp| gp.photo_id}
+        if gallery_photo_ids.include? @photo.id
+          gallery.remove_photo(@photo)
+        end
+      end
+    end
+
+    respond_to do |format|
+      format.html { layout_unassigned_photos_partial }
+      format.xml  { head :ok  }
+    end
+
+  end
+
 end

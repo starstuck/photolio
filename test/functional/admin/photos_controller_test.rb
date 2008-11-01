@@ -17,7 +17,7 @@ class Admin::PhotosControllerTest < ActionController::TestCase
       post :create, :site_id => 1, :photo => { :file_name => 'some_file.jpg' }
     end
 
-    assert_redirected_to admin_site_photo_path(assigns(:site), assigns(:photo))
+    assert_redirected_to admin_site_photos_path(assigns(:site))
   end
 
   def test_should_show_photo

@@ -17,7 +17,7 @@ class Admin::GalleriesControllerTest < ActionController::TestCase
       post :create, :site_id => 1, :gallery => {:name => '3'}
     end
 
-    assert_redirected_to admin_site_gallery_path(assigns(:site), assigns(:gallery))
+    assert_redirected_to admin_site_galleries_path(assigns(:site))
   end
 
   def test_should_show_gallery

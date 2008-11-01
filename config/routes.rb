@@ -78,7 +78,13 @@ ActionController::Routing::Routes.draw do |map|
   
   # Map resources for admin screens
   map.namespace :admin do |admin|
-    admin.resources :sites, :member => 'layout' do |site|
+    admin.resources(:sites, 
+                    :member => ['layout', 
+                                'layout_gallery_photos_partial',
+                                'layout_unassigned_photos_partial',
+                                'layout_add_gallery_photo',
+                                'layout_remove_gallery_photo'] 
+                    ) do |site|
       site.resources :galleries
       site.resources :photos do |photo|
         photo.resources :photo_keywords, :as => 'keywords', :name_prefix => 'admin_site_'

@@ -1,20 +1,91 @@
-/* Admin panel layout customization */
+/* Admin panel layout customization - make use full screen width*/
 
-div#content{
+div#header,
+div#content,
+div#footer
+{
     width: auto;
     margin-left: 20px;
     margin-right: 20px;
+}
+    
+div#content{
     overflow: visible;
 }
 
-div#admin-frame{
+div#admin_frame{
+    position: relative;
     width: 100%;
     height: 100%;
     overflow: auto;
 }
 
-div#admin-content{
+div#admin_content{
+    position: relative;
     padding: 4px;
 }
 
 
+
+/*
+ * Photo layout screen styles
+ */
+
+table#all_galleries_table td{
+    height: 136px;
+}
+
+table#all_galleries_table th{
+    width: 40px;
+}
+
+table.photos_list_table, td.empty_box{
+    border: 3px solid #000000;
+}
+
+table.photos_list_table.hover, td.empty_box.hover{
+    border-color: #7f0000;
+}
+
+td.empty_box{
+    height: 124px;
+}
+
+table.photos_list_table td{
+    padding: 0px 1px 0px 1px;
+}
+
+div.photo_box{
+    position: relative;
+}
+
+div.photo_droppable_left, div.photo_droppable_right{
+    position: absolute;
+    width: 16px;
+    height: 130px;
+    top: 0px;
+    z-index: 1;
+    opacity: 0.5;
+}
+    
+div.photo_droppable_left{
+    left: -3px;
+}
+
+div.photo_droppable_left.hover{
+    border-left: 4px solid #ff0000;
+}
+
+div.photo_droppable_right{
+    right: -3px;
+}
+
+div.photo_droppable_right.hover{
+    border-right: 4px solid #ff0000;
+}
+
+img.draggable_photo{
+    height: 130px;
+}
+    
+    

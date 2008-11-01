@@ -11,3 +11,8 @@ two:
   site_id: 1
   name: "2"
   title: Second gallery
+
+one_in_kasiak:
+  id: 3
+  site_id: 2
+  name: "1"

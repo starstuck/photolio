@@ -44,4 +44,45 @@ class Admin::SitesControllerTest < ActionController::TestCase
 
     assert_redirected_to admin_sites_path
   end
+
+  def test_get_layout
+    get :layout, :id => sites(:studio).id
+    assert_response :success
+    assert_not_nil assigns['galleries']
+  end
+
+  def test_get_layout_gallery_photos_partial
+    get(:layout_gallery_photos_partial, 
+        :id => sites(:studio).id, 
+        :gallery_id => galleries(:one).id)
+    assert_response :success
+    assert_not_nil assigns['gallery']
+  end
+
+  def test_get_layout_unassigned_photos_partial
+    get(:layout_unassigned_photos_partial, :id => sites(:studio).id)
+    assert_response :success
+    assert_not_nil assigns['unassigned_photos']
+  end
+
+  def test_layout_add_gallery_photo
+    post(:layout_add_gallery_photo, 
+         :id => sites(:studio).id,
+         :gallery_id => galleries(:one).id,
+         :photo_id => photos(:four).id,
+         :photo_position => '1')
+    assert_response :success
+    assert_template '_layout_gallery_photos'
+    assert_equal ['One', 'Four', 'Two', 'Three'], assigns['gallery'].photos.map{|p| p.title}
+  end
+
+  def test_layout_remove_gallery_photo
+    post(:layout_remove_gallery_photo, 
+         :id => sites(:studio).id,
+         :photo_id => photos(:two).id)
+    assert_response :success
+    assert_template '_layout_unassigned_photos'
+    assert_equal ['Two', 'Four'], assigns['unassigned_photos'].map{|p| p.title}
+  end
+
 end
