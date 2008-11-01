@@ -86,9 +86,6 @@ class Gallery < ActiveRecord::Base
 
   # Reorder gallery photos to match order of photo_ids
   def reorder_photos(photo_ids)
-
-    logger.info "+++ Reordering photos with: #{photo_ids.inspect}"
-
     galleries_photos_by_photo_id = Hash[*(galleries_photos.map{|gp| [gp.photo_id, gp]}.flatten)]
 
     # Update join records position to match photo_ids order
