@@ -23,8 +23,25 @@ class GalleryTest < ActiveSupport::TestCase
 
   def test_add_wtih_move_in_the_same_geallery
     gallery = galleries(:one)
-    gallery.add_photo(photos(:one), 2)
+    gallery.add_photo(photos(:one), 3)
     assert_equal ['Two', 'One', 'Three'], gallery.photos.map{|p| p.title}    
+  end
+
+  def test_add_separator
+    gallery = galleries(:one)
+    gallery.add_separator(1)
+    assert_equal ['One', 'Two', 'Three'], gallery.photos.map{|p| p.title}
+    assert_equal 4, gallery.gallery_items(true).size
+    assert_equal 'GallerySeparator', gallery.gallery_items[1].type
+
+    gallery.add_separator(1)
+    assert_equal 4, gallery.gallery_items(true).size
+
+    gallery.add_separator(2)
+    assert_equal 4, gallery.gallery_items(true).size
+
+    gallery.add_separator(3)
+    assert_equal 5, gallery.gallery_items.size
   end
 
   def test_remove_photo
@@ -34,11 +51,11 @@ class GalleryTest < ActiveSupport::TestCase
     assert_equal ['Two'], galleries(:one_in_kasiak).photos.map{|p| p.title}
   end
 
-  def test_reorder_photos
+  def test_reorder_items
     gallery = galleries(:one)
-    gallery.reorder_photos([1, 3, 2])
+    gallery.reorder_items([1, 2, 4, 3])
     assert_equal ['One', 'Three', 'Two'], gallery.photos.map{|p| p.title}
-    gallery.reorder_photos([2])
+    gallery.reorder_items([3])
     assert_equal ['Two', 'One', 'Three'], gallery.photos(true).map{|p| p.title}
   end
   

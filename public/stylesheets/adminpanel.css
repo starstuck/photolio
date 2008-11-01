@@ -26,6 +26,54 @@ div#admin_content{
 }
 
 
+/*
+ * Context menu styles
+ */ 
+
+.menu {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    width: 11em;
+    background: #fff;
+    border-top: 1px solid #ccc;
+    border-left: 1px solid #ccc;
+    border-bottom: 1px solid #676767;
+    border-right: 1px solid #676767;
+}
+
+.menu ul, .menu .li{
+    padding: 0px;
+    margin: 2px;
+    list-style: none
+}
+
+.menu a {
+    display: block;
+    color: #00c;
+    text-decoration: none;
+    padding: 2px 5px;
+    cursor: pointer;
+    font-size: 12px;
+}
+.menu a:hover {
+    background: #D3E3FE;
+}
+.menu a.disabled {
+    color: #bbb;
+}
+.menu a.disabled:hover {
+    background: #fff;
+    color: #bbb;
+}
+.menu .separator {
+    height: 1px;
+    padding: 0;
+    overflow: hidden;
+    display: block;
+    background: #ccc;
+}
+
 
 /*
  * Photo layout screen styles
@@ -55,11 +103,11 @@ table.photos_list_table td{
     padding: 0px 1px 0px 1px;
 }
 
-div.photo_box{
+div.item_box{
     position: relative;
 }
 
-div.photo_droppable_left, div.photo_droppable_right{
+div.item_droppable_left, div.item_droppable_right{
     position: absolute;
     width: 16px;
     height: 130px;
@@ -68,19 +116,19 @@ div.photo_droppable_left, div.photo_droppable_right{
     opacity: 0.5;
 }
     
-div.photo_droppable_left{
+div.item_droppable_left{
     left: -3px;
 }
 
-div.photo_droppable_left.hover{
+div.item_droppable_left.hover{
     border-left: 4px solid #ff0000;
 }
 
-div.photo_droppable_right{
+div.item_droppable_right{
     right: -3px;
 }
 
-div.photo_droppable_right.hover{
+div.item_droppable_right.hover{
     border-right: 4px solid #ff0000;
 }
 
@@ -88,4 +136,14 @@ img.draggable_photo{
     height: 130px;
 }
     
-    
+div.separator{
+    height: 130px;
+    width: 40px;
+}
+
+a.separator_close_button{
+    color: #1f1f1f;
+    position: absolute;
+    right: 5px;
+    z-index: 2;
+}

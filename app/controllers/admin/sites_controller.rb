@@ -115,15 +115,14 @@ class Admin::SitesController < Admin::AdminBaseController
            :locals => {:unassigned_photos => @unassigned_photos})
   end
 
-  # Move gallelry if already exists
   def layout_add_gallery_photo
     @site = Site.find(params[:id])
     @gallery = @site.galleries.find(params[:gallery_id])
     @photo = @site.photos.find(params[:photo_id].split('_')[-1])
-    photo_position = params[:photo_position].to_i
+    position = params[:position].to_i
 
     if @gallery and @photo
-     @gallery.add_photo(@photo, photo_position)
+     @gallery.add_photo(@photo, position)
     end
       
     respond_to do |format|
@@ -148,7 +147,7 @@ class Admin::SitesController < Admin::AdminBaseController
       
       # If it is not provided, remove photo from all galleries in site
       @site.galleries.each do |gallery|
-        gallery_photo_ids = gallery.galleries_photos.map{|gp| gp.photo_id}
+        gallery_photo_ids = gallery.gallery_items.map{|item| item.photo_id}
         if gallery_photo_ids.include? @photo.id
           gallery.remove_photo(@photo)
         end
@@ -162,4 +161,30 @@ class Admin::SitesController < Admin::AdminBaseController
 
   end
 
+  def layout_add_gallery_separator
+    @site = Site.find(params[:id])
+    @gallery = @site.galleries.find(params[:gallery_id])
+    position = params[:position].to_i
+      
+    @gallery.add_separator(position)
+
+    respond_to do |format|
+      format.html { layout_gallery_photos_partial }
+      format.xml  { head :ok  }
+    end
+  end
+  
+  def layout_remove_gallery_separator
+    @site = Site.find(params[:id])
+    @gallery = @site.galleries.find(params[:gallery_id])
+    @separator = @gallery.gallery_items.find(params[:separator_id].split('_')[-1])
+    
+    @separator.destroy
+    @gallery.gallery_items(true)
+    
+    respond_to do |format|
+      format.html { layout_gallery_photos_partial }
+      format.xml  { head :ok  }
+    end
+  end
 end

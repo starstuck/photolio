@@ -15,7 +15,7 @@ module Admin::SitesHelper
     extra_conditions = options.delete(:conditions)
     conditions = 'Droppables.last_active'
     conditions = '(#{conditions} && (#{extra_conditions})' if extra_conditions
-    "function(element){if(#{conditions}){#{remote_function(options)}}}"
+    %(function(element){if(#{conditions}){#{remote_function(options)}}})
   end
   
 end

@@ -70,7 +70,7 @@ class Admin::SitesControllerTest < ActionController::TestCase
          :id => sites(:studio).id,
          :gallery_id => galleries(:one).id,
          :photo_id => photos(:four).id,
-         :photo_position => '1')
+         :position => '1')
     assert_response :success
     assert_template '_layout_gallery_photos'
     assert_equal ['One', 'Four', 'Two', 'Three'], assigns['gallery'].photos.map{|p| p.title}
@@ -83,6 +83,30 @@ class Admin::SitesControllerTest < ActionController::TestCase
     assert_response :success
     assert_template '_layout_unassigned_photos'
     assert_equal ['Two', 'Four'], assigns['unassigned_photos'].map{|p| p.title}
+  end
+
+  def test_layout_add_gallery_separator
+    assert_equal 4, galleries(:one).gallery_items.size
+    post(:layout_add_gallery_separator, 
+         :id => sites(:studio).id,
+         :gallery_id => galleries(:one).id,
+         :position => '3')
+    assert_response :success
+    assert_template '_layout_gallery_photos'
+    assert_equal ['One', 'Two', 'Three'], assigns['gallery'].photos.map{|p| p.title}
+    assert_equal 5, assigns['gallery'].gallery_items.size
+    assert_equal 'GallerySeparator', assigns['gallery'].gallery_items[3].type
+  end
+
+  def test_layout_remove_gallery_separator
+    assert_difference('GalleryItem.count', -1) do
+      post(:layout_remove_gallery_separator, 
+           :id => sites(:studio).id,
+           :gallery_id => galleries(:one).id,
+           :separator_id => '2')
+    end
+    assert_response :success
+    assert_template '_layout_gallery_photos'
   end
 
 end

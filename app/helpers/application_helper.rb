@@ -5,7 +5,18 @@ module ApplicationHelper
     compute_public_path(photo.file_name, 'photos') 
   end
 
-  def extra_stylesheets_tags
+  def loading_tag
+    loaging_image_tag = image_tag(path_to_image('loading.gif'))
+    "<p style=\"text-align: center\">#{loaging_image_tag}"
+  end
+
+  #
+  # Slots used by main template. 
+  #
+  # You can overwrite these in your helpers, to customize layout used fot
+  # particular controller
+  #
+  def extra_head_tags
     nil
   end
 
@@ -17,8 +28,4 @@ module ApplicationHelper
     nil
   end
 
-  def loading_tag
-    loaging_image_tag = image_tag(path_to_image('loading.gif'))
-    "<p style=\"text-align: center\">#{loaging_image_tag}"
-  end
 end

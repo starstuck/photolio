@@ -83,7 +83,9 @@ ActionController::Routing::Routes.draw do |map|
                                 'layout_gallery_photos_partial',
                                 'layout_unassigned_photos_partial',
                                 'layout_add_gallery_photo',
-                                'layout_remove_gallery_photo'] 
+                                'layout_remove_gallery_photo',
+                                'layout_add_gallery_separator',
+                                'layout_remove_gallery_separator'] 
                     ) do |site|
       site.resources :galleries
       site.resources :photos do |photo|

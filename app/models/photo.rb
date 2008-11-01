@@ -5,7 +5,7 @@ class Photo < ActiveRecord::Base
 
   PHOTOS_ROOT = "#{RAILS_ROOT}/public/photos"
 
-  has_many :galleries_photos, :dependent => :destroy
+  has_many :gallery_items, :dependent => :destroy
   has_and_belongs_to_many :galleries, :readonly => true # Simple access skiping assoc table
   belongs_to :site # Site ehere photo has been imported. Afterwards it can be 
                    # placed in different galleries and differnt sites

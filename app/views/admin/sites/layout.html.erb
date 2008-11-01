@@ -6,7 +6,7 @@
     <% for gallery in @galleries -%>
       <tr>
 	<th>
-	  <a href="<%= admin_site_gallery_path(gallery) -%>">
+	  <a href="<%= admin_site_gallery_path(@site, gallery) -%>">
 	    <%= gallery.name -%>
 	  </a><br />
 	  <span><%= gallery.title -%></span>

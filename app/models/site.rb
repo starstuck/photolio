@@ -18,8 +18,8 @@ class Site < ActiveRecord::Base
   def unassigned_photos
     assigend_photos_ids = {}
     for gal in galleries
-      for gp in gal.galleries_photos
-        assigend_photos_ids[gp.photo_id] = true unless assigend_photos_ids.key? gp.photo_id
+      for item in gal.gallery_items
+        assigend_photos_ids[item.photo_id] = true unless assigend_photos_ids.key? item.photo_id
       end
     end
     return Photo.find(photos.reject{|x| assigend_photos_ids.key? x.id}, 

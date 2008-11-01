@@ -2,24 +2,35 @@
 
 one:
   id: 1
+  type: GalleryPhoto
   gallery_id: 1
   photo_id: 1
   position: 0
 
-two:
+one_separator:
   id: 2
+  type: GallerySeparator
+  gallery_id: 1
+  position: 1
+
+two:
+  id: 3
+  type: GalleryPhoto
   gallery_id: 1
   photo_id: 2
-  position: 1
-  
-three:
-  id: 3
-  gallery_id: 1
-  photo_id: 3
   position: 2
   
-two_in_kasiak:
+
+three:
   id: 4
+  type: GalleryPhoto
+  gallery_id: 1
+  photo_id: 3
+  position: 3
+  
+two_in_kasiak:
+  id: 5
+  type: GalleryPhoto
   gallery_id: 3
   photo_id: 2
   position: 0
