@@ -1,4 +1,6 @@
-// Copyright (c) 2005-2008 Thomas Fuchs (http://script.aculo.us, http://mir.aculo.us)
+// script.aculo.us dragdrop.js v1.8.1, Thu Jan 03 22:07:12 -0500 2008
+
+// Copyright (c) 2005-2007 Thomas Fuchs (http://script.aculo.us, http://mir.aculo.us)
 //           (c) 2005-2007 Sammi Williams (http://www.oriontransfer.co.nz, sammi@oriontransfer.co.nz)
 // 
 // script.aculo.us is freely distributable under the terms of an MIT-style license.
@@ -19,7 +21,8 @@ var Droppables = {
     var options = Object.extend({
       greedy:     true,
       hoverclass: null,
-      tree:       false
+      tree:       false,
+      scroll: null	 
     }, arguments[1] || { });
 
     // cache containers
@@ -62,6 +65,15 @@ var Droppables = {
   },
   
   isAffected: function(point, element, drop) {
+    if( drop.scroll ){
+      Position.includeScrollOffsets = true;
+      scrolling_element = $(drop.scroll)
+      var container_off = Element.cumulativeOffset(scrolling_element); 
+      if( point[1] < container_off[1] || point[1] > Element.getHeight(scrolling_element) + container_off[1])
+        {return false;}
+      else if( point[0] < container_off[0] || point[0] > Element.getWidth(scrolling_element) + container_off[0])
+        {return false;}
+    }
     return (
       (drop.element!=element) &&
       ((!drop._containers) ||
