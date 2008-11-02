@@ -14,7 +14,7 @@ class Admin::TopicsControllerTest < ActionController::TestCase
 
   def test_should_create_topic
     assert_difference('Topic.count') do
-      post :create, :site_id => sites(:studio), :topic => { :title => 'New topic', :name => 'NewTopic', :lang => 'en' }
+      post :create, :site_id => sites(:studio), :topic => { :title => 'New topic' }
     end
     assert_redirected_to admin_site_topic_path(assigns(:site), assigns(:topic))
   end

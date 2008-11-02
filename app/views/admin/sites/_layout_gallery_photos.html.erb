@@ -87,6 +87,9 @@
 			 :url => {:action => 'layout_add_gallery_separator', 
 		                  :id => @site,
                                   :gallery_id => gallery}),
+		     },
+		     { :name => "'Show in new window'",
+		       :callback => "function(event){window.open('#{admin_site_photos_path(@site)}/'+Event.element(event).id.split('_')[1]);}"
 		     }],
       :className => "'menu'"
       -%>

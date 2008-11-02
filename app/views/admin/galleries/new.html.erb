@@ -1,19 +1,25 @@
 <h2>New gallery for <%= @site.name -%> site</h2>
 
 <% form_for(@gallery, :url => admin_site_gallery_path(@site, @gallery)) do |f| %>
-  <%= f.error_messages %>
-
-  <p>
-    <%= f.label :name %><br />
-    <%= f.text_field :name %>
-  </p>
-  <p>
-    <%= f.label :title %><br />
-    <%= f.text_field :title %>
-  </p>
-  <p>
-    <%= f.submit "Create" %>
-  </p>
+  <div class="record_fields">
+    <%= f.error_messages %>
+    
+    <p>
+      <%= f.label :name %><br />
+      <%= f.text_field :name %>
+    </p>
+    <p>
+      <%= f.label :title %><br />
+      <%= f.text_field :title %>
+    </p>
+    <p>
+      <%= f.submit "Create" %>
+    </p>
+  </div>
 <% end %>
 
-<%= link_to 'Back', admin_site_galleries_path(@site) %>
+<hr />
+
+<div class="page_actions">
+  <%= link_to 'Back to galleries list', admin_site_galleries_path(@site) %>
+</div>

@@ -1,20 +1,25 @@
 <h2>Editing site</h2>
 
 <% form_for(@site, :url => admin_site_path(@site)) do |f| %>
-  <%= f.error_messages %>
-
-  <p>
-    <%= f.label :name %><br />
-    <%= f.text_field :name %>
-  </p>
-  <p>
-    <%= f.label :brand %><br />
-    <%= f.select :brand, Site.brands_selection %>
-  </p>
-  <p>
-    <%= f.submit "Update" %>
-  </p>
+  <div class="record_fields">
+    <%= f.error_messages %>
+    
+    <p>
+      <%= f.label :name %><br />
+      <%= f.text_field :name %>
+    </p>
+    <p>
+      <%= f.label :brand %><br />
+      <%= f.select :brand, Site.brands_selection %>
+    </p>
+    <p>
+      <%= f.submit "Update" %>
+    </p>
+  </div>
 <% end %>
 
-<%= link_to 'Show', admin_site_path(@site) %> |
-<%= link_to 'Back', admin_sites_path %>
+<hr />
+
+<div class="page_actions">
+  <%= link_to 'Back to site', admin_site_path(@site) %>
+</div>

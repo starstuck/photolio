@@ -3,11 +3,11 @@
 one:
   id: 1
   photo_id: 1
-  role: MyString
-  name: MyString
+  role: One
+  name: Some One
 
 two:
   id: 2
   photo_id: 1
-  role: MyString
-  name: MyString
+  role: Other
+  name: Some Other

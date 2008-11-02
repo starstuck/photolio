@@ -43,12 +43,29 @@ class Admin::PhotosController < Admin::AdminBaseController
   # POST /admin_photos
   # POST /admin_photos.xml
   def create
+    keywords_data = nil
+    participants_data = nil
+
+    if params[:photo].key? 'keywords'
+      keywords_data = params[:photo].delete('keywords')
+    end
+
+    if params[:photo].key? 'participants'
+      participants_data = params[:photo].delete('participants')
+    end
+
     @photo = @site.photos.build(params[:photo])
+    saved = @photo.save
+
+    if saved
+      @photo.update_keywords(keywords_data.values) if keywords_data
+      @photo.update_participants(participants_data.values) if participants_data
+    end
 
     respond_to do |format|
-      if @photo.save
-        flash[:notice] = 'Admin::Photo was successfully created.'
-        format.html { redirect_to admin_site_photos_path(@site) }
+      if saved
+        flash[:notice] = 'Photo was successfully created.'
+        format.html { redirect_to admin_site_photo_path(@site, @photo) }
         format.xml  { render :xml => @photo, :status => :created, :location => admin_site_photo_path(@site, @photo) }
       else
         format.html { render :action => "new" }
@@ -62,9 +79,19 @@ class Admin::PhotosController < Admin::AdminBaseController
   def update
     @photo = @site.photos.find(params[:id])
 
+    if params[:photo].key? 'keywords'
+      keywords_data = params[:photo].delete('keywords')
+      @photo.update_keywords(keywords_data.values)
+    end
+
+    if params[:photo].key? 'participants'
+      participants_data = params[:photo].delete('participants')
+      @photo.update_participants(participants_data.values)
+    end
+
     respond_to do |format|
       if @photo.update_attributes(params[:photo])
-        flash[:notice] = 'Admin::Photo was successfully updated.'
+        flash[:notice] = 'Photo was successfully updated.'
         format.html { redirect_to admin_site_photo_path(@site, @photo) }
         format.xml  { head :ok }
       else

@@ -32,7 +32,7 @@ class Admin::GalleriesControllerTest < ActionController::TestCase
 
   def test_should_update_gallery
     put :update, :site_id => sites(:studio), :id => galleries(:one).id, :gallery => { :name => '10' }
-    assert_redirected_to admin_site_gallery_path(assigns(:site), assigns(:gallery))
+    assert_redirected_to admin_site_galleries_path(assigns(:site))
   end
 
   def test_should_destroy_gallery

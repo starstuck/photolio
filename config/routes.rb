@@ -49,7 +49,7 @@ ActionController::Routing::Routes.draw do |map|
                       :site_name => 'studio',
                       :defaults => {:format => 'html'}
                       )
-  map.published_topic('topic/:name.:format',
+  map.published_topic('topic/:id.:format',
                       :controller => 'topic',
                       :action => 'show',
                       :site_name => 'studio',
@@ -69,7 +69,7 @@ ActionController::Routing::Routes.draw do |map|
                                  :site_brand => /(models|artists)/,
                                  :defaults => {:format => 'html'}
                                  )
-  map.published_topic_with_brand(':site_brand/:site_name/topic/:name.:format',
+  map.published_topic_with_brand(':site_brand/:site_name/topic/:id.:format',
                                  :controller => 'topic',
                                  :action => 'show',
                                  :site_brand => /(models|artists)/,

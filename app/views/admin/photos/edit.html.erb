@@ -1,24 +1,84 @@
+<%= image_tag compute_photo_path(@photo),
+    :alt => @photo.title ,
+    :style => "height: 400px; float:right; margin: 10px;"
+    -%>
+
 <h2>Editing photo</h2>
 
 <% form_for(@photo, :url => admin_site_photo_path(@site, @photo)) do |f| %>
-  <%= f.error_messages %>
+  <div class="record_fields">
+    <%= f.error_messages %>
+    
+    <p>
+      <b>File name</b><br>
+      <%= @photo.file_name -%>
+    </p>
 
-  <p>
-    <b>File name: </b>
-    <%= @photo.file_name -%>
-  </p>
-  <p>
-    <%= f.label :title %><br />
-    <%= f.text_field :title %>
-  </p>
-  <p>
-    <%= f.label :description %><br />
-    <%= f.text_field :description %>
-  </p>
-  <p>
-    <%= f.submit "Update" %>
-  </p>
+    <p>
+      <%= f.label :title %><br />
+      <%= f.text_field :title, :size => 46 %>
+    </p>
+
+    <p>
+      <%= f.label :description %><br />
+      <%= f.text_area 'description', :rows => 3, :cols => 40 %>
+    </p>
+
+    <p>
+      <b>Keywords</b><br />
+      <% index = 0 -%>
+      <% for keyword in @photo.photo_keywords -%>
+	<%= text_field_tag "photo[keywords][#{index}][name]", 
+	    keyword.name, 
+	    :id => "photo_keywords_#{index}_name",
+	    :size => 46 %><br />
+	<% index += 1 -%>
+      <% end -%>
+      <%= text_field_tag "photo[keywords][#{index}][name]", 
+	  '', 
+	  :id => "photo_keywords_#{index}_name",
+	  :size => 46 %><br />
+      <a href="#", onclick="javascript:add_photo_keyword_tag(this, <%= index + 1 -%>); return false">More..</a>
+    </p>
+
+    <p>
+      <b>Participants</b><br />
+      <% index = 0 -%>
+      <% for participant in @photo.photo_participants -%>
+	<%= text_field_tag "photo[participants][#{index}][role]", 
+	    participant.role, 
+	    :id => "photo_participants_#{index}_role",
+	    :size => 15 %>:
+	<%= text_field_tag "photo[participants][#{index}][name]", 
+	    participant.name, 
+	    :id => "photo_participants_#{index}_name",
+	    :size => 26 %>
+	<br />
+	<% index += 1 -%>
+      <% end -%>
+      <%= text_field_tag "photo[participants][#{index}][role]", 
+	  '', 
+	  :id => "photo_participants_#{index}_role",
+	  :size => 15 %>:
+      <%= text_field_tag "photo[participants][#{index}][name]", 
+	  '', 
+	  :id => "photo_participants_#{index}_name",
+	  :size => 26 %>
+      <br />
+      <a href="#", onclick="javascript:add_photo_participant_tag(this, <%= index + 1 -%>); return false">More..</a>
+    </p>
+
+    <p>
+      <%= f.submit "Update" %>
+    </p>
+  </div>
+
 <% end %>
 
-<%= link_to 'Show', admin_site_photo_path(@site, @photo) %> |
-<%= link_to 'Back', admin_site_photos_path(@site) %>
+<br style="clear: both;"/>
+<hr />
+
+<div class="page_actions">
+  <%= link_to 'Show', admin_site_photo_path(@site, @photo) %> |
+  <%= link_to 'Back to photos list', admin_site_photos_path(@site) %>
+</div>

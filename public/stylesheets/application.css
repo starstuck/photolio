@@ -71,6 +71,10 @@ body, a, p, ol, ul, td {
     font-size:   14px;
 }
 
+body b{
+    font-weight: bold;
+}
+
 a {
     text-decoration: none;
 }
@@ -80,7 +84,7 @@ a img{
 }
 
 h1, h2, h3, h4{
-    
+    margin-left: 1em; 
 }
 
 h1{
@@ -103,7 +107,7 @@ h4{
 }
 
 p{
-    margin: 5px 15px 5px 15px;
+    margin: 0.25em 1em 0.75em 1em;
 }
 
 hr {

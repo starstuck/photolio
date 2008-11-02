@@ -51,6 +51,9 @@
 </table>
 
 <hr />
-<%= link_to 'Manage photos', admin_site_photos_path(@site) %> |
-<%= link_to 'Manage galleries', admin_site_galleries_path(@site) %> |
-<%= link_to 'Back', admin_sites_path %>
+
+<div class="page_actions">
+  <%= link_to 'Manage photos', admin_site_photos_path(@site) %> |
+  <%= link_to 'Manage galleries', admin_site_galleries_path(@site) %> |
+  <%= link_to 'Back to site', admin_site_path(@site) %>
+</div>

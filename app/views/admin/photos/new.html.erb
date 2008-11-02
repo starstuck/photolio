@@ -2,27 +2,58 @@
 
 <% form_for(@photo, :url => admin_site_photos_path, :html =>
   {:multipart => true}) do |f| %>
-  <%= f.error_messages %>
+  <div class="record_fields">
+    <%= f.error_messages %>
 
-  <p>
-    <%= f.label :file, 'Photo file' %><br />
-    <%= f.file_field :file %>
-  </p>
-  <p>
-    <%= f.label :title %><br />
-    <%= f.text_field :title %>
-  </p>
-  <p>
-    <%= f.label :description %><br />
-    <%= f.text_area :description, :rows => 3 %>
-  </p>
-  <p>
-    <%= f.label :photo_keywords %><br />
-    <%= f.text_area :photo_keywords, :rows => 6 %>
-  </p>
-  <p>
-    <%= f.submit "Create" %>
-  </p>
+    <p>
+      <%= f.label :file, 'Photo file' %><br />
+      <%= f.file_field :file %>
+    </p>
+    <p>
+      <%= f.label :title %><br />
+      <%= f.text_field :title, :size => 46 %>
+    </p>
+    <p>
+      <%= f.label :description %><br />
+      <%= f.text_area :description, :rows => 3, :cols => 40 %>
+    </p>
+
+    <p>
+      <b>Keywords</b><br />
+      <% for index in 0..3-%>
+	<%= text_field_tag "photo[keywords][#{index}][name]", 
+	    '', 
+	    :id => "photo_keywords_#{index}_name",
+	    :size => 46 %><br />
+      <% end -%>
+      <a href="#", onclick="javascript:add_photo_keyword_tag(this, 4); return false">More..</a>
+    </p>
+
+    <p>
+      <b>Participants</b><br />
+      <% index = 0 -%>
+      <% for index in  0..5-%>
+	<%= text_field_tag "photo[participants][#{index}][role]", 
+	    '', 
+	    :id => "photo_participants_#{index}_role",
+	    :size => 15 %>:
+	<%= text_field_tag "photo[participants][#{index}][name]", 
+	    '', 
+	    :id => "photo_participants_#{index}_name",
+	    :size => 26 %>
+	<br />
+      <% end -%>
+      <a href="#", onclick="javascript:add_photo_participant_tag(this, 6); return false">More..</a>
+    </p>
+
+    <p>
+      <%= f.submit "Create" %>
+    </p>
+  </div>
 <% end %>
 
-<%= link_to 'Back', admin_site_photos_path(@site) %>
+<hr />
+
+<div class="page_actions">
+  <%= link_to 'Back to photos list', admin_site_photos_path(@site) %>
+</div>

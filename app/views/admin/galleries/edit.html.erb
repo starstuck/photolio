@@ -1,20 +1,25 @@
 <h2>Editing gallery</h2>
 
 <% form_for(@gallery, :url => admin_site_gallery_path(@site, @gallery)) do |f| %>
-  <%= f.error_messages %>
+  <div class="record_fields">
+    <%= f.error_messages %>
 
-  <p>
-    <%= f.label :name %><br />
-    <%= f.text_field :name %>
-  </p>
-  <p>
-    <%= f.label :title %><br />
-    <%= f.text_field :title %>
-  </p>
-  <p>
-    <%= f.submit "Update" %>
-  </p>
+    <p>
+      <%= f.label :name %><br />
+      <%= f.text_field :name %>
+    </p>
+    <p>
+      <%= f.label :title %><br />
+      <%= f.text_field :title %>
+    </p>
+    <p>
+      <%= f.submit "Update" %>
+    </p>
+  </div>
 <% end %>
 
-<%= link_to 'Show', admin_site_gallery_path(@site, @gallery) %> |
-<%= link_to 'Back', admin_site_galleries_path(@site) %>
+<hr />
+
+<div class="page_actions">
+  <%= link_to 'Back to galleries list', admin_site_galleries_path(@site) %>
+</div>

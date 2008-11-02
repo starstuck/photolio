@@ -1,21 +1,31 @@
 <h2>Listing topics in <%= @site.name -%> site</h2>
 
-<table>
-  <tr>
-    <th>Title</th>
-  </tr>
+<table class="listing">
+  <thead>
+    <tr>
+      <th>Title</th>
+      <th>In menu?</th>
+    </tr>
+  </thead>
 
-<% for topic in @topics %>
-  <tr>
-    <td><%=h topic.title %></td>
-    <td><%= link_to 'Show', admin_site_topic_path(@site, topic) %></td>
-    <td><%= link_to 'Edit', edit_admin_site_topic_path(@site, topic) %></td>
-    <td><%= link_to 'Destroy', admin_site_topic_path(@site, topic), :confirm => 'Are you sure?', :method => :delete %></td>
-  </tr>
-<% end %>
+  <tbody>
+    <% for topic in @topics %>
+      <tr>
+	<td><%=h topic.title %></td>
+	<td><%=h topic.display_in_menu ? 'Yes' : 'No' %></td>
+	<td class="actions">
+	  <%= link_to 'Show', admin_site_topic_path(@site, topic) %> |
+	  <%= link_to 'Edit', edit_admin_site_topic_path(@site, topic) %> |
+	  <%= link_to 'Destroy', admin_site_topic_path(@site, topic), :confirm => 'Are you sure?', :method => :delete %>
+	</td>
+      </tr>
+    <% end %>
+  </tbody>
 </table>
 
-<br />
+<hr />
 
-<%= link_to 'New topic', new_admin_site_topic_path(@site) %> |
-<%= link_to 'Back', admin_sites_path -%>
+<div class="page_actions">
+  <%= link_to 'New topic', new_admin_site_topic_path(@site) %> |
+  <%= link_to 'Back to site', admin_site_path(@site) -%>
+</div>

@@ -1,18 +1,47 @@
-<p>
-  <b>File name:</b>
-  <%=h @photo.file_name %>
-</p>
+<%= image_tag compute_photo_path(@photo),
+    :alt => @photo.title ,
+    :style => "height: 400px; float:right; margin: 10px;"
+    -%>
 
-<p>
-  <b>Title:</b>
-  <%=h @photo.title %>
-</p>
+<h2> Photo details </h2>
 
-<p>
-  <b>Description:</b>
-  <%=h @photo.description %>
-</p>
+<div class="record_fields">
+  
+  <p>
+    <b>File name</b><br />
+    <%=h @photo.file_name %>
+  </p>
 
+  <p>
+    <b>Title</b><br />
+    <%=h @photo.title %>
+  </p>
+  
+  <p>
+    <b>Description</b><br />
+    <%=h @photo.description %>
+  </p>
 
-<%= link_to 'Edit', edit_admin_site_photo_path(@site, @photo) %> |
-<%= link_to 'Back', admin_site_photos_path(@site) %>
+  <p>
+    <b>Keywords</b><br />
+    <%=h @photo.photo_keywords.map{|k| k.name}.join(', ') %>
+  </p>
+
+  <p>
+    <b>Participants</b>
+    <ul>
+      <% for participant in @photo.photo_participants -%>
+	<li><b><%= participant.role -%></b>: <%= participant.name -%></li>
+      <% end -%>
+    </ul>
+  </p>
+
+</div>
+
+<br style="clear: both;"/>
+<hr/>
+
+<div class="page_actions">
+  <%= link_to 'Edit', edit_admin_site_photo_path(@site, @photo) %> |
+  <%= link_to 'Back to photos list', admin_site_photos_path(@site) %>
+</div>

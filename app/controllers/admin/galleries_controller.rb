@@ -49,7 +49,7 @@ class Admin::GalleriesController < Admin::AdminBaseController
       if @gallery.save
         flash[:notice] = 'Gallery was successfully created.'
         format.html { redirect_to admin_site_galleries_path(@site) }
-        format.xml  { render :xml => @gallery, :status => :created, :location => admin_site_gallery_path(@site, @gallery) }
+        format.xml  { render :xml => @gallery, :status => :created, :location => admin_site_galleries(@site) }
       else
         format.html { render :action => "new" }
         format.xml  { render :xml => @gallery.errors, :status => :unprocessable_entity }
@@ -65,7 +65,7 @@ class Admin::GalleriesController < Admin::AdminBaseController
     respond_to do |format|
       if @gallery.update_attributes(params[:gallery])
         flash[:notice] = 'Gallery was successfully updated.'
-        format.html { redirect_to admin_site_gallery_path(@site, @gallery) }
+        format.html { redirect_to admin_site_galleries_path(@site) }
         format.xml  { head :ok }
       else
         format.html { render :action => "edit" }

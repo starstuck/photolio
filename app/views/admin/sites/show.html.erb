@@ -1,17 +1,24 @@
-<p>
-  <b>Name:</b>
-  <%=h @site.name %>
-</p>
+<h2><%= @site.name.titleize -%> site</h2>
 
-<p>
-  <b>Brand:</b>
-  <%=h @site.brand %>
-</p>
+<div class="record_fields">
+  <p>
+    <b>Name</b><br />
+    <%=h @site.name %>
+  </p>
+  
+  <p>
+    <b>Brand</b><br />
+    <%=h @site.brand %>
+  </p>
+</div>  
 
+<hr />
 
-<%= link_to 'Edit', edit_admin_site_path(@site) %> |
-<%= link_to 'Photos', admin_site_photos_path(@site) %> |
-<%= link_to 'Galleries', admin_site_galleries_path(@site) %> |
-<%= link_to 'Layout', layout_admin_site_path(@site) %> |
-<%= link_to 'Topics', admin_site_topics_path(@site) %> |
-<%= link_to 'Back', admin_sites_path %>
+<div class="page_actions">
+  <%= link_to 'Photos', admin_site_photos_path(@site) %> |
+  <%= link_to 'Galleries', admin_site_galleries_path(@site) %> |
+  <%= link_to 'Layout', layout_admin_site_path(@site) %> |
+  <%= link_to 'Topics', admin_site_topics_path(@site) %> |
+  <%= link_to 'Edit', edit_admin_site_path(@site) %> |
+  <%= link_to 'Back to sites list', admin_sites_path %>
+</div>

@@ -1,18 +1,26 @@
-<p>
-  <b>Title:</b>
-  <%=h @topic.title %>
-</p>
+<h2>Article preview</h2>
 
-<p>
-  <b>Display in menu:</b>
-  <%=h @topic.display_in_menu ? 'Yes' : 'No' %>
-</p>
+<div class="record_fields">
+  <p>
+    <b>Title</b><br />
+    <%=h @topic.title %>
+  </p>
+  
+  <p>
+    <b>Display in menu</b><br />
+    <%=h @topic.display_in_menu ? 'Yes' : 'No' %>
+  </p>
+</div>
 
-<p>
-  <b>Body:</b>
-  <%=h @topic.body %>
-</p>
+<p><b>Body preview</b></p>
 
+<hr />
 
-<%= link_to 'Edit', edit_admin_site_topic_path(@site, @topic) %> |
-<%= link_to 'Back', admin_site_topics_path(@site) %>
+<%= @topic.body_to_html %>
+
+<hr />
+
+<div class="page_actions">
+  <%= link_to 'Edit', edit_admin_site_topic_path(@site, @topic) %> |
+  <%= link_to 'Back', admin_site_topics_path(@site) %>
+</div>

@@ -52,4 +52,57 @@ class Photo < ActiveRecord::Base
     end
   end  
 
+  # Update keywords values from array of hashes, having keywords data
+  # Keywords are matched by name
+  def update_keywords(keywords_data)
+    old_keywords_by_name = Hash[*(photo_keywords.map{|k| [k.name, k]}.flatten)]
+    
+    # update existing keywords and create new ones
+    for kw_data in keywords_data
+      if old_keywords_by_name.key? kw_data['name']
+        kw = old_keywords_by_name.delete(kw_data['name'])
+        kw.update_attributes(kw_data)
+      else
+        if kw_data['name'] != ''
+          unless photo_keywords.build(kw_data).save
+            errors.add 'photo_keywords', "invalid record data: #{p_data.inspect}"
+          end
+        end
+      end
+    end
+
+    # delete keywords not present in keywords_data
+    for kw in old_keywords_by_name.values
+      photo_keywords.delete(kw)
+    end
+  end
+
+  # Update participants values from array of hashes, having participans data
+  # Participants are matched by roel and name
+  def update_participants(participants_data)
+    old_participants_by_role_name = Hash[*(photo_participants.map{|p| ["#{p.role}:#{p.name}", p]}.flatten)]
+    
+    # update existing participants, an create new ones
+    new_participants_data = []
+    for p_data in participants_data
+      identifier = "#{p_data['role']}:#{p_data['name']}"
+      if old_participants_by_role_name.key? identifier
+        p = old_participants_by_role_name.delete(identifier)
+        p.update_attributes(p_data)
+      else
+        if p_data['name'] != '' and p_data['role'] != ''
+          unless photo_participants.build(p_data).save
+            errors.add 'photo_participants', "invalid record data: #{p_data.inspect}"
+          end
+        end
+      end
+    end
+    
+    # delete all obsolete participant records
+    for p in old_participants_by_role_name.values
+      photo_participants.delete(p)
+    end
+  end
+
+
 end

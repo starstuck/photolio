@@ -22,7 +22,8 @@ module Admin::AdminBaseHelper
 
   def extra_head_tags
     [ stylesheet_link_tag('adminpanel'),
-      javascript_include_tag('protomenu')
+      javascript_include_tag('protomenu'),
+      javascript_include_tag('adminpanel')
       ].join("\n")
   end
 

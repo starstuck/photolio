@@ -27,6 +27,65 @@ div#admin_content{
 
 
 /*
+ * Common styles used in admin pages
+ */
+
+hr {
+    margin-top: 20px;
+}
+
+label{
+    font-weight: bold;
+}
+
+p.notice{
+    color: #7f0000;
+}
+
+div.page_actions{
+    margin-left: 1em;
+    margin-right: 1em;
+}
+
+/*
+ * Recort fields styles (Show, Edit, New views)
+ */
+
+div.record_fields{
+    margin-left: 1em;
+}
+
+div.record_fields p{
+    margin-left: 2em;
+    text-indent: -2em;    
+}
+
+
+/*
+ * Listing table, used in record indexes views
+ */
+
+table.listing{
+    margin-left: 1em;
+}
+
+table.listing tbody tr:first-child td{
+    border-top: 1px solid #4f4f4f;
+}
+
+table.listing td{
+    padding: 1px 0.5em;
+}
+
+
+table.listing td.actions{
+    border-left: 1px solid #4f4f4f;
+    padding-left: 1em;
+    text-align: right;
+}
+
+
+/*
  * Context menu styles
  */ 
 

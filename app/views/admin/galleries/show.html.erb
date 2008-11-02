@@ -1,13 +1,20 @@
-<p>
-  <b>Name:</b>
-  <%=h @gallery.name %>
-</p>
+<h2>Gallery details</h2>
 
-<p>
-  <b>Title:</b>
-  <%=h @gallery.title %>
-</p>
+<div class="record_fields">
+  <p>
+    <b>Name</b><br />
+    <%=h @gallery.name %>
+  </p>
 
+  <p>
+    <b>Title</b><br />
+    <%=h @gallery.title %>
+  </p>
+</div>
 
-<%= link_to 'Edit', edit_admin_site_gallery_path(@site, @gallery) %> |
-<%= link_to 'Back', admin_site_galleries_path(@site) %>
+<hr />
+
+<div class="page_actions">
+  <%= link_to 'Edit', edit_admin_site_gallery_path(@site, @gallery) %> |
+  <%= link_to 'Back to galleries list', admin_site_galleries_path(@site) %>
+</div>

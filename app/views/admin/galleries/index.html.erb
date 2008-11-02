@@ -1,23 +1,33 @@
 <h2>Listing galleries in <%= @site.name -%> site</h2>
 
-<table>
-  <tr>
-    <th>Name</th>
-    <th>Title</th>
-  </tr>
+<table class="listing">
+  
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Title</th>
+    </tr>
+  </thead>
 
-<% for gallery in @galleries %>
-  <tr>
-    <td><%=h gallery.name %></td>
-    <td><%=h gallery.title %></td>
-    <td><%= link_to 'Show', admin_site_gallery_path(@site, gallery) %></td>
-    <td><%= link_to 'Edit', edit_admin_site_gallery_path(@site, gallery) %></td>
-    <td><%= link_to 'Destroy', admin_site_gallery_path(@site, gallery), :confirm => 'Are you sure?', :method => :delete %></td>
-  </tr>
-<% end %>
+  <tbody>
+    <% for gallery in @galleries %>
+      <tr>
+	<td><%=h gallery.name %></td>
+	<td><%=h gallery.title %></td>
+	<td class="actions">
+	  <%= link_to 'Show', admin_site_gallery_path(@site, gallery) %> | 
+	  <%= link_to 'Edit', edit_admin_site_gallery_path(@site, gallery) %> |
+	  <%= link_to 'Destroy', admin_site_gallery_path(@site, gallery), :confirm => 'Are you sure?', :method => :delete %>
+	</td>
+      </tr>
+    <% end %>
+  </tbody>
+
 </table>
 
-<br />
+<hr />
 
-<%= link_to 'New gallery', new_admin_site_gallery_path(@site) %> | 
-<%= link_to 'Back', admin_sites_path -%>
+<div class="page_actions">
+  <%= link_to 'New gallery', new_admin_site_gallery_path(@site) %> | 
+  <%= link_to 'Back to site', admin_site_path(@site) -%>
+</div>
