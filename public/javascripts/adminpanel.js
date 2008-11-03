@@ -1,4 +1,10 @@
 
+// Setup rototype to calculate scrolls offsets when calculating position
+// Used by draggable in layout panel
+// WARNING: It cause serious problems on firefox
+Position.includeScrollOffsets = true;
+
+
 // Setup listener, which resize content frame on window resize
 function resize_content_on_window_resize(event){
   var window_height;

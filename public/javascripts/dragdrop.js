@@ -22,7 +22,6 @@ var Droppables = {
       greedy:     true,
       hoverclass: null,
       tree:       false,
-      scroll: null	 
     }, arguments[1] || { });
 
     // cache containers
@@ -65,15 +64,6 @@ var Droppables = {
   },
   
   isAffected: function(point, element, drop) {
-    if( drop.scroll ){
-      Position.includeScrollOffsets = true;
-      scrolling_element = $(drop.scroll)
-      var container_off = Element.cumulativeOffset(scrolling_element); 
-      if( point[1] < container_off[1] || point[1] > Element.getHeight(scrolling_element) + container_off[1])
-        {return false;}
-      else if( point[0] < container_off[0] || point[0] > Element.getWidth(scrolling_element) + container_off[0])
-        {return false;}
-    }
     return (
       (drop.element!=element) &&
       ((!drop._containers) ||
@@ -99,7 +89,7 @@ var Droppables = {
   show: function(point, element) {
     if(!this.drops.length) return;
     var drop, affected = [];
-    
+
     this.drops.each( function(drop) {
       if(Droppables.isAffected(point, element, drop))
         affected.push(drop);
