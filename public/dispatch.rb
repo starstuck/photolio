@@ -1,4 +1,7 @@
-#!/opt/local/bin/ruby
+#!/usr/bin/env ruby
+
+# Choose rails production  environment
+ENV['RAILS_ENV'] = 'production'
 
 require File.dirname(__FILE__) + "/../config/environment" unless defined?(RAILS_ROOT)
 
