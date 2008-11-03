@@ -1,4 +1,24 @@
 
+// Setup listener, which resize content frame on window resize
+function resize_content_on_window_resize(event){
+  var window_height;
+  if( typeof( window.innerHeight ) == 'number' ) {
+    //Non-IE
+    window_height = window.innerHeight;
+  } else if( document.documentElement && ( document.documentElement.clientHeight ) ) {
+    // IE 6+
+    window_height = document.documentElement.clientWidth;
+  }
+  var updated_content_height = window_height - 94;
+  if(updated_content_height < 570){
+    updated_content_height = 570;
+  }
+  $('content').style.height = updated_content_height + 'px';
+}
+//Event.stopObserving(document.onresize ? document : window, "resize", previous_handler);
+Event.observe(document.onresize ? document : window, "resize", resize_content_on_window_resize);
+	      
+
 // Add keyword form edit tag in form, just above element
 var last_photo_keyword_tag_index = 0;
 function add_photo_keyword_tag(element, index){
