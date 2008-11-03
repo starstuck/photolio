@@ -57,7 +57,7 @@ class Photo < ActiveRecord::Base
     File.makedirs("#{PHOTOS_ROOT}/_cache/h#{height}/#{File.dirname(file_name)}")
     thumb_path = "#{PHOTOS_ROOT}/_cache/h#{height}/#{file_name}"
     unless File.exists? thumb_path
-      system("convert #{PHOTOS_ROOT}/#{file_name} -resize x#{height} -quality 75% #{thumb_path}")
+      system("convert #{PHOTOS_ROOT}/#{file_name} -resize x#{height} -quality 85% #{thumb_path}")
     end
     "_cache/h#{height}/#{file_name}"
   end
