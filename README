@@ -4,6 +4,9 @@
 * Extract public views from old page
 * Make photos load after page load, so images loading wont extend overal page load time
 * Make sure all stylesheets, ajavascripts and images are cache friendly
+* Solve rce conditions when moving photo to adder gallery. Sometimes origin gallery updates
+  before target, withoun knowing, that one item is going to be deleted in few moments
+* Consider showing loading wheel in frame, not to replace reloaded content, to avoid blinks
 * Add javascript triggeref loading screen during page load
 * Checkout posibilities for speeding up dragables under firefox
 * Accounts with permisions management
