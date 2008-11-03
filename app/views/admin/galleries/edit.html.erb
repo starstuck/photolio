@@ -13,6 +13,14 @@
       <%= f.text_field :title %>
     </p>
     <p>
+      <%= f.label :display_in_index %><br />
+      <%= f.check_box :display_in_index %>
+    </p>
+    <p>
+      <%= f.label :mark_as_new %><br />
+      <%= f.check_box :mark_as_new %>
+    </p>
+    <p>
       <%= f.submit "Update" %>
     </p>
   </div>
