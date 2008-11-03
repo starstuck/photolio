@@ -24,8 +24,8 @@ function add_onload_handler(handler){
 /* Setup sifr replacement fonts - it have its own onload listener */
 function setup_sifr(){
   // TODO: Switch to ruby computed location
-  var goodtime = {src: '/fonts/goodtime.swf'};
-  var eurostile = {src: '/fonts/eurostile.swf'};
+  var goodtime = {src: fonts_path + '/goodtime.swf'};
+  var eurostile = {src: fonts_path + '/eurostile.swf'};
   sIFR.activate(goodtime, eurostile);
   sIFR.replace(goodtime,{ selector: 'span#header-studio',
 	opaque: true,
