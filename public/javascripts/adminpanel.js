@@ -16,7 +16,9 @@ function resize_content_on_window_resize(event){
   $('content').style.height = updated_content_height + 'px';
 }
 //Event.stopObserving(document.onresize ? document : window, "resize", previous_handler);
+//Event.stopObserving(window "load", previous_handler);
 Event.observe(document.onresize ? document : window, "resize", resize_content_on_window_resize);
+Event.observe(window, "load", resize_content_on_window_resize);
 	      
 
 // Add keyword form edit tag in form, just above element

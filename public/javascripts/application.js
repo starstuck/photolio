@@ -14,7 +14,7 @@ window.onload = function () {
 /* Register function as onLoad handlerm so it will be executed each time page loads 
    Functions registered eith this method will be executed before handlers registerd
    in traditional way. In praticualr they will be executed before function, that 
-   removes loadin  screen.
+   removes loading screen.
  */
 function add_onload_handler(handler){
   onload_handlers.push(handler);
