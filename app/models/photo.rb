@@ -51,6 +51,16 @@ class Photo < ActiveRecord::Base
       FileUtils.rm_rf("#{PHOTOS_ROOT}/#{file_name}")
     end
   end  
+  
+  # Get path for thumbnail, in selected size. If thumbnail is not generated yet, it will be created
+  def thumbnail_path(height)
+    File.makedirs("#{PHOTOS_ROOT}/_cache/h#{height}/#{File.dirname(file_name)}")
+    thumb_path = "#{PHOTOS_ROOT}/_cache/h#{height}/#{file_name}"
+    unless File.exists? thumb_path
+      system("convert #{PHOTOS_ROOT}/#{file_name} -resize x#{height} -quality 75% #{thumb_path}")
+    end
+    "_cache/h#{height}/#{file_name}"
+  end
 
   # Update keywords values from array of hashes, having keywords data
   # Keywords are matched by name

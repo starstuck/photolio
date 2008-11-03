@@ -5,8 +5,7 @@
 * Make photos load after page load, so images loading wont extend overal page load time
 * Make sure all stylesheets, ajavascripts and images are cache friendly
 * Add javascript triggeref loading screen during page load
-* Layout screen optimization
-  * use generated thumbnails instead of fuull imges, resized by browser
+* Checkout posibilities for speeding up dragables under firefox
 * Accounts with permisions management
 * Content versioning
 * Content translation

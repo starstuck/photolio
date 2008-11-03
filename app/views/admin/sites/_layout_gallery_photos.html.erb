@@ -29,7 +29,7 @@
 	    :scroll => "'admin_frame'"
 	    -%>
 	<% if item.is_a? GalleryPhoto -%>
-	  <%= image_tag compute_photo_path(item.photo),
+	  <%= image_tag compute_photo_thumbnail_path(130, item.photo),
 	      :id => "photo_#{item.photo_id}",
 	      :alt => index, # Used by context menu
 	      :class => "assigned_photo draggable_photo gallery_#{gallery.id}_photo"-%>
