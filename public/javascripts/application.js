@@ -21,61 +21,10 @@ function add_onload_handler(handler){
 }
 
 
-/* Setup sifr replacement fonts - it have its own onload listener */
-function setup_sifr(){
-  // TODO: Switch to ruby computed location
-  var goodtime = {src: fonts_path + '/goodtime.swf'};
-  var eurostile = {src: fonts_path + '/eurostile.swf'};
-  sIFR.activate(goodtime, eurostile);
-  sIFR.replace(goodtime,{ selector: 'span#header-studio',
-	opaque: true,
-	forceSingleLine: true,
-	tuneHeight: -5,
-	css: {'.sIFR-root': { 'color': '#bfbfbf',
-	    'background-color': '#303232',
-	    'font-size': '32px' 
-	    }}
-	});
-  sIFR.replace(goodtime,{ selector: 'span#header-brand',
-	opaque: true,
-	forceSingleLine: true,
-	tuneHeight: -5,
-	css: {'.sIFR-root': { 'color': '#bfbfbf',
-	    'background-color': '#303232',
-	    'font-size': '26px' 
-	    }}
-	});
-  sIFR.replace(eurostile,{ selector: '#gallery-switches ul>span',
-	transparent: true,
-	forceSingleLine: true,
-	tuneHeight: -4,
-	css: {'.sIFR-root': { 'color': '#bfbfbf',
-	    'background-color': '#000000',
-	    'font-size': '16px'
-	    }}
-	});  
-  sIFR.replace(eurostile,{ selector: 'div.gallery-switch',
-	forceSingleLine: true,
-	transparent: true,
-	tuneHeight: -4,
-       	css: {'.sIFR-root': { 
-	    'color': '#bfbfbf',
-	    'background-color': '#000000',
-	    'font-size': '16px'
-	    },
-	    'a': {'color': '#bfbfbf', 'text-decoration': 'none'},
-	    'a:hover': {'color': '#7f7f7f'}
-        }
-	});  
-  sIFR.initialize();
-}
-add_onload_handler(setup_sifr);
-
-
 /* Add reflections to galery images */
 
 function add_reflections() {
-  var rimages = $$('#gallery-images img');
+  var rimages = $$('#gallery_photos img');
   for (i=0;i<rimages.length;i++) {
     Reflection.add(rimages[i], { height: 0.25, opacity : null});
   }
@@ -92,34 +41,38 @@ function setup_scrollbar() {
   /* Update images container width based on items content */
   function update_gallery_images_width() {
     var new_width = 0;
-    var image_items = $$('#gallery-images > div');
+    var image_items = $$('#gallery_photos > span');
     var margin = 4;
     for (i = 0 ; i < image_items.length ; i++){
       new_width += image_items[i].offsetWidth;
       new_width += margin;
     }
-    document.getElementById("gallery-images").style.width = new_width + "px";
+    document.getElementById("gallery_photos").style.width = new_width + "px";
   }
 
-  var scrollerDiv = document.getElementById("gallery-scroller");
+  var scrollerDiv = document.getElementById("gallery_scroller");
 
   if (scrollerDiv){
+    // TODO: instead of javascript, do it on sttic level during view building
     update_gallery_images_width();
 
-    var imagesDiv = document.getElementById("gallery-images");
-    var visibleWidth = document.getElementById("gallery").offsetWidth;
-    var scrollbarWidth = document.getElementById("gallery-scrollbar-space").offsetWidth;
+    /* Turn off default browser scroller */
+    document.getElementById("gallery_photos_viewport").style.overflow = "hidden";
+
+    var imagesDiv = document.getElementById("gallery_photos");
+    var visibleWidth = document.getElementById("gallery_photos_viewport").offsetWidth;
+    var scrollbarWidth = document.getElementById("gallery_scrollbar_space").offsetWidth;
     var overflowSize = 4;
     
     scroller = new Scroller(scrollerDiv, imagesDiv, scrollbarWidth, visibleWidth,
 			    {scrollerOffset: 0 - overflowSize,
 				scrollerMinWidth: 40,
 				setScrollerWidth: function(width){
-				var left_width = $("gallery-scroller-left").offsetWidth;
-				var right_width = $("gallery-scroller-right").offsetWidth;
+				var left_width = $("gallery_scroller_left").offsetWidth;
+				var right_width = $("gallery_scroller_right").offsetWidth;
 				var space_width = width - left_width - right_width + 2 * overflowSize;
-				$("gallery-scroller-space").style.width = space_width + "px";
-				$("gallery-scroller-right").style.left = space_width + left_width + "px";
+				$("gallery_scroller_space").style.width = space_width + "px";
+				$("gallery_scroller_right").style.left = space_width + left_width + "px";
 			      }});
 
     function stop_scrolling(event){
@@ -133,7 +86,7 @@ function setup_scrollbar() {
     function start_scrolling_right(event){
       scroller.startScrollingToEnd();
       var el = Event.element(event)
-	Event.observe("gallery-scrollbar-left", "mouseout", stop_scrolling);
+	Event.observe("gallery_scrollbar_left", "mouseout", stop_scrolling);
     }
 
     function scroll_on_mousewheel(event){
@@ -141,14 +94,14 @@ function setup_scrollbar() {
       //alert("Scroll delta" + Event.wheel(event));
     }
 
-    Event.observe("gallery-scrollbar-left", "mousedown", start_scrolling_left);
-    Event.observe("gallery-scrollbar-left", "mouseup", stop_scrolling);
+    Event.observe("gallery_scrollbar_left", "mousedown", start_scrolling_left);
+    Event.observe("gallery_scrollbar_left", "mouseup", stop_scrolling);
     
-    Event.observe("gallery-scrollbar-right", "mousedown", start_scrolling_right);
-    Event.observe("gallery-scrollbar-right", "mouseup", stop_scrolling);
+    Event.observe("gallery_scrollbar_right", "mousedown", start_scrolling_right);
+    Event.observe("gallery_scrollbar_right", "mouseup", stop_scrolling);
 
-    Event.observe("gallery-images", "mousewheel", scroll_on_mousewheel);
-    Event.observe("gallery-images", "DOMMouseScroll", scroll_on_mousewheel); //firefox
+    Event.observe("gallery_photos", "mousewheel", scroll_on_mousewheel);
+    Event.observe("gallery_photos", "DOMMouseScroll", scroll_on_mousewheel); //firefox
   }
 }
 add_onload_handler(setup_scrollbar);
@@ -165,28 +118,28 @@ function setup_gallery_play() {
           speed: 75, 
 	  afterFinish: pause_gallery
 	  });
-    var el = $('gallery-play-button');
+    var el = $('gallery_play_button');
     el.className = 'playing';
     Event.stopObserving(el, 'click', play_gallery);
     Event.observe(el, 'click', pause_gallery);
-    Event.observe('gallery-scrollbar-left', 'mousedown', pause_gallery);
-    Event.observe('gallery-scrollbar-right', 'mousedown', pause_gallery);
-    Event.observe('gallery-scroller', 'mousedown', pause_gallery);
+    Event.observe('gallery_scrollbar_left', 'mousedown', pause_gallery);
+    Event.observe('gallery_scrollbar_right', 'mousedown', pause_gallery);
+    Event.observe('gallery_scroller', 'mousedown', pause_gallery);
   }
 
   function pause_gallery(event) {
     scroller.cancelScrolling();
-    var el = $('gallery-play-button');
+    var el = $('gallery_play_button');
     el.className = '';
     Event.stopObserving(el, 'click', pause_gallery);
-    Event.stopObserving('gallery-scrollbar-left', 'mousedown', pause_gallery);
-    Event.stopObserving('gallery-scrollbar-right', 'mousedown', pause_gallery);
-    Event.stopObserving('gallery-scroller', 'mousedown', pause_gallery);
+    Event.stopObserving('gallery_scrollbar_left', 'mousedown', pause_gallery);
+    Event.stopObserving('gallery_scrollbar_right', 'mousedown', pause_gallery);
+    Event.stopObserving('gallery_scroller', 'mousedown', pause_gallery);
     Event.observe(el, 'click', play_gallery);
   }
 
-  if (document.getElementById('gallery-play-button'))
-    Event.observe("gallery-play-button", "click", play_gallery);
+  if (document.getElementById('gallery_play_button'))
+    Event.observe("gallery_play_button", "click", play_gallery);
 }
 add_onload_handler(setup_gallery_play);
 

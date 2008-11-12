@@ -32,6 +32,7 @@ class Photo < ActiveRecord::Base
   # We can set file name after photo site is set
   def update_file_name
     if @file_data
+      #TODO: sanitize file_name
       self.file_name = "#{site.name}/#{@file_data.original_filename}"
     end      
   end

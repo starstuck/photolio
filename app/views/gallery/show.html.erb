@@ -1,2 +1,72 @@
-<h2>Gallery#show</h2>
-<p>Find me in app/views/gallery/show.html.erb</p>
+<ul id="site_menu">
+  <% for topic in @menu_items -%>
+    <li class="site_menu_topic">
+      <%= link_to( topic.title, 
+		   :controller => 'topic',
+		   :action => 'show',
+		   :site_name => @site.name,
+		   :id => topic,
+		   :format => 'html' )
+	  -%>
+    </li>
+  <% end -%>
+</ul>
+
+<div id="gallery">
+
+  <p id="gallery_switches">
+    <span class="typeface-js gallery_switches_label">Gallery:</span>
+    <% for gallery in @galleries -%>
+      <%= link_to "<span>#{gallery.name}</span><div class=\"gallery_switch_ghost\"></div>", 
+	  { :controller => 'gallery', 
+	    :action  => 'show',
+	    :site_name => @site.name,
+	    :gallery_name => gallery.name,
+	    :format => 'html'}, 
+	  { :class => "typeface-js gallery_switch" + ( gallery.id == @gallery.id ? ' active' : '' ), 
+	    :title => gallery.title } 
+	  -%>
+    <% end -%>
+  </p>
+  
+  <div id="gallery_photos_viewport">
+    <p id="gallery_photos">
+      <% for item in @gallery.gallery_items -%>
+	<% if item.is_a? GalleryPhoto -%>
+	  <span class="gallery_photo">
+	    <%= link_to( image_tag( compute_photo_path(item.photo), 
+				    :alt => item.photo.title, 
+				    :height => "400"),  
+			 { :controller => 'photo', 
+			   :action => 'show',
+			   :site_name => @site.name,
+			   :gallery_name => gallery.name,
+			   :id => item.photo,
+			   :format => 'html'},
+			 { :title => item.photo.title })
+		-%>
+	  </span>
+	<% elsif item.is_a? GallerySeparator -%>
+	  <span class="gallery_separator">&nbsp;</span>
+	<% end -%>
+      <% end -%>
+    </p>
+  </div>
+
+  <div id="gallery_scrollbar">
+    <div id="gallery_scrollbar_left"></div>
+    <div id="gallery_scrollbar_space">
+      <div id="gallery_scroller">
+	<div id="gallery_scroller_left"></div>
+	<div id="gallery_scroller_space"></div>
+	<div id="gallery_scroller_right"></div>
+      </div>
+    </div>
+    <div id="gallery_scrollbar_right"></div>
+  </div>
+
+  <div id="gallery_controls">
+    <div id="gallery_play_button"></div>
+  </div>
+  
+</div>

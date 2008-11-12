@@ -37,7 +37,7 @@ ActionController::Routing::Routes.draw do |map|
   # See how all your routes lay out with "rake routes"
 
   # Map published pages without brand (polinostudio)
-  map.published_gallery('gallery/:name.:format', 
+  map.published_gallery('gallery/:gallery_name.:format', 
                         :controller => 'gallery', 
                         :action => 'show',
                         :site_name => 'studio',

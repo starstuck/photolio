@@ -31,29 +31,27 @@ pre{
     background-color: #111111;
 }  
 
-div#content,
-div#content-preloading
+#content,
+#content_preloading
 {
     background-color: #000000;
 }
 
-div#header,
-div#gallery-switches
+#header,
+#gallery_switches span
 {
     color: #bfbfbf;
 }
 
-div.gallery-switch a:hover,
+div.gallery_switch a:hover,
 div#footer{
     color: #7f7f7f;
 }
 
-div.gallery-switch.active{
-    background-color: #2f2f2f;
-}
 
-div#gallery-controlls,
-div#site-menu{
+#gallery_switches .gallery_switch.active, 
+#gallery_controls,
+#site_menu{
     background-color: #2f2f2f;
 }
 
@@ -63,12 +61,12 @@ div#site-menu{
  */
 
 body, a, h1, h2, h3, h4, p, ol, ul, td {
-    font-family: verdana, arial, helvetica, sans-serif;
-    font-weight: lighter;
+    font-family: helvetica, arial, sans-serif;
+    font-weight: normal;
 }
 
 body, a, p, ol, ul, td {
-    font-size:   14px;
+    font-size: 14px;
 }
 
 body b{
@@ -88,10 +86,10 @@ h1, h2, h3, h4{
 }
 
 h1{
+    font-family: 'Good Times', helvetica, arial, sans-serif;
     font-size: 32px;
     text-transform: uppercase;
-    letter-spacing: 2px;
-    line-height: 30px;
+    line-height: 32px;
 }
 
 h2{
@@ -122,14 +120,6 @@ pre {
 }
 
 
-/*
- * Common table styles
- */
-
-table{
-    border-spacing: 0px;
-}
-
 /* 
  * Common text styles 
  */
@@ -138,8 +128,17 @@ table{
     font-size: 75%;
 }
 
-.sIFR-alternate {
-    display: none; /* Hide sIFR alternates */
+.typeface-js{
+    font-family: 'Venus Rising', helvetica, arial, sans-serif;
+}
+
+
+/*
+ * Common table styles
+ */
+
+table{
+    border-spacing: 0px;
 }
 
 

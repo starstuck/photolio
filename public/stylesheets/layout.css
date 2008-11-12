@@ -15,9 +15,9 @@ body {
 
 div#header{
     width: 930px;
-    height: 36px;
+    height: 30px;
     margin: 0px auto;
-    padding-top: 34px;
+    padding-top: 30px;
     padding-left: 65px;
 }
 
@@ -26,12 +26,9 @@ div#header h1{
     margin: 0px;
 }
 
-span#header-studio{
-    font-size: 32px;
-}
-
-span#header-brand{
+span#header_brand{
     font-size: 26px;
+    line-height: 32px;
 }
 
 /* 
@@ -39,10 +36,10 @@ span#header-brand{
  */
 
 div#content,
-div#content-preloading
+div#content_preloading
 {
     width: 930px;
-    height: 570px;
+    height: 550px;
     background-image: url(../images/content-corner-tl.gif);
     background-repeat: no-repeat;
 }
@@ -54,14 +51,14 @@ div#content{
     overflow: hidden;
 }
 
-div#content-preloading{
+div#content_preloading{
     position: fixed;
     top: 70px;
     z-index: 20;
     display: none;
 }
 
-span.content-corner-tr, span.content-corner-bl, span.content-corner-br{
+span.content_corner_tr, span.content_corner_bl, span.content_corner_br{
     position: absolute;
     width: 13px;
     height: 13px;
@@ -70,19 +67,19 @@ span.content-corner-tr, span.content-corner-bl, span.content-corner-br{
     background-repeat: no-repeat;
 }
 
-span.content-corner-tr{
+span.content_corner_tr{
     top: 0px;
     right: 0px;
     background-image: url(../images/content-corner-tr.gif);
 }
 
-span.content-corner-bl{
+span.content_corner_bl{
     bottom: 0px;
     left: 0px;
     background-image: url(../images/content-corner-bl.gif); 
 }
 
-span.content-corner-br{
+span.content_corner_br{
     bottom: 0px;
     right: 0px;
     background-image: url(../images/content-corner-br.gif); 
@@ -93,74 +90,73 @@ span.content-corner-br{
  * Gallery
  */
 
-#gallery, #topic{
-    width: 930px;
-    height: 570px;
-    overflow: hidden;    
-}
-
-
 /* Gallery switches */
 
-#gallery-switches {
-    margin: 15px 25px 20px 25px;
-    height: 20px;
+#gallery_switches {
+    display: block;
+    margin: 17px 25px 17px 25px;
     width: 880px;
+    height: 16px;
     font-size: 14px;
 }
 
-#gallery-switches .sIFR-alternate{
+#gallery_switches .sIFR-alternate{
     display:none;
 }
 
-#gallery-switches ul{
+.gallery_switch,
+.gallery_switches_label
+{
+    display: block;
+    float: left;
     height: 20px;
+}
+
+.gallery_switches_label {
+    padding-right: 10px;
+}
+
+.gallery_switch{
+    position: relative; 
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+
+/* Gallery photos */
+
+#gallery_photos_viewport{
+    position: relative;
+    overflow: auto;  /* Scrollbar is being disabled in js, because we use custom one */
+    width: 926px;
+    height: 500px;
+    margin-left: 2px;
+    margin-right: 2px;
+}
+
+#gallery_photos{
+    display: block;
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    width: 10000px; /*This should be overwritten to correct value on item style attribute */
     padding: 0px;
     margin: 0px;
-    display: block;
 }
 
-#gallery-switches ul span{
-    display: block;
-    float: left;
-    height: 20px;
-    width: 60px;    
-}
-
-#gallery-switches li{
-    display: block;
-    float: left;
-    list-style: none;
-    text-align: center;
-}
-
-div.gallery-switch {
-    height: 18px;
-    padding: 1px 10px 1px 10px;
-}
-    
-
-/* Gallery images */
-
-#gallery-images{
-    position: relative;
-    left: 0px;
-    width: 100000px;
-    height:500px;
-    padding: 0px;
-}
-
-#gallery-images div.gallery-image{
+#gallery_photos .gallery_photo,
+#gallery_photos .gallery_separator
+{
     float: left;
     margin: 0px 2px 0px 2px;
 }
 
-#gallery-images div.gallery-separator{
+#gallery_photos .gallery_separator{
     float: left;
     width: 100px;
 }
 
-#gallery-images img{
+#gallery_photos img{
     height: 400px;
 }
 
@@ -168,43 +164,43 @@ div.gallery-switch {
 
 /* Gallery scrollbar */
 
-#gallery-scrollbar {
-    position: relative;
+#gallery_scrollbar {
+    position: absolute;
     left: 150px;
-    top: -40px;
+    bottom: 40px;
     height: 12px;
     width: auto;
     z-index: 10;
 }
 
-#gallery-scrollbar-left {
+#gallery_scrollbar_left {
     width: 19px;
     height: 12px;
-    background-image: url(../img/scrollbar-left.png); 
+    background-image: url(../images/scrollbar-left.png); 
     cursor: pointer;
 }
 
-#gallery-scrollbar-space {
+#gallery_scrollbar_space {
     position: absolute;
     left: 19px;
     top: 0px;
     width: 588px;
     height: 12px;
-    background-image: url(../img/scrollbar-space.png);
+    background-image: url(../images/scrollbar-space.png);
     background-repeat: repeat-x;
 }
 
-#gallery-scrollbar-right {
+#gallery_scrollbar_right {
     position: absolute;
     left: 607px;
     top: 0px;
     width: 19px;
     height: 12px;
-    background-image: url(../img/scrollbar-right.png);
+    background-image: url(../images/scrollbar-right.png);
     cursor: pointer;
 }
 
-#gallery-scroller {
+#gallery_scroller {
     position: absolute;
     top: 1px;
     left: -4px;
@@ -213,37 +209,37 @@ div.gallery-switch {
     cursor: move;
 }
 
-#gallery-scroller-left {
+#gallery_scroller_left {
     width: 14px;
     height: 10px;
-    background-image: url(../img/scroller-left.png);
+    background-image: url(../images/scroller-left.png);
 }
 
-#gallery-scroller-space {
+#gallery_scroller_space {
     position: absolute;
     top: 0px;
     left: 14px;
     width: 35px;
     height: 10px;
-    background-image: url(../img/scroller-space.png);
+    background-image: url(../images/scroller-space.png);
     background-repeat: repeat-x;
 }
 
-#gallery-scroller-right {
+#gallery_scroller_right {
     position: absolute;
     top: 0px;
     left: 49px;
     width: 14px;
     height: 10px;
-    background-image: url(../img/scroller-right.png);
+    background-image: url(../images/scroller-right.png);
 }
 
 
 /* Gallery controlls */
 
-#gallery-controls {
+#gallery_controls {
     position: absolute;
-    top: 530px;
+    bottom: 20px;
     left: 0px;
     width: 50px;
     height: 20px;
@@ -251,52 +247,55 @@ div.gallery-switch {
     opacity: 0.7;
 }
 
-#gallery-play-button {
+#gallery_play_button {
     width: 14px;
     height: 14px;
     margin-top: 3px;
     margin-left: 32px;
-    background-image: url(../img/button-play.png);
+    background-image: url(../images/button-play.png);
     cursor: pointer;
 }
 
-.playing#gallery-play-button {
-    background-image: url(../img/button-pause.png);
+.playing#gallery_play_button {
+    background-image: url(../images/button-pause.png);
 }
 
 
 /* Site menu */
 
-div#site-menu {
+#site_menu {
+    display: block;
     position: absolute;
-    top: 530px;
-    left: 868px;
+    bottom: 20px;
+    right: 0px;
     width: 70px;
     font-size: 11px;
     z-index: 100;
     opacity: 0.7;
+    list-style: none;
+    background-color: #5f0000;
 }
 
-div.site-menu-topic {
+.site_menu_topic {
     padding: 4px 5px 0px 5px;
     height: 16px;
     width: 70px;
 }
 
-div.site-menu-topic a{
+.site_menu_topic a{
     margin-top: 2px;
 }
 
 
 /* Topic page */
 
-#topic-header{
+#topic_header{
     width: 900px;
     height: 45px;
     margin: 5px 15px 5px 15px;
 }
 
-#close-button{
+#close_button{
     position: relative;
     left: 885px;
     top: 5px;
@@ -304,7 +303,7 @@ div.site-menu-topic a{
     height: 11px;
 }
 
-#topic-content{
+#topic_content{
     height: 515px;
     margin: 0px 15px 0px 15px;
 }
@@ -312,14 +311,14 @@ div.site-menu-topic a{
 
 /* Photo page */
 
-#photo-box{
+#photo_box{
     height: 400px;
     margin-left: auto;
     margin-right: auto;
     text-align: center;
 }
 
-#photo-description-box{
+#photo_description_box{
     position: relative;
     left: 319px; 
     width: 260px;
@@ -328,16 +327,16 @@ div.site-menu-topic a{
     font-size: 11px;
 }
 
-#photo-description-box table{
+#photo_description_box table{
     width: 100%;
     margin-top: 5px;
 }
 
-#photo-description-box td{
+#photo_description_box td{
     padding: 0px 5px 0px 5px;
 }
 
-#photo-description-box td.col1{
+#photo_description_box td.col1{
     text-align: right;
 }
 
@@ -353,5 +352,4 @@ div#footer{
 
 div#footer p{
     font-size: 7pt;
-    margin: 0px;
 }

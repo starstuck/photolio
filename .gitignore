@@ -1,6 +1,10 @@
 config/database.yml
-log
-tmp
-doc/*
-public/photos
 db/schema.rb
+doc/*
+log
+public/photos
+public/stylesheets/admin_*.css
+public/stylesheets/base_*.css
+public/javascripts/admin_*.js
+public/javascripts/base_*.js
+tmp
