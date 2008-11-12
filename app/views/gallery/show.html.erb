@@ -17,7 +17,7 @@
   <p id="gallery_switches">
     <span class="typeface-js gallery_switches_label">Gallery:</span>
     <% for gallery in @galleries -%>
-      <%= link_to "<span>#{gallery.name}</span><div class=\"gallery_switch_ghost\"></div>", 
+      <%= link_to gallery.name, 
 	  { :controller => 'gallery', 
 	    :action  => 'show',
 	    :site_name => @site.name,
@@ -25,7 +25,7 @@
 	    :format => 'html'}, 
 	  { :class => "typeface-js gallery_switch" + ( gallery.id == @gallery.id ? ' active' : '' ), 
 	    :title => gallery.title } 
-	  -%>
+	  %>
     <% end -%>
   </p>
   
