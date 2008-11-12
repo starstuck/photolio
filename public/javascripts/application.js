@@ -38,23 +38,9 @@ var scroller; //gallery scroller object wil be stored here
 
 function setup_scrollbar() {
 
-  /* Update images container width based on items content */
-  function update_gallery_images_width() {
-    var new_width = 0;
-    var image_items = $$('#gallery_photos > span');
-    var margin = 4;
-    for (i = 0 ; i < image_items.length ; i++){
-      new_width += image_items[i].offsetWidth;
-      new_width += margin;
-    }
-    document.getElementById("gallery_photos").style.width = new_width + "px";
-  }
-
   var scrollerDiv = document.getElementById("gallery_scroller");
 
   if (scrollerDiv){
-    // TODO: instead of javascript, do it on sttic level during view building
-    update_gallery_images_width();
 
     /* Turn off default browser scroller */
     document.getElementById("gallery_photos_viewport").style.overflow = "hidden";

@@ -1,4 +1,5 @@
 require 'ftools'
+require 'mini_magick'
 
 
 class Photo < ActiveRecord::Base
@@ -12,7 +13,7 @@ class Photo < ActiveRecord::Base
   has_many :photo_participants, :dependent => :destroy
   has_many :photo_keywords, :dependent => :destroy
 
-  before_validation_on_create :update_file_name
+  before_validation_on_create :update_file_name_and_metadata
   after_save :write_file
   after_destroy :delete_file
 
@@ -24,16 +25,24 @@ class Photo < ActiveRecord::Base
   validates_length_of :title, :maximum => 255, :allow_nil => true
   validates_length_of :description, :maximum => 255, :allow_nil => true
   validates_associated :photo_participants, :photo_keywords
+  validates_length_of :format, :maximum => 8
+  validates_numericality_of :width, :only_integer => true
+  validates_numericality_of :height, :only_integer => true
 
   def file=(file_data)
-    @file_data = file_data
+    @uploaded_file = file_data
   end
 
   # We can set file name after photo site is set
-  def update_file_name
-    if @file_data
+  def update_file_name_and_metadata
+    if @uploaded_file
+      @file_data = @uploaded_file.read
       #TODO: sanitize file_name
-      self.file_name = "#{site.name}/#{@file_data.original_filename}"
+      self.file_name = "#{site.name}/#{@uploaded_file.original_filename}"
+      image = MiniMagick::Image.from_blob(@file_data, self.file_name.split('.')[-1])
+      self.width = image[:width]
+      self.height = image[:height]
+      self.format = image[:format]
     end      
   end
 
@@ -41,7 +50,7 @@ class Photo < ActiveRecord::Base
     if @file_data
       File.makedirs("#{PHOTOS_ROOT}/#{site.name}")
       File.open("#{PHOTOS_ROOT}/#{file_name}", "w") do |f|
-        f.write(@file_data.read)
+        f.write(@file_data)
       end
     end
   end
