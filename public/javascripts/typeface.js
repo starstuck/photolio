@@ -258,8 +258,8 @@ var _typeface_js = {
 			cssLineHeightAdjustment = style.lineHeight - this.pixelsFromPoints(face, style, face.lineHeight);
 		}
 		
-		var marginTop = Math.round(boundingBoxAdjustmentTop + cssLineHeightAdjustment / 2);
-		var marginBottom = Math.round(boundingBoxAdjustmentBottom + cssLineHeightAdjustment / 2);
+		var marginTop = Math.round(boundingBoxAdjustmentTop + cssLineHeightAdjustment * 0.75);
+		var marginBottom = Math.round(boundingBoxAdjustmentBottom + cssLineHeightAdjustment * 0.25);
 
 		e.style.marginTop = marginTop + 'px';
 		e.style.marginBottom = marginBottom + 'px';
