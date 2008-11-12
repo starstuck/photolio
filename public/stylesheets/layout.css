@@ -94,9 +94,9 @@ span.content_corner_br{
 
 #gallery_switches {
     display: block;
-    margin: 17px 25px 17px 25px;
+    margin: 16px 25px 16px 25px;
     width: 880px;
-    height: 16px;
+    height: 18px;
     font-size: 14px;
 }
 
@@ -109,7 +109,8 @@ span.content_corner_br{
 {
     display: block;
     float: left;
-    height: 20px;
+    height: 18px;
+    line-height: 18px;
 }
 
 .gallery_switches_label {
@@ -244,7 +245,7 @@ span.content_corner_br{
     width: 50px;
     height: 20px;
     z-index: 100;
-    opacity: 0.7;
+    opacity: 0.6;
 }
 
 #gallery_play_button {
@@ -268,24 +269,26 @@ span.content_corner_br{
     position: absolute;
     bottom: 20px;
     right: 0px;
-    width: 70px;
-    font-size: 11px;
+    width: 90px;
+    margin: 0px;
     z-index: 100;
-    opacity: 0.7;
+    opacity: 0.6;
     list-style: none;
-    background-color: #5f0000;
+    text-align: right;
 }
 
 .site_menu_topic {
-    padding: 4px 5px 0px 5px;
-    height: 16px;
-    width: 70px;
+    display: block;
+    font-size: 11px;
+    line-height: 14px;
+    margin: 4px 0px 0px 0px;
+    padding: 4px 0px 2px 0px;
 }
 
 .site_menu_topic a{
-    margin-top: 2px;
+    display: block;
+    margin-right: 8px;
 }
-
 
 /* Topic page */
 

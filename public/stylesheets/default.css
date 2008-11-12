@@ -51,7 +51,7 @@ div#footer{
 
 #gallery_switches .gallery_switch.active, 
 #gallery_controls,
-#site_menu{
+#site_menu .site_menu_topic{
     background-color: #2f2f2f;
 }
 
