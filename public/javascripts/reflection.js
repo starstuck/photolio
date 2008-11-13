@@ -1,5 +1,5 @@
 /**
- * reflection.js v1.9
+ * reflection.js v2.0
  * http://cow.neondragon.net/stuff/reflection/
  * Freely distributable under MIT-style license.
  */
@@ -132,11 +132,8 @@ var Reflection = {
 					gradient.addColorStop(0, "rgba(255, 255, 255, "+(1-options['opacity'])+")");
 		
 					context.fillStyle = gradient;
-					if (navigator.appVersion.indexOf('WebKit') != -1) {
-						context.fill();
-					} else {
-						context.fillRect(0, 0, reflectionWidth, reflectionHeight*2);
-					}
+					context.rect(0, 0, reflectionWidth, reflectionHeight*2);
+					context.fill();
 				}
 			}
 		} catch (e) {
@@ -150,3 +147,25 @@ var Reflection = {
 		}
 	}
 }
+
+function addReflections() {
+	var rimages = document.myGetElementsByClassName('reflect');
+	for (i=0;i<rimages.length;i++) {
+		var rheight = null;
+		var ropacity = null;
+		
+		var classes = rimages[i].className.split(' ');
+		for (j=0;j<classes.length;j++) {
+			if (classes[j].indexOf("rheight") == 0) {
+				var rheight = classes[j].substring(7)/100;
+			} else if (classes[j].indexOf("ropacity") == 0) {
+				var ropacity = classes[j].substring(8)/100;
+			}
+		}
+		
+		Reflection.add(rimages[i], { height: rheight, opacity : ropacity});
+	}
+}
+
+var previousOnload = window.onload;
+window.onload = function () { if(previousOnload) previousOnload(); addReflections(); }
