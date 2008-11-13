@@ -14,7 +14,7 @@ class Admin::PhotosControllerTest < ActionController::TestCase
 
   def test_should_create_photo
     assert_difference('Photo.count') do
-      post :create, :site_id => 1, :photo => { :file_name => 'some_file.jpg' }
+      post :create, :site_id => 1, :photo => { :file_name => 'some_file.jpg', :width => 100, :height => 100, :format => 'JPEG' }
     end
 
     assert_redirected_to admin_site_photo_path(assigns(:site), assigns['photo'])

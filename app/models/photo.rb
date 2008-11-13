@@ -5,6 +5,7 @@ require 'mini_magick'
 class Photo < ActiveRecord::Base
 
   PHOTOS_ROOT = "#{RAILS_ROOT}/public/photos"
+  STORE_HEIGHT = 400
 
   has_many :gallery_items, :dependent => :destroy
   has_and_belongs_to_many :galleries, :readonly => true # Simple access skiping assoc table
@@ -36,13 +37,15 @@ class Photo < ActiveRecord::Base
   # We can set file name after photo site is set
   def update_file_name_and_metadata
     if @uploaded_file
-      @file_data = @uploaded_file.read
-      #TODO: sanitize file_name
       self.file_name = "#{site.name}/#{@uploaded_file.original_filename}"
-      image = MiniMagick::Image.from_blob(@file_data, self.file_name.split('.')[-1])
+      image = MiniMagick::Image.from_blob(@uploaded_file.read, self.file_name.split('.')[-1])
+      if image[:height] != STORE_HEIGHT
+        image.resize( "x#{STORE_HEIGHT}" )
+      end
       self.width = image[:width]
       self.height = image[:height]
       self.format = image[:format]
+      @file_data = image.to_blob
     end      
   end
 
@@ -66,8 +69,10 @@ class Photo < ActiveRecord::Base
   def thumbnail_path(height)
     File.makedirs("#{PHOTOS_ROOT}/_cache/h#{height}/#{File.dirname(file_name)}")
     thumb_path = "#{PHOTOS_ROOT}/_cache/h#{height}/#{file_name}"
-    unless File.exists? thumb_path
-      system("convert #{PHOTOS_ROOT}/#{file_name} -resize x#{height} -quality 85% #{thumb_path}")
+    if ( not File.exists? thumb_path ) and File.exists? "#{PHOTOS_ROOT}/#{file_name}"
+      mm = MiniMagick::Image.from_file("#{PHOTOS_ROOT}/#{file_name}")
+      mm.resize( "x#{height}", '-quality', '85%' )
+      mm.write(thumb_path)
     end
     "_cache/h#{height}/#{file_name}"
   end
