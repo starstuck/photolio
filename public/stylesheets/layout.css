@@ -15,9 +15,9 @@ body {
 
 div#header{
     width: 930px;
-    height: 30px;
+    height: 32px;
     margin: 0px auto;
-    padding-top: 30px;
+    padding-top: 28px;
     padding-left: 65px;
 }
 
@@ -39,7 +39,7 @@ div#content,
 div#content_preloading
 {
     width: 930px;
-    height: 550px;
+    height: 565px;
     background-image: url(../images/content-corner-tl.gif);
     background-repeat: no-repeat;
 }
@@ -94,10 +94,9 @@ span.content_corner_br{
 
 #gallery_switches {
     display: block;
-    margin: 16px 25px 16px 25px;
+    margin: 17px 25px 17px 25px;
     width: 880px;
-    height: 18px;
-    font-size: 14px;
+    height: 16px;
 }
 
 #gallery_switches .sIFR-alternate{
@@ -109,8 +108,9 @@ span.content_corner_br{
 {
     display: block;
     float: left;
-    height: 18px;
-    line-height: 18px;
+    height: 16px;
+    line-height: 16px;
+    font-size: 12px;
 }
 
 .gallery_switches_label {
@@ -168,7 +168,7 @@ span.content_corner_br{
 #gallery_scrollbar {
     position: absolute;
     left: 150px;
-    bottom: 40px;
+    bottom: 65px;
     height: 12px;
     width: auto;
     z-index: 10;
@@ -240,7 +240,7 @@ span.content_corner_br{
 
 #gallery_controls {
     position: absolute;
-    bottom: 20px;
+    bottom: 30px;
     left: 0px;
     width: 50px;
     height: 20px;
@@ -267,7 +267,7 @@ span.content_corner_br{
 #site_menu {
     display: block;
     position: absolute;
-    bottom: 20px;
+    bottom: 30px;
     right: 0px;
     width: 90px;
     margin: 0px;
@@ -279,15 +279,15 @@ span.content_corner_br{
 
 .site_menu_topic {
     display: block;
-    font-size: 11px;
     line-height: 14px;
     margin: 4px 0px 0px 0px;
-    padding: 4px 0px 2px 0px;
+    padding: 3px 0px 2px 0px;
 }
 
 .site_menu_topic a{
     display: block;
     margin-right: 8px;
+    font-size: 12px;
 }
 
 
