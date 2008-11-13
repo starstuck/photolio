@@ -1,3 +1,10 @@
+
+<%= javascript_tag "tinyMCE.init({
+mode: 'textareas',
+theme: 'advanced',
+});"
+    -%>
+
 <h2>Editing topic</h2>
 
 <% form_for(@topic, :url => admin_site_topic_path(@site, @topic)) do |f| %>
@@ -13,7 +20,7 @@
       <%= f.check_box :display_in_menu %>
     </p>
     <p>
-      <%= f.label :body %> <it>(Text will be formated using <a href="http://daringfireball.net/projects/markdown/syntax" target="_blank">markdown</a> processor)</it><br />
+      <%= f.label :body %>
       <%= f.text_area :body, :cols => 110, :rows => 25 %>
     </p>
     <p>

@@ -23,6 +23,7 @@ module Admin::AdminBaseHelper
   def extra_head_tags
     [ stylesheet_link_merged( :admin ),
       javascript_include_merged( :admin ),
+      javascript_include_tag( '/tiny_mce/tiny_mce' )
       ].join("\n")
   end
 
