@@ -27,7 +27,7 @@ class Site < ActiveRecord::Base
   end
 
   # Get gallereis, sorted by  titel in user firendly way (numbers are treated as numbers)
-  def ordered_galleries(limit_by_display_in_index = true)
+  def galleries_in_order(limit_by_display_in_index = true)
     gals = galleries
     gals.reject!{ |g| not g.display_in_index } if limit_by_display_in_index
     gals.sort do |x, y|

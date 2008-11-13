@@ -26,7 +26,7 @@ module ApplicationHelper
   end
 
   def site_default_path(site)
-    published_site_gallery_path(site, site.ordered_galleries.first)
+    published_site_gallery_path(site, site.galleries_in_order.first)
   end
 
   def global_default_path

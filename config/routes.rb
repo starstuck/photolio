@@ -72,6 +72,7 @@ ActionController::Routing::Routes.draw do |map|
   
   # Map resources for admin screens
   map.namespace :admin do |admin|
+    admin.root :controller => 'admin_base'
     admin.resources(:sites, 
                     :member => ['layout', 
                                 'layout_gallery_photos_partial',
@@ -90,7 +91,7 @@ ActionController::Routing::Routes.draw do |map|
     end
   end
   
-  #map.root :controller => 'gallery', :action => 'show'
+  map.root :controller => 'gallery', :action => 'index', :site_name => 'studio'
 
   # Install the default routes as the lowest priority.
   # Note: These default routes make all actions in every controller accessible via GET requests. You should
