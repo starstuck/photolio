@@ -1,3 +1,4 @@
+require 'find'
 require 'ftools'
 require 'mini_magick'
 
@@ -61,7 +62,15 @@ class Photo < ActiveRecord::Base
   # Delete file ony if no other foto uses it
   def delete_file
     if Photo.count(:conditions => {'file_name' => file_name}) <= 1
+      # Remove photo data
       FileUtils.rm_rf("#{PHOTOS_ROOT}/#{file_name}")
+
+      # Remove cached thumbnails
+      Find.find("#{PHOTOS_ROOT}/_cache") do |path|
+        if path =~ /#{file_name}\Z/
+          FileUtils.rm_rf(path)
+        end
+      end
     end
   end  
   
