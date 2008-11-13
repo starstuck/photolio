@@ -25,6 +25,29 @@ module ApplicationHelper
     end
   end
 
+  def site_default_path(site)
+    published_site_gallery_path(site, site.ordered_galleries.first)
+  end
+
+  def global_default_path
+    default_site = Site.find(:first, :conditions => {:name => 'studio'})
+    site_default_path(default_site)
+  end
+
+  # Build back reference to previous url (HTTP_REFERER field)
+  # Falback to site default
+  def back_reference(site=nil)
+    if params[:back_ref]
+      params[:back_ref]
+    elsif request.env["HTTP_REFERER"]
+      request.env["HTTP_REFERER"]
+    elsif site
+      helper.site_default_path(@site)
+    else
+      helper.global_default_path
+    end
+  end
+
   def compute_photo_path(photo)
     compute_public_path(photo.file_name, 'photos') 
   end

@@ -1,2 +1,37 @@
-<h2>Photo#show</h2>
-<p>Find me in app/views/photo/show.html.erb</p>
+<div id="topic">
+
+  <div id="topic_header">
+    <% if @photo.title -%>
+      <h2 class="photo_title"><%= @photo.title -%></h2>
+    <% end -%>
+    <div id="close_button">
+      <%= link_to( image_tag( 'x.png', :size => '14x11', :alt => '[X]' ), 
+		   back_reference(@site),
+		   :title => 'back')
+	  -%>
+    </div>
+  </div>
+
+  <div id="photo_box" style="width: <%= @photo.width -%>px;">
+    <%= image_tag( compute_photo_path(@photo), 
+		   :size => "#{@photo.width}x#{@photo.height}", 
+		   :alt => @photo.alt_text )
+	-%>
+
+    <table class="photo_description">
+
+      <% for participant in @photo.photo_participants -%>
+	<tr>
+	  <td class="participant_role"><%=h participant.role -%></td>
+	  <td class="participant_name"><%=h participant.name -%></td>
+	</tr>
+      <% end -%>
+
+      <% if @photo.description -%>
+	<tr><td colspan="2" class="description"><%=h @photo.description -%></td></tr>
+      <% end -%>
+
+    </table>
+  </div>
+  
+</div>

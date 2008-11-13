@@ -1,10 +1,10 @@
 <div id="topic">
 
   <div id="topic_header">
-    <h2><%= @topic.title -%></h2>
+    <h2><%=h @topic.title -%></h2>
     <div id="close_button">
       <%= link_to( image_tag( 'x.png', :size => '14x11', :alt => '[X]' ), 
-		   @back_ref,
+		   back_reference(@site),
 		   :title => 'back')
 	  -%>
     </div>
