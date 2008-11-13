@@ -21,7 +21,7 @@ var Droppables = {
     var options = Object.extend({
       greedy:     true,
       hoverclass: null,
-      tree:       false,
+      tree:       false
     }, arguments[1] || { });
 
     // cache containers

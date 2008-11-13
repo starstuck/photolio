@@ -2,10 +2,13 @@
  * Body
  */
 
+html, body{
+    overflow: hidden; /* Hide window scrollbars, as they brake gallery scrolling */
+}
+
 body {
     margin: 0px;
     padding: 0px;
-    overflow: hidden;
 }
 
 
@@ -40,8 +43,6 @@ div#content_preloading
 {
     width: 930px;
     height: 565px;
-    background-image: url(../images/content-corner-tl.gif);
-    background-repeat: no-repeat;
 }
 
 div#content{
@@ -58,13 +59,22 @@ div#content_preloading{
     display: none;
 }
 
-span.content_corner_tr, span.content_corner_bl, span.content_corner_br{
+span.content_corner_tl,
+span.content_corner_tr, 
+span.content_corner_bl, 
+span.content_corner_br{
     position: absolute;
     width: 13px;
     height: 13px;
     display: block;
     /* margin-bottom: -1px this is for IE */
     background-repeat: no-repeat;
+}
+
+span.content_corner_tl{
+    top: 0px;
+    left: 0px;
+    background-image: url(../images/content-corner-tl.gif);
 }
 
 span.content_corner_tr{
@@ -94,7 +104,8 @@ span.content_corner_br{
 
 #gallery_switches {
     display: block;
-    margin: 17px 25px 17px 25px;
+    padding: 17px 25px 17px 25px;
+    margin: 0px;
     width: 880px;
     height: 16px;
 }
@@ -130,7 +141,7 @@ span.content_corner_br{
     position: relative;
     overflow: auto;  /* Scrollbar is being disabled in js, because we use custom one */
     width: 926px;
-    height: 500px;
+    height: 515px;
     margin-left: 2px;
     margin-right: 2px;
 }
@@ -166,6 +177,7 @@ span.content_corner_br{
 /* Gallery scrollbar */
 
 #gallery_scrollbar {
+    display: none; /* Is going to be changed during js scrollbar initialization */
     position: absolute;
     left: 150px;
     bottom: 65px;
@@ -211,14 +223,16 @@ span.content_corner_br{
 }
 
 #gallery_scroller_left {
+    position: relative;
     width: 14px;
     height: 10px;
+    z-index: 1;
     background-image: url(../images/scroller-left.png);
 }
 
 #gallery_scroller_space {
-    position: absolute;
-    top: 0px;
+    position: relative;
+    top: -10px;
     left: 14px;
     width: 35px;
     height: 10px;
@@ -227,8 +241,8 @@ span.content_corner_br{
 }
 
 #gallery_scroller_right {
-    position: absolute;
-    top: 0px;
+    position: relative;
+    top: -20px;
     left: 49px;
     width: 14px;
     height: 10px;
@@ -239,12 +253,13 @@ span.content_corner_br{
 /* Gallery controlls */
 
 #gallery_controls {
+    display: none; /* Is changed by js controls initialization script */
     position: absolute;
     bottom: 30px;
     left: 0px;
     width: 50px;
     height: 20px;
-    z-index: 100;
+    z-index: 10;
     opacity: 0.6;
 }
 
@@ -271,7 +286,7 @@ span.content_corner_br{
     right: 0px;
     width: 90px;
     margin: 0px;
-    z-index: 100;
+    z-index: 10;
     opacity: 0.6;
     list-style: none;
     text-align: right;

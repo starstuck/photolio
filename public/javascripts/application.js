@@ -23,7 +23,7 @@ function add_onload_handler(handler){
 
 /* Add reflections to galery images */
 
-function add_reflections() {
+function add_reflections(){
   var rimages = $$('#gallery_photos img');
   for (i=0;i<rimages.length;i++) {
     Reflection.add(rimages[i], { height: 0.25, opacity : null});
@@ -42,8 +42,9 @@ function setup_scrollbar() {
 
   if (scrollerDiv){
 
-    /* Turn off default browser scroller */
+    /* Turn off default browser scroller, and enable custom one */
     document.getElementById("gallery_photos_viewport").style.overflow = "hidden";
+    document.getElementById("gallery_scrollbar").style.display = "block";
 
     var imagesDiv = document.getElementById("gallery_photos");
     var visibleWidth = document.getElementById("gallery_photos_viewport").offsetWidth;
@@ -77,7 +78,6 @@ function setup_scrollbar() {
 
     function scroll_on_mousewheel(event){
       scroller.moveBy(Event.wheel(event) * (10));
-      //alert("Scroll delta" + Event.wheel(event));
     }
 
     Event.observe("gallery_scrollbar_left", "mousedown", start_scrolling_left);
@@ -95,7 +95,7 @@ add_onload_handler(setup_scrollbar);
 
 /* Setup gallery play/pause button */
 
-function setup_gallery_play() {
+function setup_gallery_controlls() {
   function play_gallery(event) {
     if (scroller.isEnd()) {
       scroller.moveToBeginning();
@@ -124,25 +124,14 @@ function setup_gallery_play() {
     Event.observe(el, 'click', play_gallery);
   }
 
-  if (document.getElementById('gallery_play_button'))
-    Event.observe("gallery_play_button", "click", play_gallery);
-}
-add_onload_handler(setup_gallery_play);
-
-
-/* Extend image description box, to match width of image */
-
-function setup_photo_description_box(){
-  var box = document.getElementById('photo-description-box');
-  if (box) {
-    var width = document.getElementById('photo-element').offsetWidth;
-    width -= 2; //substract border
-    var left = 449 - (width / 2);
-    box.style.width = width + "px";
-    box.style.left = left + "px";
+  var controlsDiv = document.getElementById('gallery_controls');
+  if (controlsDiv) {
+    if (document.getElementById('gallery_play_button'))
+      Event.observe("gallery_play_button", "click", play_gallery);
+    controlsDiv.style.display = 'block';
   }
 }
-/*add_onload_handler(setup_photo_description_box);*/
+add_onload_handler(setup_gallery_controlls);
 
 
 /* Load google analytics library */

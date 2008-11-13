@@ -42,9 +42,9 @@ module ApplicationHelper
     elsif request.env["HTTP_REFERER"]
       request.env["HTTP_REFERER"]
     elsif site
-      helper.site_default_path(@site)
+      site_default_path(@site)
     else
-      helper.global_default_path
+      global_default_path
     end
   end
 

@@ -167,5 +167,9 @@ function addReflections() {
 	}
 }
 
-var previousOnload = window.onload;
-window.onload = function () { if(previousOnload) previousOnload(); addReflections(); }
+/* Disabled. Reflections onload handler is excuted by cusomized handlers in 
+ * application.js in order to have proper onload events execution
+ *
+ *var previousOnload = window.onload;
+ *window.onload = function () { if(previousOnload) previousOnload(); addReflections(); }
+ */

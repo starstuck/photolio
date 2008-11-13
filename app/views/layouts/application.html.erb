@@ -18,7 +18,6 @@
     <![endif]-->
     <!--[if lte IE 6]>
       <%= stylesheet_link_tag 'ie6fix' %>
-      <%= javascript_include_tag 'iepngfix' %>
     <![endif]-->
 
     <%= extra_head_tags %>
@@ -36,17 +35,21 @@
     </div>
 
     <!--
-    <div id="content_preloading"
-     <span class="content_corner_tr"></span>
+    <div id="content_preloading">
+      <img alt="Loading..." src="" style="margin: 250px 450px;"/>
+      <span class="content_corner_tl"></span>
+      <span class="content_corner_tr"></span>
       <span class="content_corner_bl"></span>
       <span class="content_corner_br"></span>
-      <img alt="Loading..." src="" style="margin: 250px 450px;"/>
     </div>
     -->
 
     <div id="content">
-      <span class="content_corner_tr"></span>
+
       <%= yield %>
+
+      <span class="content_corner_tl"></span>
+      <span class="content_corner_tr"></span>
       <span class="content_corner_bl"></span>
       <span class="content_corner_br"></span>
     </div>

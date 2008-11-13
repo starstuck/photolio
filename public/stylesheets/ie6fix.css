@@ -1,56 +1,61 @@
 /* Fix gallery switches layout */
 
-div.gallery-switch {
+div.gallery_switch {
     width: 10px;
 }
 
 
 /* Fix gallery scroller transparency */
 
-#gallery-scrollbar-left {
+#gallery_scrollbar_left {
     background-image: none;
-    filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src=res/img/scrollbar-left.png);
+    filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src=../images/scrollbar-left.png);
 }
     
-#gallery-scrollbar-space {
+#gallery_scrollbar_space {
     background-image: none;
-    filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src=res/img/scrollbar-space.png, sizingMethod='scale');*/
-    /*border-top: solid 1px #2f2f2f;*/
+    filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src=../images/scrollbar-space.png, sizingMethod='scale');
 }
 
-#gallery-scrollbar-right {
+#gallery_scrollbar_right {
     background-image: none;
-    filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src=res/img/scrollbar-right.png);
+    filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src=../images/scrollbar-right.png);
 }
 
-#gallery-scroller-left {
+#gallery_scroller_left {
     background-image: none;
-    filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src=res/img/scroller-left.png);
+    filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src=../images/scroller-left.png);
 }
 
-#gallery-scroller-space {
+#gallery_scroller_space {
     /*background-image: none;*/
-    /*filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src=res/img/scroller-space.png);*/
+    /*filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src=../images/scroller-space.png, sizingMethod='scale');*/
 }
 
-#gallery-scroller-right {
+#gallery_scroller_right {
     background-image: none;
-    filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src=res/img/scroller-right.png);
+    top: -26px;
+    filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src=../images/scroller-right.png);
 }
 
 
 /* Fix transparency in controlls and site menu */
 
-#gallery-controls, #site-menu {
+#gallery_controls, #site_menu {
     filter: alpha(opacity=70);
 }
 
-#gallery-play-button {
+#gallery_play_button {
     background-image: none;
-    filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src=res/img/button-play.png);
+    filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src=../images/button-play.png);
 }
 
-.playing#gallery-play-button {
+.playing#gallery_play_button {
     background-image: none;
-    filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src=res/img/button-pause.png);
+    filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src=../images/button-pause.png);
+}
+
+span.content_corner_bl,
+span.content_corner_br{
+    bottom: -4px;
 }
