@@ -10,6 +10,14 @@ module Admin::AdminBaseHelper
     javascript_tag(protomenu_js(selector, options))
   end
 
+  # Build javascript tag, that loads tinymce to all textareas on page
+  def load_tinymce_tag
+    javascript_tag <<EOS
+    document.write(unescape("%3cscript src='#{javascript_path('/tiny_mce/tiny_mce')}' type='text/javascript'%3E%3C/script%3E"));
+    add_onload_handler(function(){ tinyMCE.init({mode: 'textareas', theme: 'advanced',}); });
+EOS
+  end
+
   def protomenu_js(selector, options={})
     options[:selector] = selector
     options[:menuItems] = '[' + options[:menuItems].map{|x| options_for_javascript(x)}.join(', ') + ']'
@@ -23,7 +31,6 @@ module Admin::AdminBaseHelper
   def extra_head_tags
     [ stylesheet_link_merged( :admin ),
       javascript_include_merged( :admin ),
-      javascript_include_tag( '/tiny_mce/tiny_mce' )
       ].join("\n")
   end
 
