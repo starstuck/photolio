@@ -290,25 +290,30 @@ span.content_corner_br{
     margin-right: 8px;
 }
 
+
 /* Topic page */
 
 #topic_header{
-    width: 900px;
-    height: 45px;
-    margin: 5px 15px 5px 15px;
+    height: 40px;
+    padding: 5px 25px 5px 25px;
+}
+
+#topic_header h2{
+    margin-top: 10px;
 }
 
 #close_button{
-    position: relative;
-    left: 885px;
-    top: 5px;
+    position: absolute;
+    top: 15px;
+    right: 15px;
     width: 14px;
     height: 11px;
 }
 
-#topic_content{
-    height: 515px;
-    margin: 0px 15px 0px 15px;
+#topic_viewport{
+    height: 475px;
+    margin: 0px 25px 25px 25px;
+    overflow: auto;
 }
 
 

@@ -124,5 +124,14 @@ class Photo < ActiveRecord::Base
     end
   end
 
+  # Build photo alt text cosisting of title, participants, keywords and description
+  def alt_text
+    res = []
+    res << title if title and title.size > 0
+    photo_participants.each{|p| res << "#{p.role}: #{p.name}"}
+    photo_keywords.each{|k| res << k}
+    res << title if description and description.size > 0
+    res.join('; ')
+  end
 
 end

@@ -1,2 +1,17 @@
-<h2>Topic#show</h2>
-<p>Find me in app/views/topic/show.html.erb</p>
+<div id="topic">
+
+  <div id="topic_header">
+    <h2><%= @topic.title -%></h2>
+    <div id="close_button">
+      <%= link_to( image_tag( 'x.png', :size => '14x11', :alt => '[X]' ), 
+		   @back_ref,
+		   :title => 'back')
+	  -%>
+    </div>
+  </div>
+
+  <div id="topic_viewport" class="topic_body">
+    <%= @topic.body -%>
+  </div>
+  
+</div>

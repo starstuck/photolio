@@ -1,6 +1,30 @@
 # Methods added to this helper will be available to all templates in the application.
 module ApplicationHelper
 
+  def published_site_gallery_path(site, gallery, format='html', options={})
+    if site.name == 'studio'
+      published_studio_gallery_path(gallery.name, format, options)
+    else
+      published_brand_site_gallery_path(site.brand, site.name, gallery.name, format, options)
+    end
+  end
+
+  def published_site_photo_path(site, photo, format='html', options={})
+    if site.name == 'studio'
+      published_studio_photo_path(photo.id, format, options)
+    else
+      published_brand_site_photo_path(site.brand, site.name, photo.id, format, options)
+    end
+  end
+
+  def published_site_topic_path(site, topic, format='html', options={})
+    if site.name == 'studio'
+      published_studio_topic_path(topic.name, format, options)
+    else
+      published_brand_site_topic_path(site.brand, site.name, topic.name, format, options)
+    end
+  end
+
   def compute_photo_path(photo)
     compute_public_path(photo.file_name, 'photos') 
   end

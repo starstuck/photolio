@@ -1,28 +1,18 @@
-<ul id="site_menu">
-  <% for topic in @menu_items -%>
-    <li class="site_menu_topic">
-      <%= link_to( topic.title, 
-		   :controller => 'topic',
-		   :action => 'show',
-		   :site_name => @site.name,
-		   :id => topic,
-		   :format => 'html' )
-	  -%>
-    </li>
-  <% end -%>
-</ul>
-
 <div id="gallery">
+
+  <ul id="site_menu">
+    <% for topic in @menu_items -%>
+      <li class="site_menu_topic">
+	<%= link_to topic.title, published_site_topic_path( @site, topic ) -%>
+      </li>
+    <% end -%>
+  </ul>
 
   <p id="gallery_switches">
     <span class="typeface-js gallery_switches_label">Gallery:</span>
     <% for gallery in @galleries -%>
       <%= link_to gallery.name, 
-	  { :controller => 'gallery', 
-	    :action  => 'show',
-	    :site_name => @site.name,
-	    :gallery_name => gallery.name,
-	    :format => 'html'}, 
+	  published_site_gallery_path( @site, gallery ),
 	  { :class => "typeface-js gallery_switch" + ( gallery.id == @gallery.id ? ' active' : '' ), 
 	    :title => gallery.title } 
 	  %>
@@ -35,16 +25,11 @@
 	<% if item.is_a? GalleryPhoto -%>
 	  <span class="gallery_photo">
 	    <%= link_to( image_tag( compute_photo_path(item.photo), 
-				    :alt => item.photo.title, 
+				    :alt => item.photo.alt_text, 
 				    :height => "400",
 				    :width => (item.photo.width.to_f / item.photo.height * 400).to_i ),  
-			 { :controller => 'photo', 
-			   :action => 'show',
-			   :site_name => @site.name,
-			   :gallery_name => gallery.name,
-			   :id => item.photo,
-			   :format => 'html'},
-			 { :title => item.photo.title })
+			 published_site_photo_path( @site, item.photo ),
+			 { :title => item.photo.alt_text })
 		-%>
 	  </span>
 	<% elsif item.is_a? GallerySeparator -%>

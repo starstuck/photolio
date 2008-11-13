@@ -1,6 +1,13 @@
 <h2>Article preview</h2>
 
 <div class="record_fields">
+
+  <p>
+    <b>Name</b> <it>(Used in topic links)</it><br />
+    <%=h @topic.name %>
+  </p>
+
+
   <p>
     <b>Title</b><br />
     <%=h @topic.title %>
@@ -16,7 +23,9 @@
 
 <hr />
 
-<%= @topic.body_to_html %>
+<div class="topic_body" style="margin: 25px;">
+  <%= @topic.body %>
+</div>
 
 <hr />
 

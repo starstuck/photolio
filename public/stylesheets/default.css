@@ -124,12 +124,17 @@ pre {
  * Common text styles 
  */
 
-.small {
-    font-size: 75%;
-}
-
 .typeface-js{
     font-family: 'Venus Rising', helvetica, arial, sans-serif;
+}
+
+
+/*
+ * Topic text styles
+ */
+
+.topic_body p{
+    margin-left: 0em;
 }
 
 

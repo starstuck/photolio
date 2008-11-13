@@ -37,44 +37,38 @@ ActionController::Routing::Routes.draw do |map|
   # See how all your routes lay out with "rake routes"
 
   # Map published pages without brand (polinostudio)
-  map.published_gallery('gallery/:gallery_name.:format', 
-                        :controller => 'gallery', 
-                        :action => 'show',
-                        :site_name => 'studio',
-                        :defaults => {:format => 'html'}
-                        )
-  map.published_photo('gallery/:gallery_name/:id.:format', 
-                      :controller => 'photo', 
-                      :action => 'show',
-                      :site_name => 'studio',
-                      :defaults => {:format => 'html'}
-                      )
-  map.published_topic('topic/:id.:format',
-                      :controller => 'topic',
-                      :action => 'show',
-                      :site_name => 'studio',
-                      :defaults => {:format => 'html'}
-                      )
+  map.published_studio_gallery('gallery/:gallery_name.:format', 
+                               :controller => 'gallery', 
+                               :action => 'show',
+                               :site_name => 'studio'
+                               )
+  map.published_studio_photo('photo/:id.:format', 
+                             :controller => 'photo', 
+                             :action => 'show',
+                             :site_name => 'studio'
+                             )
+  map.published_studio_topic('topic/:topic_name.:format',
+                             :controller => 'topic',
+                             :action => 'show',
+                             :site_name => 'studio'
+                             )
 
   # Map branded published pages (polinostudio/models, polinostudio/artists/..)
-  map.published_gallery_with_brand(':site_brand/:site_name/gallery/:name.:format', 
-                                   :controller => 'gallery', 
-                                   :action => 'show',
-                                   :site_brand => /(models|artists)/,
-                                   :defaults => {:format => 'html'}
-                                   )
-  map.published_photo_with_brand(':site_brand/:site_name/gallery/:gallery_name/:id.:format', 
-                                 :controller => 'photo', 
-                                 :action => 'show',
-                                 :site_brand => /(models|artists)/,
-                                 :defaults => {:format => 'html'}
-                                 )
-  map.published_topic_with_brand(':site_brand/:site_name/topic/:id.:format',
-                                 :controller => 'topic',
-                                 :action => 'show',
-                                 :site_brand => /(models|artists)/,
-                                 :defaults => {:format => 'html'}
-                                 )
+  map.published_brand_site_gallery(':site_brand/:site_name/gallery/:gallery_name.:format', 
+                             :controller => 'gallery', 
+                             :action => 'show',
+                             :site_brand => /(models|artists)/
+                             )
+  map.published_brand_site_photo(':site_brand/:site_name/photo/:id.:format', 
+                           :controller => 'photo', 
+                           :action => 'show',
+                           :site_brand => /(models|artists)/
+                           )
+  map.published_brand_site_topic(':site_brand/:site_name/topic/:topic_name.:format',
+                           :controller => 'topic',
+                           :action => 'show',
+                           :site_brand => /(models|artists)/
+                           )
   
   # Map resources for admin screens
   map.namespace :admin do |admin|
