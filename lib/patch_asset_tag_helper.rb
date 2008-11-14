@@ -35,11 +35,11 @@ module ActionView::Helpers::AssetTagHelper
   # accesssed on server root.
   #
   # This is used only by sed by cached stylesheet_include_tag invocation.
-  def compute_javascripts_paths(sources)
+  def compute_javascript_paths(sources)
     # Has been:
     #expand_javascript_sources(sources).collect { |source| compute_public_path(source, 'javascripts', 'js', false) }
     # Updated to:
-    expand_stylesheet_sources(sources).collect { |source| File.join('javascripts', source + '.css') }
+    expand_stylesheet_sources(sources).collect { |source| File.join('javascripts', source + '.js') }
   end
 
   # Fix computation of stylesheets paths.
