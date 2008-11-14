@@ -29,8 +29,8 @@ EOS
   #
 
   def extra_head_tags
-    [ stylesheet_link_merged( :admin ),
-      javascript_include_merged( :admin ),
+    [ stylesheet_link_tag('adminpanel', :cache => '_cache_admin'),
+      javascript_include_tag('protomenu', 'adminpanel', :cache => '_cache_admin'),
       ].join("\n")
   end
 

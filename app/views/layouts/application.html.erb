@@ -8,9 +8,23 @@
     <meta name="Keywords" content="Polino studio, Pauline Jakubiuk, Paulina Jakubiuk, Photographer, Portfolio" />
     <meta name="Description" content="Polino studio, photography by Pauline Jakubiuk." />
 
-    <%= stylesheet_link_merged :base%>
+    <%= stylesheet_link_tag('layout',
+                           'default',
+                           :cache => '_cache_base')
+    -%>
 
-    <%= javascript_include_merged :base %>
+    <%= javascript_include_tag('prototype',
+                              'effects',
+                              'dragdrop',
+                              'controls',
+                              'typeface',
+                              'typeface/goodtimes',
+                              'typeface/venusrising',
+                              'reflection', 
+                              'scroller',
+                              'application',
+                              :cache => '_cache_base')
+   -%>
 
     <!--[if gte IE 7]>
       <%= stylesheet_link_tag 'ie7fix' %>
