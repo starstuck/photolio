@@ -1,13 +1,19 @@
 # Polinostudio TODO list
 
-* Fix problem on loading page for first time
-* Extract public views from old page
+* Build publish automation script
+* Setup proper metadata depenging on pare content
+* Add support for resize - center frame ? to reconsider ?
+* Fix scroller partially disapearing in IE, when dragging
+* In back button check handling functionreferer field. If it is outsite our domain,  
+  dont go there, instead go back to default site page
 * Make photos load after page load, so images loading wont extend overal page load time
-* Make sure all stylesheets, ajavascripts and images are cache friendly
-* Solve rce conditions when moving photo to adder gallery. Sometimes origin gallery updates
+* Make sure all stylesheets, ajavascripts and images are cache friendly - 
+  focus on assed_id generated for joined stylesheets and javascripts. You must also solve 
+  issues with images references from css (maybe link them in page header).
+  If it is ok, extend expire times to one year.
+* Solve race conditions when moving photo to other gallery. Sometimes origin gallery updates
   before target, withoun knowing, that one item is going to be deleted in few moments
-* Consider showing loading wheel in frame, not to replace reloaded content, to avoid blinks
-* Add javascript triggeref loading screen during page load
+* Add javascript triggered loading screen during page load
 * Checkout posibilities for speeding up dragables under firefox
 * Accounts with permisions management
 * Content versioning
