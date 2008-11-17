@@ -152,3 +152,17 @@ function setup_ga(){
 }
 add_onload_handler(setup_ga);
 
+
+/*
+ * Library functions used by application
+ */
+
+/* Go back in history. If page is first time called, return true */
+function go_back(){
+  if(document.referrer&&document.referrer!=""){
+    history.go(-1);
+    return false;
+  }else{
+    return true; 
+  }
+}

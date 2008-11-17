@@ -4,8 +4,9 @@
     <h2><%=h @topic.title -%></h2>
     <div id="close_button">
       <%= link_to( image_tag( 'x.png', :size => '12x11', :alt => 'X' ), 
-		   back_reference(@site),
-		   :title => 'back')
+		   site_default_path(@site),
+		   :title => 'back',
+		   :onClick => 'return(go_back());')
 	  -%>
     </div>
   </div>

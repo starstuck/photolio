@@ -34,20 +34,6 @@ module ApplicationHelper
     site_default_path(default_site)
   end
 
-  # Build back reference to previous url (HTTP_REFERER field)
-  # Falback to site default
-  def back_reference(site=nil)
-    if params[:back_ref]
-      params[:back_ref]
-    elsif request.env["HTTP_REFERER"]
-      request.env["HTTP_REFERER"]
-    elsif site
-      site_default_path(@site)
-    else
-      global_default_path
-    end
-  end
-
   def compute_photo_path(photo)
     compute_public_path(photo.file_name, 'photos') 
   end
