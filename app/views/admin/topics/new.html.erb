@@ -1,6 +1,6 @@
 <h2>New topic for <%= @site.name -%> site</h2>
 
-<% form_for(@topic, :url => admin_site_topic_path(@site, @topic)) do |f| %>
+<% form_for(@topic, :url => admin_site_topics_path(@site)) do |f| %>
   <div class="record_fields">
     <%= f.error_messages %>
     

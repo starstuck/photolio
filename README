@@ -1,6 +1,7 @@
 # Polinostudio TODO list
 
 * Build publish automation script
+* Turn off java script in untested browsers and all extrass
 * Setup proper metadata depenging on pare content
 * Add support for resize - center frame ? to reconsider ?
 * Fix scroller partially disapearing in IE, when dragging

@@ -1,6 +1,6 @@
 <h2>New gallery for <%= @site.name -%> site</h2>
 
-<% form_for(@gallery, :url => admin_site_gallery_path(@site, @gallery)) do |f| %>
+<% form_for(@gallery, :url => admin_site_galleries_path(@site)) do |f| %>
   <div class="record_fields">
     <%= f.error_messages %>
     
