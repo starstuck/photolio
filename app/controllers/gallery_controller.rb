@@ -2,15 +2,6 @@ class GalleryController < ApplicationController
 
   before_filter :setup_context
   
-  # redirect to default gallery
-  def index
-    @gallery = @site.galleries_in_order.first unless @gallery
-    redirect_to( :action => 'show',
-                 :gallery_name => @gallery.name, 
-                 :format => 'html',
-                 :status => 307  )
-  end
-
   def show
     @galleries = @site.galleries_in_order
     @menu_items = @site.topics.find(:all, :conditions => 'display_in_menu <> 0' )

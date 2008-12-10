@@ -37,6 +37,10 @@ ActionController::Routing::Routes.draw do |map|
   # See how all your routes lay out with "rake routes"
 
   # Map published pages without brand (polinostudio)
+  map.published_studio(':action.:format', 
+                       :controller => 'site', 
+                       :site_name => 'studio'
+                       )
   map.published_studio_gallery('gallery/:gallery_name.:format', 
                                :controller => 'gallery', 
                                :action => 'show',
@@ -54,6 +58,10 @@ ActionController::Routing::Routes.draw do |map|
                              )
 
   # Map branded published pages (polinostudio/models, polinostudio/artists/..)
+  map.published_brand_site(':site_brand/:site_name/:action.:format', 
+                           :controller => 'site', 
+                           :site_brand => /(models|artists)/
+                           )
   map.published_brand_site_gallery(':site_brand/:site_name/gallery/:gallery_name.:format', 
                              :controller => 'gallery', 
                              :action => 'show',
@@ -91,7 +99,7 @@ ActionController::Routing::Routes.draw do |map|
     end
   end
   
-  map.root :controller => 'gallery', :action => 'index', :site_name => 'studio'
+  map.root :controller => 'site', :action => 'index', :site_name => 'studio'
 
   # Install the default routes as the lowest priority.
   # Note: These default routes make all actions in every controller accessible via GET requests. You should

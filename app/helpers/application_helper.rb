@@ -36,6 +36,7 @@ module ApplicationHelper
 
   class PhotoTag < ActionView::Helpers::AssetTagHelper::ImageTag
     DIRECTORY = 'photos'.freeze    
+    def directory; DIRECTORY; end
   end
 
   def compute_photo_path(photo)

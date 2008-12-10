@@ -11,7 +11,7 @@ class Gallery < ActiveRecord::Base
   validates_uniqueness_of :name, :scope => 'site_id'
   validates_length_of :title, :maximum => 255, :allow_nil => true
 
-\
+
   # Add existing GalleryItem object to this gallery (maintain association)
   def add_item(item, position=nil)
     item.gallery = self
