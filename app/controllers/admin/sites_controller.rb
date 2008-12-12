@@ -187,4 +187,62 @@ class Admin::SitesController < Admin::AdminBaseController
       format.xml  { head :ok  }
     end
   end
+
+  # Pusblish page. First cache all pages in public directory. 
+  # If remote location is configured, synchronize this directory with remote location.
+  def publish
+    @site = Site.find(params[:id])
+    sitemap = SiteController.raw_sitemap(@site)
+    
+    galleries_count = 0
+    topics_count = 0
+    photos_count = 0
+    max_lastmod = DateTime.new
+
+    # TODO optimize, by not deleting old files, only updateing based on mtime
+
+    # Clean old published files
+    for folder in ['gallery', 'topic', 'photo']
+      FileUtils.rm_rf File.join( Rails.public_path, folder )
+    end
+
+    # Cache all pages from sitemap
+    for page in sitemap
+      page_params = page['loc'].clone
+      page_controller = page_params.delete(:controller)
+      page_action = page_params.delete(:action)
+      body = render_component_as_string( :controller => page_controller,
+                                         :action => page_action,
+                                         :params => page_params )
+
+      page_path = url_for( page['loc'].merge( :only_path => true, :skip_relative_url_root => true ) )
+      page_file_path = File.join( Rails.public_path, page_path )
+      FileUtils.mkdir_p( File.dirname( page_file_path ) )
+      File.open(page_file_path, "wb+"){ |f| f.write(body) }
+      
+      ctime = page['lastmod']
+      if ctime.is_a? DateTime
+        ctime = ctime.to_time
+      elsif ctime.is_a? ActiveSupport::TimeWithZone
+        ctime = ctime.time
+      end        
+      File.utime(Time.new, ctime, page_file_path)
+
+      max_lastmod = page['lastmod'] if page['lastmod'] > max_lastmod
+      if page_controller =~ /gallery/:
+        galleries_count += 1
+      elsif page_controller =~ /topic/:
+        topics_count += 1
+      elsif page_controller =~ /photo/:
+        photos_count += 1
+      end
+    end
+
+    flash[:notice] = "Site #{@site.name} is published. #{galleries_count} gallereis, #{topics_count} topics, #{photos_count} photos saved."
+
+    respond_to do |format|
+        format.html { redirect_to(admin_site_path(@site)) }
+        format.xml  { head :ok }
+    end
+  end
 end

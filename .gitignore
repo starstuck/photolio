@@ -2,7 +2,10 @@ config/database.yml
 db/schema.rb
 doc/*
 log
+public/gallery
+public/photo
 public/photos
 public/stylesheets/_cache_*.css
+public/topic
 public/javascripts/_cache_*.js
 tmp

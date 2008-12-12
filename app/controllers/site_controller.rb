@@ -34,10 +34,11 @@ class SiteController < ApplicationController
       last_photo_updated = Photo.maximum('updated_at', :conditions => ['id in (?)', gallery.photo_ids])
       sitemap << { 
         'loc' => { 
-          'controller' => 'gallery',
-          'action' => 'show',
-          'site_name' => gallery.site.name,
-          'gallery_name' => gallery.name
+          :controller => '/gallery',
+          :action => 'show',
+          :site_name => gallery.site.name,
+          :gallery_name => gallery.name,
+          :format => 'html'
         },
         'lastmod' => [ last_gallery_updated, 
                        last_topic_updated, 
@@ -52,10 +53,11 @@ class SiteController < ApplicationController
     for topic in site.topics
       sitemap << { 
         'loc' => { 
-          'controller' => 'topic',
-          'action' => 'show',
-          'site_name' => gallery.site.name,
-          'topic_name' => topic.name
+          :controller => '/topic',
+          :action => 'show',
+          :site_name => gallery.site.name,
+          :topic_name => topic.name,
+          :format => 'html'
         },
         'lastmod' => topic.updated_at,
         'changefreq' => 'daily',
@@ -69,10 +71,11 @@ class SiteController < ApplicationController
       unless hidden_photos.include? photo
         sitemap << { 
           'loc' => { 
-            'controller' => 'photo',
-            'action' => 'show',
-            'site_name' => gallery.site.name,
-            'id' => photo.id
+            :controller => '/photo',
+            :action => 'show',
+            :site_name => gallery.site.name,
+            :id => photo.id,
+            :format => 'html'
           },
           'lastmod' => topic.updated_at,
           'changefreq' => 'weekly',

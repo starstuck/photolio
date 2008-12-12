@@ -108,5 +108,36 @@ class Admin::SitesControllerTest < ActionController::TestCase
     assert_response :success
     assert_template '_layout_gallery_photos'
   end
+end
+
+
+class Admin::PublishSiteTest < ActionController::TestCase
+  
+  tests Admin::SitesController
+  
+  def setup
+    # setup temporary public directory
+    @old_public_path = Rails.public_path
+    @temp_dir = File.join(RAILS_ROOT, 'tmp', "test_#{rand.to_s[2..-1]}")
+    FileUtils.mkdir_p(@temp_dir)
+    Rails.public_path = @temp_dir    
+  end
+
+  def teardown
+    # Cleanup temporary public directory
+    Rails.public_path = @old_public_path
+    FileUtils.rm_rf [@temp_dir]
+  end
+
+  def test_publish
+    # TODO: add timestamping tests
+
+    get :publish, :id => sites(:studio).id
+    assert_redirected_to :action => 'show'
+  end
+
+  def should_test_cleanup
+    #TODO: fill
+  end
 
 end
