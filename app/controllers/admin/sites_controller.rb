@@ -231,7 +231,7 @@ class Admin::SitesController < Admin::AdminBaseController
 
     if Site.publish_remote_location
       logger.info "Publishing site to remote location: #{Site.publish_remote_location} ..."
-      rsync = IO.popen("rsync -r #{Rails.public_path}/* #{Site.publish_remote_location}")
+      rsync = IO.popen("rsync --recursive --times #{Rails.public_path}/* #{Site.publish_remote_location}")
       logger.info( rsync.readlines.join("\n") )
       flash[:notice] += " Content copied to remote location."
     end
