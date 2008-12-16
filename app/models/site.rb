@@ -1,6 +1,10 @@
 class Site < ActiveRecord::Base
 
   BRANDS = ['artists', 'models']
+  
+  class << self
+    attr_accessor :publish_remote_location
+  end
 
   has_many :galleries, :dependent => :destroy, :order => 'name' 
   has_many :photos, :dependent => :destroy, :order => 'file_name'

@@ -111,11 +111,8 @@ class Admin::SitesControllerTest < ActionController::TestCase
 end
 
 
-class Admin::PublishSiteTest < ActionController::TestCase
-  
-  tests Admin::SitesController
-  
-  def setup
+module PublishSetup
+  def setup_with_publish
     # setup temporary public directory
     @old_public_path = Rails.public_path
     @temp_dir = File.join(RAILS_ROOT, 'tmp', "test_#{rand.to_s[2..-1]}")
@@ -123,15 +120,28 @@ class Admin::PublishSiteTest < ActionController::TestCase
     Rails.public_path = @temp_dir    
   end
 
-  def teardown
+  def teardown_with_publish
     # Cleanup temporary public directory
     Rails.public_path = @old_public_path
     FileUtils.rm_rf [@temp_dir]
+  end  
+end
+
+
+class Admin::PublishSiteTest < ActionController::TestCase
+  include PublishSetup
+  
+  tests Admin::SitesController
+  
+  def setup
+    setup_with_publish
+  end
+
+  def teardown
+    teardown_with_publish
   end
 
   def test_publish
-    # TODO: add timestamping tests
-
     get :publish, :id => sites(:studio).id
     assert_redirected_to :action => 'show'
     assert_match /2 galleries/, flash[:notice]
@@ -145,4 +155,31 @@ class Admin::PublishSiteTest < ActionController::TestCase
     #TODO: fill
   end
 
+end
+
+
+class Admin::PublishRemoteLocationSiteTest < ActionController::TestCase
+  include PublishSetup
+
+  tests Admin::SitesController
+  
+  def setup
+    setup_with_publish
+    @temp2_dir = File.join(RAILS_ROOT, 'tmp', "test_#{rand.to_s[2..-1]}")
+    FileUtils.mkdir_p(@temp2_dir)
+    Site.publish_remote_location = @temp2_dir
+  end
+
+  def teardown
+    teardown_with_publish
+    #FileUtils.rm_rf [@temp2_dir]
+    Site.publish_remote_location = nil
+  end
+
+  def test_publish_with_remote_location
+    get :publish, :id => sites(:studio).id
+    assert_redirected_to :action => 'show'
+    assert_match /remote location/, flash[:notice]
+    assert_equal Dir.entries(@temp_dir), Dir.entries(@temp2_dir)
+  end
 end

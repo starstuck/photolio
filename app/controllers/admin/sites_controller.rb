@@ -226,8 +226,15 @@ class Admin::SitesController < Admin::AdminBaseController
                 :format => 'xml',
                 :published => true
               }, max_lastmod)
-              
+
     flash[:notice] = "Site #{@site.name} is published. #{galleries_count} galleries, #{topics_count} topics, #{photos_count} photos saved."
+
+    if Site.publish_remote_location
+      logger.info "Publishing site to remote location: #{Site.publish_remote_location} ..."
+      rsync = IO.popen("rsync -r #{Rails.public_path}/* #{Site.publish_remote_location}")
+      logger.info( rsync.readlines.join("\n") )
+      flash[:notice] += " Content copied to remote location."
+    end
 
     respond_to do |format|
         format.html { redirect_to(admin_site_path(@site)) }
