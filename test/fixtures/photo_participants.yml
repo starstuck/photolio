@@ -5,9 +5,13 @@ one:
   photo_id: 1
   role: One
   name: Some One
+  created_at: 2008-01-01
+  updated_at: 2008-01-01
 
 two:
   id: 2
   photo_id: 1
   role: Other
   name: Some Other
+  created_at: 2008-01-01
+  updated_at: 2008-01-01

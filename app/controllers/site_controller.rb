@@ -38,7 +38,8 @@ class SiteController < ApplicationController
           :action => 'show',
           :site_name => gallery.site.name,
           :gallery_name => gallery.name,
-          :format => 'html'
+          :format => 'html',
+          :published => true
         },
         'lastmod' => [ last_gallery_updated, 
                        last_topic_updated, 
@@ -57,7 +58,8 @@ class SiteController < ApplicationController
           :action => 'show',
           :site_name => gallery.site.name,
           :topic_name => topic.name,
-          :format => 'html'
+          :format => 'html',
+          :published => true
         },
         'lastmod' => topic.updated_at,
         'changefreq' => 'daily',
@@ -74,8 +76,9 @@ class SiteController < ApplicationController
             :controller => '/photo',
             :action => 'show',
             :site_name => gallery.site.name,
-            :id => photo.id,
-            :format => 'html'
+            :photo_id => photo.id,
+            :format => 'html',
+            :published => true
           },
           'lastmod' => topic.updated_at,
           'changefreq' => 'weekly',
@@ -83,7 +86,6 @@ class SiteController < ApplicationController
           }
       end
     end
-
 
     sitemap
   end

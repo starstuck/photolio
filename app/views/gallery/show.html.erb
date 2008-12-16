@@ -3,7 +3,7 @@
   <ul id="site_menu">
     <% for topic in @menu_items -%>
       <li class="site_menu_topic">
-	<%= link_to topic.title, published_site_topic_path( @site, topic ) -%>
+	<%= link_to topic.title, show_site_topic_path( @site, topic ) -%>
       </li>
     <% end -%>
   </ul>
@@ -12,7 +12,7 @@
     <span class="typeface-js gallery_switches_label">Gallery:</span>
     <% for gallery in @galleries -%>
       <%= link_to gallery.name, 
-	  published_site_gallery_path( @site, gallery ),
+	  show_site_gallery_path(@site, gallery),
 	  { :class => "typeface-js gallery_switch" + ( gallery.id == @gallery.id ? ' active' : '' ), 
 	    :title => gallery.title } 
 	  %>
@@ -28,7 +28,7 @@
 				    :alt => item.photo.alt_text, 
 				    :height => "400",
 				    :width => (item.photo.width.to_f / item.photo.height * 400).to_i ),  
-			 published_site_photo_path( @site, item.photo ),
+			 show_site_photo_path( @site, item.photo ),
 			 { :title => item.photo.alt_text })
 		-%>
 	  </span>

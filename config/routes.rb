@@ -36,48 +36,46 @@ ActionController::Routing::Routes.draw do |map|
 
   # See how all your routes lay out with "rake routes"
 
-  # Map published pages without brand (polinostudio)
-  map.published_studio(':action.:format', 
-                       :controller => 'site', 
-                       :site_name => 'studio'
-                       )
-  map.published_studio_gallery('gallery/:gallery_name.:format', 
-                               :controller => 'gallery', 
-                               :action => 'show',
-                               :site_name => 'studio'
-                               )
-  map.published_studio_photo('photo/:id.:format', 
-                             :controller => 'photo', 
-                             :action => 'show',
-                             :site_name => 'studio'
-                             )
-  map.published_studio_topic('topic/:topic_name.:format',
-                             :controller => 'topic',
-                             :action => 'show',
-                             :site_name => 'studio'
-                             )
+  # Map public views published, live, branded  and unbranded for both cases
+  for controller, actions, id_method in [['site', ['index', 'sitemap'], 'name'],
+                                         ['gallery', ['show'], 'name'],
+                                         ['photo', ['show'], 'id'],
+                                         ['topic', ['show'], 'name']
+                                        ]
+    for action in actions
+      controller_name_part = controller != 'site' ? "_#{controller}" : ""
+      controller_path_part = controller != 'site' ? "#{controller}/" : ""
+      map.send("#{action}_live_studio#{controller_name_part}", 
+               "live/#{controller_path_part}:#{controller}_#{id_method}.:format",
+               :controller => controller,
+               :action => action,
+               :site_name => 'studio',
+               :published => false
+               )             
+      map.send("#{action}_published_studio#{controller_name_part}", 
+               "#{controller_path_part}:#{controller}_#{id_method}.:format",
+               :controller => controller,
+               :action => action,
+               :site_name => 'studio',
+               :published => true
+               )             
+      map.send("#{action}_live_brand_site#{controller_name_part}", 
+               ":site_brand/:site_name/#{controller_path_part}:#{controller}_#{id_method}.:format",
+               :controller => controller,
+               :action => action,
+               :site_brand => /(#{Site::BRANDS.join('|')})/,
+               :published => false
+               )             
+      map.send("#{action}_published_brand_site#{controller_name_part}", 
+               "live/:site_brand/:site_name/#{controller_path_part}:#{controller}_#{id_method}.:format",
+               :controller => controller,
+               :action => action,
+               :site_brand => /(#{Site::BRANDS.join('|')})/,
+               :published => true
+               )             
+    end
+  end
 
-  # Map branded published pages (polinostudio/models, polinostudio/artists/..)
-  map.published_brand_site(':site_brand/:site_name/:action.:format', 
-                           :controller => 'site', 
-                           :site_brand => /(models|artists)/
-                           )
-  map.published_brand_site_gallery(':site_brand/:site_name/gallery/:gallery_name.:format', 
-                             :controller => 'gallery', 
-                             :action => 'show',
-                             :site_brand => /(models|artists)/
-                             )
-  map.published_brand_site_photo(':site_brand/:site_name/photo/:id.:format', 
-                           :controller => 'photo', 
-                           :action => 'show',
-                           :site_brand => /(models|artists)/
-                           )
-  map.published_brand_site_topic(':site_brand/:site_name/topic/:topic_name.:format',
-                           :controller => 'topic',
-                           :action => 'show',
-                           :site_brand => /(models|artists)/
-                           )
-  
   # Map resources for admin screens
   map.namespace :admin do |admin|
     admin.root :controller => 'admin_base'
@@ -100,7 +98,9 @@ ActionController::Routing::Routes.draw do |map|
     end
   end
   
-  map.root :controller => 'site', :action => 'index', :site_name => 'studio'
+  # Redirects for easy address entering
+  map.connect 'live', :controller => 'site', :action => 'index', :site_name => 'studio', :published => false
+  map.root :controller => 'site', :action => 'index', :site_name => 'studio', :published => true
 
   # Install the default routes as the lowest priority.
   # Note: These default routes make all actions in every controller accessible via GET requests. You should

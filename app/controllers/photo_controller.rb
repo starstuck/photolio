@@ -13,7 +13,7 @@ class PhotoController < ApplicationController
 
   def setup_context
     @site = Site.find( :first, :conditions => { 'name' => params[:site_name] } )
-    @photo = @site.photos.find(params[:id])
+    @photo = @site.photos.find(params[:photo_id])
   end
 
 

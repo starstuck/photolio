@@ -6,12 +6,16 @@ one:
   gallery_id: 1
   photo_id: 1
   position: 0
+  created_at: 2008-01-01
+  updated_at: 2008-01-01
 
 one_separator:
   id: 2
   type: GallerySeparator
   gallery_id: 1
   position: 1
+  created_at: 2008-01-01
+  updated_at: 2008-01-01
 
 two:
   id: 3
@@ -19,7 +23,8 @@ two:
   gallery_id: 1
   photo_id: 2
   position: 2
-  
+  created_at: 2008-01-01
+  updated_at: 2008-01-01
 
 three:
   id: 4
@@ -27,6 +32,8 @@ three:
   gallery_id: 1
   photo_id: 3
   position: 3
+  created_at: 2008-01-01
+  updated_at: 2008-01-01
   
 two_in_kasiak:
   id: 5
@@ -34,3 +41,5 @@ two_in_kasiak:
   gallery_id: 3
   photo_id: 2
   position: 0
+  created_at: 2008-01-01
+  updated_at: 2008-01-01

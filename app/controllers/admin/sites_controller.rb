@@ -199,7 +199,7 @@ class Admin::SitesController < Admin::AdminBaseController
     photos_count = 0
     max_lastmod = DateTime.new
 
-    # TODO optimize, by not deleting old files, only updateing based on mtime
+    # TODO optimize, by not deleting old files, only updating based on mtime
 
     # Clean old published files
     for folder in ['gallery', 'topic', 'photo']
@@ -208,41 +208,58 @@ class Admin::SitesController < Admin::AdminBaseController
 
     # Cache all pages from sitemap
     for page in sitemap
-      page_params = page['loc'].clone
-      page_controller = page_params.delete(:controller)
-      page_action = page_params.delete(:action)
-      body = render_component_as_string( :controller => page_controller,
-                                         :action => page_action,
-                                         :params => page_params )
-
-      page_path = url_for( page['loc'].merge( :only_path => true, :skip_relative_url_root => true ) )
-      page_file_path = File.join( Rails.public_path, page_path )
-      FileUtils.mkdir_p( File.dirname( page_file_path ) )
-      File.open(page_file_path, "wb+"){ |f| f.write(body) }
-      
-      ctime = page['lastmod']
-      if ctime.is_a? DateTime
-        ctime = ctime.to_time
-      elsif ctime.is_a? ActiveSupport::TimeWithZone
-        ctime = ctime.time
-      end        
-      File.utime(Time.new, ctime, page_file_path)
+      page_path = save_page(page['loc'], page['lastmod'])
 
       max_lastmod = page['lastmod'] if page['lastmod'] > max_lastmod
-      if page_controller =~ /gallery/:
+      if page_path =~ /^\/gallery\//:
         galleries_count += 1
-      elsif page_controller =~ /topic/:
+      elsif page_path =~ /^\/topic\//:
         topics_count += 1
-      elsif page_controller =~ /photo/:
+      elsif page_path =~ /^\/photo\//:
         photos_count += 1
       end
     end
 
-    flash[:notice] = "Site #{@site.name} is published. #{galleries_count} gallereis, #{topics_count} topics, #{photos_count} photos saved."
+    save_page({ :controller => '/site',
+                :action => 'sitemap',
+                :site_name => @site.name,
+                :format => 'xml',
+                :published => true
+              }, max_lastmod)
+              
+    flash[:notice] = "Site #{@site.name} is published. #{galleries_count} galleries, #{topics_count} topics, #{photos_count} photos saved."
 
     respond_to do |format|
         format.html { redirect_to(admin_site_path(@site)) }
         format.xml  { head :ok }
     end
   end
+
+  private
+
+  # Save page to file, and set ctime acording to lastmod
+  # Returns page path (relative to server root)
+  def save_page(location, ctime)
+    page_params = location.clone
+    page_controller = page_params.delete(:controller)
+    page_action = page_params.delete(:action)
+    body = render_component_as_string( :controller => page_controller,
+                                       :action => page_action,
+                                       :params => page_params )
+    
+    page_path = url_for( location.merge( :only_path => true, :skip_relative_url_root => true ) )
+    page_file_path = File.join( Rails.public_path, page_path )
+    FileUtils.mkdir_p( File.dirname( page_file_path ) )
+    File.open(page_file_path, "wb+"){ |f| f.write(body) }
+    
+    if ctime.is_a? DateTime
+      ctime = ctime.to_time
+    elsif ctime.is_a? ActiveSupport::TimeWithZone
+      ctime = ctime.time
+    end        
+    File.utime(Time.new, ctime, page_file_path)
+    
+    return page_path
+  end
+
 end

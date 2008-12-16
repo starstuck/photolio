@@ -8,6 +8,8 @@ one:
   width: 100
   height: 100
   format: JPEG
+  created_at: 2008-01-01
+  updated_at: 2008-01-01
 
 two:
   id: 2
@@ -17,6 +19,8 @@ two:
   width: 100
   height: 100
   format: JPEG
+  created_at: 2008-01-01
+  updated_at: 2008-01-01
   
 three:
   id: 3
@@ -26,6 +30,8 @@ three:
   width: 100
   height: 100
   format: JPEG
+  created_at: 2008-01-01
+  updated_at: 2008-01-01
 
 four:
   id: 4
@@ -35,3 +41,5 @@ four:
   width: 100
   height: 100
   format: JPEG
+  created_at: 2008-01-01
+  updated_at: 2008-01-01

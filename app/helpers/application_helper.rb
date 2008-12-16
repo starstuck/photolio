@@ -1,11 +1,30 @@
 # Methods added to this helper will be available to all templates in the application.
 module ApplicationHelper
 
-  def published_site_gallery_path(site, gallery, format='html', options={})
+  def site_controller_path(site, object, controller, action, id_method, options={})
+    options[:format] = 'html' unless options.key? 'format'
+    options[:published] = params[:published] unless options.key? 'published'
+    version = options[:published] ? 'published' : 'live'
     if site.name == 'studio'
-      published_studio_gallery_path(gallery.name, format, options)
+      send("#{action}_#{version}_studio_#{controller}_path",
+           object.send(id_method), options )
     else
-      published_brand_site_gallery_path(site.brand, site.name, gallery.name, format, options)
+      send("#{action}_#{version}_brand_site_#{controller}_path",
+           site.brand, site.name, object.send(id_method), options )
+    end
+  end
+  
+  # Register paths calculation function with user friendly names
+  for controller, actions, id_method in [['gallery', ['show'], 'name'],
+                                         ['photo', ['show'], 'id'],
+                                         ['topic', ['show', 'play'], 'name'],
+                                        ]
+    for action in actions
+      class_eval <<-EOS
+        def #{action}_site_#{controller}_path(site, object, options={})
+          site_controller_path(site, object, '#{controller}', '#{action}', '#{id_method}', options)
+        end
+      EOS
     end
   end
 
@@ -26,7 +45,7 @@ module ApplicationHelper
   end
 
   def site_default_path(site)
-    published_site_gallery_path(site, site.galleries_in_order.first)
+    show_site_gallery_path(site, site.galleries_in_order.first)
   end
 
   def global_default_path

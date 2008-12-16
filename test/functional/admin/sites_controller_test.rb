@@ -134,6 +134,11 @@ class Admin::PublishSiteTest < ActionController::TestCase
 
     get :publish, :id => sites(:studio).id
     assert_redirected_to :action => 'show'
+    assert_match /2 galleries/, flash[:notice]
+    assert_match /2 topics/, flash[:notice]
+    assert_match /3 photos/, flash[:notice]
+
+    assert_equal DateTime.new(2008, 1, 1), File.mtime( File.join(@temp_dir, 'gallery', '1.html') )
   end
 
   def should_test_cleanup
