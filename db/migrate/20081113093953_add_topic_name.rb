@@ -1,7 +1,7 @@
 class AddTopicName < ActiveRecord::Migration
   def self.up
-    add_column :topics, :name, :string, :null => false
-    change_column :topics, :title, :string, :null => false
+    add_column :topics, :name, :string
+    change_column :topics, :title, :string
     
     Topic.reset_column_information
     Topic.find(:all).each do |topic|

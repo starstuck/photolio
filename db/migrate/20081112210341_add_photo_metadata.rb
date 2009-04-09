@@ -3,9 +3,9 @@ require 'mini_magick'
 
 class AddPhotoMetadata < ActiveRecord::Migration
   def self.up
-    add_column :photos, :width, :integer, :null => false
-    add_column :photos, :height, :integer, :null => false
-    add_column :photos, :format, :string, :limit => 8, :null => false
+    add_column :photos, :width, :integer
+    add_column :photos, :height, :integer
+    add_column :photos, :format, :string, :limit => 8
 
     Photo.reset_column_information
     Photo.find(:all).each do |photo|

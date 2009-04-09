@@ -8,10 +8,8 @@ require 'patch_asset_tag_helper'
 class ApplicationController < ActionController::Base
   # See ActionController::RequestForgeryProtection for details
   # Uncomment the :secret if you're not using the cookie session store
-  protect_from_forgery # :secret => '4d2f1ca893c52a70a30d417c8ff0d382'
+  protect_from_forgery # See ActionController::RequestForgeryProtection for details
   
-  # See ActionController::Base for details 
-  # Uncomment this to filter the contents of submitted sensitive data parameters
-  # from your application log (in this case, all fields with names like "password"). 
-  # filter_parameter_logging :password
+  # Scrub sensitive parameters from your log                                                  
+  filter_parameter_logging :password
 end

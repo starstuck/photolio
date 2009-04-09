@@ -53,17 +53,19 @@ module ApplicationHelper
     site_default_path(default_site)
   end
 
-  class PhotoTag < ActionView::Helpers::AssetTagHelper::ImageTag
-    DIRECTORY = 'photos'.freeze    
-    def directory; DIRECTORY; end
-  end
+  #class PhotoTag < ActionView::Helpers::AssetTagHelper::ImageTag
+  #  DIRECTORY = 'photos'.freeze    
+  #  def directory; DIRECTORY; end
+  #end
 
   def compute_photo_path(photo)
-    PhotoTag.new(self, @controller, photo.file_name, include_host=false).public_path
+    #PhotoTag.new(self, @controller, photo.file_name, include_host=false).public_path
+    compute_public_path(photo.file_name, 'photos')
   end
 
   def compute_photo_thumbnail_path(size, photo)
-    PhotoTag.new(self, @controller, photo.thumbnail_path(size), include_host=false).public_path
+    #PhotoTag.new(self, @controller, photo.thumbnail_path(size), include_host=false).public_path
+    compute_public_path(photo.thumbnail_path(size), 'photos')
   end
 
   def loading_tag
