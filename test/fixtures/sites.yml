@@ -1,8 +1,8 @@
 # Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
 
-studio:
+polinostudio:
   id: 1
-  name: studio
+  name: polinostudio
 
 kasiak:
   id: 2

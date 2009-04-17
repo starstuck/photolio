@@ -37,4 +37,8 @@ EOS
   def brand_name
     'admin'
   end
+
+  def page_title
+    'Photolio'
+  end
 end

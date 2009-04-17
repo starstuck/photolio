@@ -1,13 +1,12 @@
 require 'test_helper'
 
-class PhotoControllerTest < ActionController::TestCase
+class Site::PhotoControllerTest < ActionController::TestCase
 
-  def test_should_show
+  def test_should_show_polinostudio
     get( :show,
-         { :site_name => sites(:studio).name,
+         { :site_name => sites(:polinostudio).name,
            :photo_id => photos(:one).id,
            :format => 'html',
-           :published => true
          } )
     assert_response :success
   end

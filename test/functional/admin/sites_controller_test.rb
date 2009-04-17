@@ -21,53 +21,53 @@ class Admin::SitesControllerTest < ActionController::TestCase
   end
 
   def test_should_show_site
-    get :show, :id => sites(:studio).id
+    get :show, :id => sites(:polinostudio).id
     assert_response :success
     assert_not_nil assigns(:site)
   end
 
   def test_should_get_edit
-    get :edit, :id => sites(:studio).id
+    get :edit, :id => sites(:polinostudio).id
     assert_response :success
   end
 
   def test_should_update_site
-    put :update, :id => sites(:studio).id, :site => { :name => 'studio2' }
+    put :update, :id => sites(:polinostudio).id, :site => { :name => 'studio2' }
     assert_redirected_to admin_site_path(assigns(:site))
     assert_equal 'studio2', assigns['site'].name
   end
 
   def test_should_destroy_site
     assert_difference('Site.count', -1) do
-      delete :destroy, :id => sites(:studio).id
+      delete :destroy, :id => sites(:polinostudio).id
     end
 
     assert_redirected_to admin_sites_path
   end
 
   def test_get_layout
-    get :layout, :id => sites(:studio).id
+    get :layout, :id => sites(:polinostudio).id
     assert_response :success
     assert_not_nil assigns['galleries']
   end
 
   def test_get_layout_gallery_photos_partial
     get(:layout_gallery_photos_partial, 
-        :id => sites(:studio).id, 
+        :id => sites(:polinostudio).id, 
         :gallery_id => galleries(:one).id)
     assert_response :success
     assert_not_nil assigns['gallery']
   end
 
   def test_get_layout_unassigned_photos_partial
-    get(:layout_unassigned_photos_partial, :id => sites(:studio).id)
+    get(:layout_unassigned_photos_partial, :id => sites(:polinostudio).id)
     assert_response :success
     assert_not_nil assigns['unassigned_photos']
   end
 
   def test_layout_add_gallery_photo
     post(:layout_add_gallery_photo, 
-         :id => sites(:studio).id,
+         :id => sites(:polinostudio).id,
          :gallery_id => galleries(:one).id,
          :photo_id => photos(:four).id,
          :position => '1')
@@ -78,7 +78,7 @@ class Admin::SitesControllerTest < ActionController::TestCase
 
   def test_layout_remove_gallery_photo
     post(:layout_remove_gallery_photo, 
-         :id => sites(:studio).id,
+         :id => sites(:polinostudio).id,
          :photo_id => photos(:two).id)
     assert_response :success
     assert_template '_layout_unassigned_photos'
@@ -88,7 +88,7 @@ class Admin::SitesControllerTest < ActionController::TestCase
   def test_layout_add_gallery_separator
     assert_equal 4, galleries(:one).gallery_items.size
     post(:layout_add_gallery_separator, 
-         :id => sites(:studio).id,
+         :id => sites(:polinostudio).id,
          :gallery_id => galleries(:one).id,
          :position => '3')
     assert_response :success
@@ -101,7 +101,7 @@ class Admin::SitesControllerTest < ActionController::TestCase
   def test_layout_remove_gallery_separator
     assert_difference('GalleryItem.count', -1) do
       post(:layout_remove_gallery_separator, 
-           :id => sites(:studio).id,
+           :id => sites(:polinostudio).id,
            :gallery_id => galleries(:one).id,
            :separator_id => '2')
     end
@@ -142,13 +142,13 @@ class Admin::PublishSiteTest < ActionController::TestCase
   end
 
   def test_publish
-    get :publish, :id => sites(:studio).id
+    get :publish, :id => sites(:polinostudio).id
     assert_redirected_to :action => 'show'
     assert_match /2 galleries/, flash[:notice]
     assert_match /2 topics/, flash[:notice]
     assert_match /3 photos/, flash[:notice]
 
-    assert_equal DateTime.new(2008, 1, 1), File.mtime( File.join(@temp_dir, 'gallery', '1.html') )
+    assert_equal DateTime.new(2008, 1, 1), File.mtime( File.join(@temp_dir, 'polinostudio', 'gallery', '1.html') )
   end
 
   def should_test_cleanup
@@ -177,7 +177,7 @@ class Admin::PublishRemoteLocationSiteTest < ActionController::TestCase
   end
 
   def test_publish_with_remote_location
-    get :publish, :id => sites(:studio).id
+    get :publish, :id => sites(:polinostudio).id
     assert_redirected_to :action => 'show'
     assert_match /remote location/, flash[:notice]
     assert_equal Dir.entries(@temp_dir), Dir.entries(@temp2_dir)

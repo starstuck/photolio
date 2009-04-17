@@ -1,9 +1,7 @@
-class SiteController < ApplicationController
-
-  before_filter :setup_context
+class Site::SiteController < Site::SiteBaseController
 
   # redirect to default gallery
-  def index
+  def show
     @gallery = @site.galleries_in_order.first
     redirect_to( :controller => 'gallery',
                  :action => 'show',
@@ -13,10 +11,10 @@ class SiteController < ApplicationController
   end
 
   def sitemap
-    @sitemap = SiteController.raw_sitemap(@site)
+    @sitemap = Site::SiteController.raw_sitemap(@site)
     @url_prefix = 'http://www.polinostudio.com'
     respond_to do |format|
-      format.xml { render :layout => false}
+      format.xml { render :template => 'site/sitemap', :layout => false}
     end
   end
 
@@ -34,12 +32,11 @@ class SiteController < ApplicationController
       last_photo_updated = Photo.maximum('updated_at', :conditions => ['id in (?)', gallery.photo_ids])
       sitemap << { 
         'loc' => { 
-          :controller => '/gallery',
+          :controller => '/site/gallery',
           :action => 'show',
           :site_name => gallery.site.name,
           :gallery_name => gallery.name,
           :format => 'html',
-          :published => true
         },
         'lastmod' => [ last_gallery_updated, 
                        last_topic_updated, 
@@ -54,12 +51,11 @@ class SiteController < ApplicationController
     for topic in site.topics
       sitemap << { 
         'loc' => { 
-          :controller => '/topic',
+          :controller => '/site/topic',
           :action => 'show',
           :site_name => gallery.site.name,
           :topic_name => topic.name,
           :format => 'html',
-          :published => true
         },
         'lastmod' => topic.updated_at,
         'changefreq' => 'daily',
@@ -73,12 +69,11 @@ class SiteController < ApplicationController
       unless hidden_photos.include? photo
         sitemap << { 
           'loc' => { 
-            :controller => '/photo',
+            :controller => '/site/photo',
             :action => 'show',
             :site_name => gallery.site.name,
             :photo_id => photo.id,
             :format => 'html',
-            :published => true
           },
           'lastmod' => topic.updated_at,
           'changefreq' => 'weekly',
@@ -88,12 +83,6 @@ class SiteController < ApplicationController
     end
 
     sitemap
-  end
-
-  private
-
-  def setup_context
-    @site = Site.find( :first, :conditions => { 'name' => params[:site_name] } )
   end
 
 end

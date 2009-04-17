@@ -1,4 +1,4 @@
-module GalleryHelper
+module Site::GalleryHelper
 
   def total_gallery_items_width(gallery)
     #  Values below are based on CSS styles

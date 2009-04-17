@@ -192,7 +192,7 @@ class Admin::SitesController < Admin::AdminBaseController
   # If remote location is configured, synchronize this directory with remote location.
   def publish
     @site = Site.find(params[:id])
-    sitemap = SiteController.raw_sitemap(@site)
+    sitemap = Site::SiteController.raw_sitemap(@site)
     
     galleries_count = 0
     topics_count = 0
@@ -211,16 +211,16 @@ class Admin::SitesController < Admin::AdminBaseController
       page_path = save_page(page['loc'], page['lastmod'])
 
       max_lastmod = page['lastmod'] if page['lastmod'] > max_lastmod
-      if page_path =~ /^\/gallery\//:
+      if page_path =~ /^\/[^\/]*\/gallery\//:
         galleries_count += 1
-      elsif page_path =~ /^\/topic\//:
+      elsif page_path =~ /^\/[^\/]*\/topic\//:
         topics_count += 1
-      elsif page_path =~ /^\/photo\//:
+      elsif page_path =~ /^\/[^\/]*\/photo\//:
         photos_count += 1
       end
     end
 
-    save_page({ :controller => '/site',
+    save_page({ :controller => '/site/site',
                 :action => 'sitemap',
                 :site_name => @site.name,
                 :format => 'xml',

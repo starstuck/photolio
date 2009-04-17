@@ -3,7 +3,7 @@
   <ul id="site_menu">
     <% for topic in @menu_items -%>
       <li class="site_menu_topic">
-	<%= link_to topic.title, show_site_topic_path( @site, topic ) -%>
+	<%= link_to topic.title, show_site_topic_path(@site, topic) -%>
       </li>
     <% end -%>
   </ul>
