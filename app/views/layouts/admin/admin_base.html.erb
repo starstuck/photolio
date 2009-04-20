@@ -1,16 +1,57 @@
-<% @content_for_layout = capture do -%>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <title><%= page_title %></title>
 
-  <div id="admin_frame">
-    <div id="admin_content">
+    <meta http-equiv="content-type" content="text/html;charset=UTF-8" />
 
-      <p class="notice"><%= flash[:notice] %></p>
-      
-      <%= yield  %>
+    <%= stylesheet_link_tag('layout', 'default')
+    -%>
 
+    <%= javascript_include_tag('prototype',
+                               'effects',
+                               'dragdrop',
+                               'typeface',
+                               'typeface/goodtimes',
+			       'protomenu',
+                               'application')
+    -%>
+
+    <!--[if lte IE 6]>
+      <%= stylesheet_link_tag 'ie6fix' %>
+    <![endif]-->
+
+    <%= extra_head_tags %>
+  </head>
+
+  <body>
+
+    <div id="header">
+      <h1>
+	<span id="header_studio">Photolio</span>
+	<span id="header_brand">admin</span>
+      </h1>
     </div>
-  </div>
+    
+    <div id="content">
+      <div id="content_scrollframe">
+	<div id="content_scrollable">
+	  <p class="notice"><%= flash[:notice] %></p>
+	  <%= yield  %>
+	</div>
+      </div>
 
-<% end -%>
+      <span class="content_corner_tl"></span>
+      <span class="content_corner_tr"></span>
+      <span class="content_corner_bl"></span>
+      <span class="content_corner_br"></span>
+    </div>
 
-<%= render(:file => 'layouts/polinostudio', 
-           :locals => {'content_for_layout' => @content_for_layout }) -%>
+    <div id="footer">
+      <p>&copy; <a href="http://www.webstylizer.eu">WebStylizer.eu<a/> - All rights reserved.</p>
+    </div>
+
+  </body>
+</html>
+
+

@@ -26,7 +26,7 @@
 	    :with => "'photo_id=' + encodeURIComponent(element.id)",
 	    :loading => "Element.update('gallery_#{gallery.id}_photos_list', 'a<td style=\"width: 100px;\">#{loading_tag}</td>')",
 	    :hoverclass => 'hover',
-	    :scroll => "'admin_frame'"
+	    :scroll => "'content_scrollframe'"
 	    -%>
 	<% if item.is_a? GalleryPhoto -%>
 	  <%= image_tag compute_photo_thumbnail_path(130, item.photo),
@@ -37,7 +37,7 @@
 	      :revert => draggable_revert_js,
 	      :onEnd => draggable_on_end_js(:update => "gallery_#{gallery.id}_photos_list",
 					    :url => {:action => 'layout_gallery_photos_partial', :id => @site, :gallery_id => gallery}),
-	      :scroll => "'admin_frame'"
+	      :scroll => "'content_scrollframe'"
 	      -%>
 	<% else -%>
 	  <div id="<%= "separator_#{item.id}" -%>"
@@ -64,7 +64,7 @@
 	    :with => "'photo_id=' + encodeURIComponent(element.id)",
 	    :loading => "Element.update('gallery_#{gallery.id}_photos_list', 'a<td style=\"width: 100px;\">#{loading_tag}</td>')",
 	    :hoverclass => 'hover',
-	    :scroll => "'admin_frame'"
+	    :scroll => "'content_scrollframe'"
 	    -%>
       </div>
     </td>

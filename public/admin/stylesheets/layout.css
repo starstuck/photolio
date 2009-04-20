@@ -1,51 +1,145 @@
-/* Admin panel layout customization - make use full screen width*/
+/* 
+ * Body, exta
+ */
 
-div#header,
-div#content,
-div#footer
-{
-    width: auto;
-    margin-left: 20px;
-    margin-right: 20px;
-}
-    
-div#content{
-    overflow: visible;
+html, body{
+    overflow: hidden; /* Hide window scrollbars, as they brake gallery scrolling */
 }
 
-div#admin_frame{
-    position: relative;
-    width: 100%;
-    height: 100%;
-    overflow: auto;
-}
-
-div#admin_content{
-    position: relative;
-    padding: 4px;
+body {
+    margin: 0px;
+    padding: 0px;
 }
 
 
 /*
- * Common styles used in admin pages
+ * Header box 
  */
 
-hr {
-    margin-top: 20px;
+div#header{
+    width: auto;
+    height: 32px;
+    margin: 0px 20px;
+    padding-top: 28px;
+    padding-left: 65px;
 }
 
-label{
-    font-weight: bold;
+div#header h1{
+    padding: 0px;
+    margin: 0px;
 }
 
-p.notice{
-    color: #7f0000;
+span#header_brand{
+    font-size: 26px;
 }
 
-div.page_actions{
+
+/* 
+ * Content box and content during loading box
+ */
+
+div#content,
+div#content_preloading
+{
+    width: auto;
+    height: 565px;
+}
+
+div#content{
+    position: relative;
+    margin-left: 20px;
+    margin-right: 20px;
+    overflow: hidden;
+}
+
+div#content_preloading{
+    position: fixed;
+    top: 70px;
+    z-index: 20;
+    display: none;
+}
+
+div#content_scrollframe{
+    position: relative;
+    overflow: auto;
+    width: 100%;
+    height: 100%
+}
+
+div#content_scrollable{
+    position: relative;
+    padding: 4px;
+}
+
+span.content_corner_tl,
+span.content_corner_tr, 
+span.content_corner_bl, 
+span.content_corner_br{
+    position: absolute;
+    width: 13px;
+    height: 13px;
+    display: block;
+    /* margin-bottom: -1px this is for IE */
+    background-repeat: no-repeat;
+}
+
+span.content_corner_tl{
+    top: 0px;
+    left: 0px;
+    background-image: url(../images/content-corner-tl.gif);
+}
+
+span.content_corner_tr{
+    top: 0px;
+    right: 0px;
+    background-image: url(../images/content-corner-tr.gif);
+}
+
+span.content_corner_bl{
+    bottom: 0px;
+    left: 0px;
+    background-image: url(../images/content-corner-bl.gif); 
+}
+
+span.content_corner_br{
+    bottom: 0px;
+    right: 0px;
+    background-image: url(../images/content-corner-br.gif); 
+}
+
+
+/* Topic page */
+
+#topic_header{
+    height: 40px;
+    padding: 5px 25px 5px 25px;
+}
+
+#topic_header h2{
+    margin-top: 10px;
+}
+
+#close_button{
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    width: 14px;
+    height: 11px;
+}
+
+#topic_viewport{
+    height: 475px;
+    margin: 0px 25px 25px 25px;
+    overflow: auto;
+}
+
+/* Page elements */
+
+div.page_actions {
     margin-left: 1em;
-    margin-right: 1em;
+    margin-right: 1em; 
 }
+
 
 /*
  * Recort fields styles (Show, Edit, New views)
@@ -205,4 +299,18 @@ a.separator_close_button{
     position: absolute;
     right: 5px;
     z-index: 2;
+}
+
+
+/* FOOTER */
+
+div#footer{
+    width: auto;
+    margin: 0px auto;
+    padding-right: 15px;
+    text-align: right;
+}
+
+div#footer p{
+    font-size: 7pt;
 }

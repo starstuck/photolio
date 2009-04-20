@@ -1,3 +1,7 @@
+module ActionView::Helpers::AssetTagHelper
+  alias_method :compute_public_path_without_admin, :compute_public_path
+end
+
 module Admin::AdminBaseHelper
 
   def remote_callback(options={})
@@ -12,10 +16,10 @@ module Admin::AdminBaseHelper
 
   # Build javascript tag, that loads tinymce to all textareas on page
   def load_tinymce_tag
-    javascript_tag <<EOS
-    document.write(unescape("%3cscript src='#{javascript_path('/tiny_mce/tiny_mce')}' type='text/javascript'%3E%3C/script%3E"));
-    add_onload_handler(function(){ tinyMCE.init({mode: 'textareas', theme: 'advanced',}); });
-EOS
+    javascript_tag <<-EOS
+      document.write(unescape("%3cscript src='#{javascript_path('/tiny_mce/tiny_mce')}' type='text/javascript'%3E%3C/script%3E"));
+      add_onload_handler(function(){ tinyMCE.init({mode: 'textareas', theme: 'advanced',}); });
+    EOS
   end
 
   def protomenu_js(selector, options={})
@@ -24,21 +28,27 @@ EOS
     %(new Proto.Menu(#{options_for_javascript(options)});)
   end
 
+  def compute_photo_path(photo)
+    compute_public_path_without_admin(photo.file_name, "#{photo.site.name}/photos")
+  end
+
+  def compute_photo_thumbnail_path(size, photo)
+    compute_public_path_without_admin(photo.thumbnail_path(size), "#{photo.site.name}/photos")
+  end
+
+
   #
   # Main template slots customization 
   #
 
-  def extra_head_tags
-    [ stylesheet_link_tag('adminpanel', :cache => '_cache_admin'),
-      javascript_include_tag('protomenu', 'adminpanel', :cache => '_cache_admin'),
-      ].join("\n")
-  end
-
-  def brand_name
-    'admin'
-  end
-
   def page_title
     'Photolio'
   end
+
+  protected
+
+  def compute_public_path(source, dir, ext=nil)
+    compute_public_path_without_site(source, "admin/#{dir}", ext)
+  end
+
 end

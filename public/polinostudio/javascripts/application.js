@@ -3,17 +3,17 @@
 var onload_handlers = new Array();
 var previousOnload = window.onload;
 
-window.onload = function () { 
-  for (var i = 0; i < onload_handlers.length; i++) 
+window.onload = function () {
+  for (var i = 0; i < onload_handlers.length; i++)
   {
     onload_handlers[i]();
   }
-  if(previousOnload) previousOnload(); 
+  if(previousOnload) previousOnload();
 }
 
-/* Register function as onLoad handlerm so it will be executed each time page loads 
+/* Register function as onLoad handlerm so it will be executed each time page loads
    Functions registered eith this method will be executed before handlers registerd
-   in traditional way. In praticualr they will be executed before function, that 
+   in traditional way. In praticualr they will be executed before function, that
    removes loading screen.
  */
 function add_onload_handler(handler){
@@ -50,7 +50,9 @@ function setup_scrollbar() {
     var visibleWidth = document.getElementById("gallery_photos_viewport").offsetWidth;
     var scrollbarWidth = document.getElementById("gallery_scrollbar_space").offsetWidth;
     var overflowSize = 4;
-    
+
+    // alert('Started with scroll position: ' + document.getElementById("gallery_photos_viewport").scrollLeft);
+
     scroller = new Scroller(scrollerDiv, imagesDiv, scrollbarWidth, visibleWidth,
 			    {scrollerOffset: 0 - overflowSize,
 				scrollerMinWidth: 40,
@@ -65,7 +67,7 @@ function setup_scrollbar() {
     function stop_scrolling(event){
       scroller.cancelScrolling();
     }
-    
+
     function start_scrolling_left(event){
       scroller.startScrollingToBeginning();
     }
@@ -82,7 +84,7 @@ function setup_scrollbar() {
 
     Event.observe("gallery_scrollbar_left", "mousedown", start_scrolling_left);
     Event.observe("gallery_scrollbar_left", "mouseup", stop_scrolling);
-    
+
     Event.observe("gallery_scrollbar_right", "mousedown", start_scrolling_right);
     Event.observe("gallery_scrollbar_right", "mouseup", stop_scrolling);
 
@@ -101,7 +103,7 @@ function setup_gallery_controlls() {
       scroller.moveToBeginning();
     }
     scroller.startScrollingToEnd({
-          speed: 75, 
+          speed: 75,
 	  afterFinish: pause_gallery
 	  });
     var el = $('gallery_play_button');
@@ -154,7 +156,7 @@ add_onload_handler(setup_ga);
 
 
 /*
- * Library functions used by application
+ * Library functions called from html
  */
 
 /* Go back in history. If page is first time called, return true */
@@ -163,6 +165,6 @@ function go_back(){
     history.go(-1);
     return false;
   }else{
-    return true; 
+    return true;
   }
 }
