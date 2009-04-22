@@ -1,0 +1,47 @@
+<h2>Listing accounts</h2>
+
+<table class="listing">
+  
+  <thead>
+    <tr>
+      <th>Login</th>
+      <th>Name</th>
+      <th>Roles</th>
+      <th>Sites</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% for user in @users %>
+      <tr>
+	<td><%=h user.login %></td>
+	<td><%=h user.name %></td>
+	<td>
+	  <% for role in user.user_roles -%>
+	    <% if role != user.user_roles[0] -%>, <% end -%>
+	    <%= role.name -%>
+	  <% end -%>
+	</td>
+	<td>
+	  <% for site in user.sites -%>
+	    <% if site != user.sites[0] -%>, <% end -%>
+	    <%= link_to site.name, admin_site_path(site) -%>
+	  <% end -%>
+	</td>
+	<td class="actions">
+	  <%= link_to 'Show', admin_user_path(user) %> | 
+	  <%= link_to 'Edit', edit_admin_user_path(user) %> |
+	  <%= link_to 'Destroy', admin_user_path(user), :confirm => 'Are you sure?', :method => :delete %>
+	</td>
+      </tr>
+    <% end %>
+  </tbody>
+
+</table>
+
+<hr />
+
+<div class="page_actions">
+  <%= link_to 'New user', new_admin_user_path -%> |
+  <%= link_to 'Back to sites index', admin_sites_path(@site) -%>
+</div>

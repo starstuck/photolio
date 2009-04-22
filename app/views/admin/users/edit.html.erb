@@ -1,0 +1,53 @@
+<h2>Editing user details</h2>
+
+<% form_for @user, :url => admin_user_path(@user) do |f| %>
+  <div class="record_fields">
+    <%= f.error_messages %>
+
+    
+    <p>
+      <%= f.label :login %><br />
+      <%= @user.login -%>
+    </p>
+    <p>
+      <%= f.label :name %><br />
+      <%= f.text_field :name %>
+    </p>
+    <p>
+      <%= f.label :email %><br />
+      <%= f.text_field :email %>
+    </p>
+
+    <p>
+      <%= f.label :must_change_password, 'Is user requested to change password on next login?' %><br />
+      <%= f.check_box :must_change_password%>
+    </p>
+
+    <% if is_manager? -%>
+      <p> 
+	<%= hidden_field_tag 'user_roles_empty', '' -%> 
+	<%= label_tag 'user_roles', 'User roles' -%><br />
+	<%= select_tag('user_roles[]',
+		       options_for_select(@all_user_roles, @selected_user_roles),
+		       {:multiple=>true, :size=>4})-%>
+      </p>
+      <p>
+	<%= hidden_field_tag 'user_sites_empty', '' -%> 
+	<%= label_tag 'user_sites', 'Sites, that user can edit' -%><br />
+	<%= select_tag('user_sites[]',
+		       options_for_select(@all_user_sites, @selected_user_sites),
+		       {:multiple=>true, :size=>5})-%>
+      </p>
+    <% end -%>
+
+    <p>
+      <%= f.submit "Update" %>
+    </p>
+  </div>
+<% end %>
+
+<hr />
+
+<div class="page_actions">
+  <%= link_to 'Back to user details', admin_user_path(@user) %>
+</div>

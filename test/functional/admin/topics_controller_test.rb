@@ -1,6 +1,13 @@
 require 'test_helper'
 
 class Admin::TopicsControllerTest < ActionController::TestCase
+  include AuthenticatedTestHelper
+
+  def setup
+    super
+    login_as users(:aaron)
+  end
+
   def test_should_get_index
     get :index, :site_id => sites(:polinostudio).id
     assert_response :success

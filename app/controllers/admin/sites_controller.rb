@@ -1,9 +1,13 @@
 # -*- coding: iso-8859-2 -*-
 class Admin::SitesController < Admin::AdminBaseController
+
+  before_filter :setup_site_context
+  skip_before_filter :setup_site_context, :only => [:index, :new, :create]
+
   # GET /admin_sites
   # GET /admin_sites.xml
   def index
-    @sites = Site.find(:all, :order => 'brand, name')
+    @sites = current_user.sites.find(:all, :order => 'name')
 
     respond_to do |format|
       format.html # index.html.erb
@@ -14,8 +18,6 @@ class Admin::SitesController < Admin::AdminBaseController
   # GET /admin_sites/1
   # GET /admin_sites/1.xml
   def show
-    @site = Site.find(params[:id])
-
     respond_to do |format|
       format.html # show.html.erb
       format.xml  { render :xml => @site }
@@ -29,13 +31,12 @@ class Admin::SitesController < Admin::AdminBaseController
 
     respond_to do |format|
       format.html # new.html.erb
-      format.xml  { render :xml => @admin_site }
+      format.xml  { render :xml => @site }
     end
   end
 
   # GET /admin_sites/1/edit
   def edit
-    @site = Site.find(params[:id])
   end
 
   # POST /admin_sites
@@ -58,8 +59,6 @@ class Admin::SitesController < Admin::AdminBaseController
   # PUT /admin_sites/1
   # PUT /admin_sites/1.xml
   def update
-    @site = Site.find(params[:id])
-
     respond_to do |format|
       if @site.update_attributes(params[:site])
         flash[:notice] = 'Site was successfully updated.'
@@ -75,7 +74,6 @@ class Admin::SitesController < Admin::AdminBaseController
   # DELETE /admin_sites/1
   # DELETE /admin_sites/1.xml
   def destroy
-    @site = Site.find(params[:id])
     @site.destroy
 
     respond_to do |format|
@@ -87,7 +85,6 @@ class Admin::SitesController < Admin::AdminBaseController
   # Dispaly screen for layouting photos.
   # It allows to assign photos to gallerias, change order, add separators
   def layout
-    @site = Site.find(params[:id])
     @galleries = @site.galleries
     
     respond_to do |format|
@@ -100,7 +97,6 @@ class Admin::SitesController < Admin::AdminBaseController
   end
 
   def layout_gallery_photos_partial
-    @site = Site.find(params[:id])
     @gallery = @site.galleries.find(params[:gallery_id])
 
     render(:partial => "layout_gallery_photos",
@@ -116,7 +112,6 @@ class Admin::SitesController < Admin::AdminBaseController
   end
 
   def layout_add_gallery_photo
-    @site = Site.find(params[:id])
     @gallery = @site.galleries.find(params[:gallery_id])
     @photo = @site.photos.find(params[:photo_id].split('_')[-1])
     position = params[:position].to_i
@@ -132,7 +127,6 @@ class Admin::SitesController < Admin::AdminBaseController
   end
 
   def layout_remove_gallery_photo
-    @site = Site.find(params[:id])
     # We must query for photo object, because @site.photo.find returns photo
     # object with joins data, which brakes @photo.id attribute
     @photo = Photo.find(params[:photo_id].split('_')[-1],
@@ -162,7 +156,6 @@ class Admin::SitesController < Admin::AdminBaseController
   end
 
   def layout_add_gallery_separator
-    @site = Site.find(params[:id])
     @gallery = @site.galleries.find(params[:gallery_id])
     position = params[:position].to_i
       
@@ -175,7 +168,6 @@ class Admin::SitesController < Admin::AdminBaseController
   end
   
   def layout_remove_gallery_separator
-    @site = Site.find(params[:id])
     @gallery = @site.galleries.find(params[:gallery_id])
     @separator = @gallery.gallery_items.find(params[:separator_id].split('_')[-1])
     
@@ -191,7 +183,6 @@ class Admin::SitesController < Admin::AdminBaseController
   # Pusblish page. First cache all pages in public directory. 
   # If remote location is configured, synchronize this directory with remote location.
   def publish
-    @site = Site.find(params[:id])
     sitemap = Site::SiteController.raw_sitemap(@site)
     
     galleries_count = 0
@@ -267,6 +258,11 @@ class Admin::SitesController < Admin::AdminBaseController
     File.utime(Time.new, ctime, page_file_path)
     
     return page_path
+  end
+
+  def setup_site_context
+    @site = Site.find(params[:id])
+    test_user_allowed_access_site
   end
 
 end

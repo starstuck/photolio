@@ -1,6 +1,13 @@
 require 'test_helper'
 
 class Admin::PhotosControllerTest < ActionController::TestCase
+  include AuthenticatedTestHelper
+
+  def setup
+    super
+    login_as users(:aaron)
+  end
+
   def test_should_get_index
     get :index, :site_id => 1
     assert_response :success

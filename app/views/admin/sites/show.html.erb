@@ -20,6 +20,8 @@
   <%= link_to 'Layout', layout_admin_site_path(@site) %> |
   <%= link_to 'Topics', admin_site_topics_path(@site) %> |
   <%= link_to 'Publish', publish_admin_site_path(@site) %> |
-  <%= link_to 'Edit', edit_admin_site_path(@site) %> |
-  <%= link_to 'Back to sites list', admin_sites_path %>
+  <%= link_to 'Edit', edit_admin_site_path(@site) %> 
+  <% if @current_user.has_multisite_view -%>
+    | <%= link_to 'Back to sites list', admin_sites_path %>
+  <% end -%>
 </div>

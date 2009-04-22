@@ -39,6 +39,8 @@ ActionController::Routing::Routes.draw do |map|
   # Map resources for admin screens
   map.namespace :admin do |admin|
     admin.root :controller => 'admin_base'
+    admin.resources :users, :member => ['change_password', 'reset_password']
+    admin.resource :session, :member => ['delete']
     admin.resources(:sites, 
                     :member => ['layout', 
                                 'layout_gallery_photos_partial',

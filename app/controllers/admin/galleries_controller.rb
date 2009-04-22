@@ -1,6 +1,6 @@
 class Admin::GalleriesController < Admin::AdminBaseController
 
-  before_filter(:get_site)
+  before_filter(:setup_site_context)
   
   # GET /admin_galleries
   # GET /admin_galleries.xml
@@ -49,7 +49,7 @@ class Admin::GalleriesController < Admin::AdminBaseController
       if @gallery.save
         flash[:notice] = 'Gallery was successfully created.'
         format.html { redirect_to admin_site_galleries_path(@site) }
-        format.xml  { render :xml => @gallery, :status => :created, :location => admin_site_galleries(@site) }
+        format.xml  { render :xml => @gallery, :status => :created, :location => admin_site_galleries_path(@site) }
       else
         format.html { render :action => "new" }
         format.xml  { render :xml => @gallery.errors, :status => :unprocessable_entity }
@@ -81,14 +81,8 @@ class Admin::GalleriesController < Admin::AdminBaseController
     @gallery.destroy
 
     respond_to do |format|
-      format.html { redirect_to(admin_site_galleries_url(@site)) }
+      format.html { redirect_to(admin_site_galleries_path(@site)) }
       format.xml  { head :ok }
     end
-  end
-
-  protected
-  
-  def get_site
-    @site = Site.find(params[:site_id])
   end
 end

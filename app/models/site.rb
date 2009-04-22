@@ -9,6 +9,7 @@ class Site < ActiveRecord::Base
   has_many :galleries, :dependent => :destroy, :order => 'name' 
   has_many :photos, :dependent => :destroy, :order => 'file_name'
   has_many :topics, :dependent => :destroy, :order => 'title'
+  has_and_belongs_to_many :users, :order => 'name, login', :uniq => true
 
   validates_length_of :name, :in => 3..255
   validates_uniqueness_of :name

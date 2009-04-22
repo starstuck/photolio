@@ -34,9 +34,21 @@
     </div>
     
     <div id="content">
+      <div id="topbar" style="width: 100%; height: 15px;">
+	<div id="userinfo" style="position: absolute; right:5px;">
+	  <%= render :partial => 'admin/users/user_bar' %>
+	</div>
+      </div>
+      
       <div id="content_scrollframe">
 	<div id="content_scrollable">
-	  <p class="notice"><%= flash[:notice] %></p>
+	  <% if flash[:error] %>
+	    <p class="notice"><%= flash[:error] %></p>
+	  <% end %>
+	  <% if flash[:notice] %>
+	    <p class="notice"><%= flash[:notice] %></p>
+	  <% end %>
+
 	  <%= yield  %>
 	</div>
       </div>

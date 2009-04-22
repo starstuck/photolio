@@ -1,6 +1,13 @@
 require 'test_helper'
 
 class Admin::SitesControllerTest < ActionController::TestCase
+  include AuthenticatedTestHelper
+
+  def setup
+    super
+    login_as users(:aaron)
+  end   
+
   def test_should_get_index
     get :index
     assert_response :success
@@ -24,6 +31,13 @@ class Admin::SitesControllerTest < ActionController::TestCase
     get :show, :id => sites(:polinostudio).id
     assert_response :success
     assert_not_nil assigns(:site)
+  end
+
+  def test_should_deny_show_site
+    login_as users(:quentin)
+    get :show, :id => sites(:polinostudio).id
+    assert_response :redirect
+    assert_equal 'You have insufficient permissions to manage site: polinostudio', flash[:notice]
   end
 
   def test_should_get_edit
@@ -130,11 +144,13 @@ end
 
 class Admin::PublishSiteTest < ActionController::TestCase
   include PublishSetup
+  include AuthenticatedTestHelper
   
   tests Admin::SitesController
   
   def setup
     setup_with_publish
+    login_as users(:aaron)
   end
 
   def teardown
@@ -159,6 +175,7 @@ end
 
 
 class Admin::PublishRemoteLocationSiteTest < ActionController::TestCase
+  include AuthenticatedTestHelper
   include PublishSetup
 
   tests Admin::SitesController
@@ -168,6 +185,7 @@ class Admin::PublishRemoteLocationSiteTest < ActionController::TestCase
     @temp2_dir = File.join(RAILS_ROOT, 'tmp', "test_#{rand.to_s[2..-1]}")
     FileUtils.mkdir_p(@temp2_dir)
     Site.publish_remote_location = @temp2_dir
+    login_as users(:aaron)
   end
 
   def teardown

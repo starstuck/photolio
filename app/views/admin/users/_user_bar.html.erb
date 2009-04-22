@@ -1,0 +1,4 @@
+<% if logged_in? -%>
+  <span id="user-bar-greeting">Logged in as <%= link_to current_user.label, admin_user_path(current_user) %></span>
+  <span id="user-bar-action"  >(<%= link_to "Log out", logout_path, { :title => "Log out" }    %>)</span>
+<% end -%>

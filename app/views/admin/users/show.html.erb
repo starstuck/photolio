@@ -1,0 +1,56 @@
+<h2>User details</h2>
+
+<div class="record_fields">
+  <p>
+    <b>Login</b><br />
+    <%=h @user.login %>
+  </p>
+
+  <p>
+    <b>Name</b><br />
+    <%=h @user.name %>
+  </p>
+
+  <p>
+    <b>Email</b><br />
+    <%=h @user.email %>
+  </p>
+
+  <p>
+    <b>Is requested to change password</b><br />
+    <%=h @user.must_change_password ? 'Yes' : 'No' -%>
+  </p>
+
+  <p>
+    <b>Roles</b><br />
+    <% for role in @user.user_roles -%>
+      <% if role != @user.user_roles[0] -%>, <% end -%>
+      <%= role.name -%>
+    <% end -%>
+  </p>
+
+  <p>
+    <b>Sites accessible by user</b><br />
+    <% for site in @user.sites -%>
+      <% if site != @user.sites[0] -%>, <% end -%>
+      <%= link_to site.name, admin_site_path(site) -%>
+    <% end -%>
+  </p>
+
+
+</div>
+
+<hr />
+
+<div class="page_actions">
+  <%= link_to 'Edit', edit_admin_user_path(@user) %> |
+  <% if is_owner? -%>
+    <%= link_to 'Change password', change_password_admin_user_path(@user) %> |
+  <% end -%>
+  <% if is_manager? -%>
+    <%= link_to 'Reset password', reset_password_admin_user_path(@user), :confirm => 'Are you sure?' %> |
+    <%= link_to 'Back to users list', admin_users_path %>
+  <% else -%>
+    <%= link_to 'Back to sites admin', admin_root_path %>
+  <% end -%>
+</div>

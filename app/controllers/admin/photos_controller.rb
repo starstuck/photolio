@@ -1,6 +1,6 @@
 class Admin::PhotosController < Admin::AdminBaseController
 
-  before_filter(:get_site)
+  before_filter(:setup_site_context)
 
   # GET /admin_photos
   # GET /admin_photos.xml
@@ -113,9 +113,4 @@ class Admin::PhotosController < Admin::AdminBaseController
     end
   end
 
-  protected
-  
-  def get_site
-    @site = Site.find(params[:site_id])
-  end
 end

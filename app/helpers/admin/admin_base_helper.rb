@@ -36,6 +36,13 @@ module Admin::AdminBaseHelper
     compute_public_path_without_admin(photo.thumbnail_path(size), "#{photo.site.name}/photos")
   end
 
+  def login_path
+    new_admin_session_path
+  end
+
+  def logout_path
+    delete_admin_session_path
+  end
 
   #
   # Main template slots customization 
@@ -48,7 +55,7 @@ module Admin::AdminBaseHelper
   protected
 
   def compute_public_path(source, dir, ext=nil)
-    compute_public_path_without_site(source, "admin/#{dir}", ext)
+    compute_public_path_without_admin(source, "admin/#{dir}", ext)
   end
 
 end
