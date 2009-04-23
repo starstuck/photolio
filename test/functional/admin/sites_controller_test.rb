@@ -24,7 +24,7 @@ class Admin::SitesControllerTest < ActionController::TestCase
       post :create, :site => { :name => 'New site' }
     end
 
-    assert_redirected_to admin_site_path(assigns(:site))
+    assert_redirected_to admin_sites_path
   end
 
   def test_should_show_site

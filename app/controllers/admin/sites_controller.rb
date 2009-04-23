@@ -47,8 +47,8 @@ class Admin::SitesController < Admin::AdminBaseController
     respond_to do |format|
       if @site.save
         flash[:notice] = 'Site was successfully created.'
-        format.html { redirect_to(admin_site_path(@site)) }
-        format.xml  { render :xml => @site, :status => :created, :location => admin_site_path(@site) }
+        format.html { redirect_to(admin_sites_path) }
+        format.xml  { render :xml => @site, :status => :created, :location => admin_sites_path }
       else
         format.html { render :action => "new" }
         format.xml  { render :xml => @site.errors, :status => :unprocessable_entity }
