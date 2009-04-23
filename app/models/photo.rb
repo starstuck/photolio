@@ -1,11 +1,9 @@
 require 'find'
 require 'ftools'
-require 'mini_magick'
+require 'mini_magick_utils'
 
 
 class Photo < ActiveRecord::Base
-
-  PHOTOS_ROOT = "#{RAILS_ROOT}/public/photos"
 
   has_many :gallery_items, :dependent => :destroy
   has_and_belongs_to_many :galleries, :readonly => true # Simple access skiping assoc table
@@ -21,7 +19,7 @@ class Photo < ActiveRecord::Base
   attr_readonly :file_name
 
   validates_length_of :file_name, :maximum => 255, :allow_blank => false
-  validates_uniqueness_of :file_name
+  validates_uniqueness_of :file_name, :scope => :site_id
   validates_presence_of :site
   validates_length_of :title, :maximum => 255, :allow_nil => true
   validates_length_of :description, :maximum => 255, :allow_nil => true
@@ -34,13 +32,24 @@ class Photo < ActiveRecord::Base
     @uploaded_file = file_data
   end
 
+  def photos_folder
+    "#{RAILS_ROOT}/public/#{site.name}/photos"
+  end
+  
+  def cache_path_prefix
+    ".cache"
+  end
+
+  def cache_folder
+    "#{photos_folder}/#{cache_path_prefix}"
+  end
+
   # We can set file name after photo site is set
   def update_file_name_and_metadata
     if @uploaded_file
       self.file_name = "#{@uploaded_file.original_filename}"
       image = MiniMagick::Image.from_blob(@uploaded_file.read, self.file_name.split('.')[-1])
-      #photo_store_size = site.template_options.photo_store_size
-      photo_store_size = 'x400'
+      photo_store_size = site.site_params.photo_store_size
       if not image.match_max_size(photo_store_size)
         image.resize(photo_store_size)
       end
@@ -53,8 +62,8 @@ class Photo < ActiveRecord::Base
 
   def write_file
     if @file_data
-      File.makedirs("#{PHOTOS_ROOT}/#{site.name}")
-      File.open("#{PHOTOS_ROOT}/#{file_name}", "w") do |f|
+      File.makedirs("#{photos_folder}")
+      File.open("#{photos_folder}/#{file_name}", "w") do |f|
         f.write(@file_data)
       end
     end
@@ -64,10 +73,10 @@ class Photo < ActiveRecord::Base
   def delete_file
     if Photo.count(:conditions => {'file_name' => file_name}) <= 1
       # Remove photo data
-      FileUtils.rm_rf("#{PHOTOS_ROOT}/#{file_name}")
+      FileUtils.rm_rf("#{photos_folder}/#{file_name}")
 
       # Remove cached thumbnails
-      Find.find("#{PHOTOS_ROOT}/_cache") do |path|
+      Find.find("#{cache_folder}") do |path|
         if path =~ /#{file_name}\Z/
           FileUtils.rm_rf(path)
         end
@@ -77,14 +86,14 @@ class Photo < ActiveRecord::Base
   
   # Get path for thumbnail, in selected size. If thumbnail is not generated yet, it will be created
   def thumbnail_path(height)
-    File.makedirs("#{PHOTOS_ROOT}/_cache/h#{height}/#{File.dirname(file_name)}")
-    thumb_path = "#{PHOTOS_ROOT}/_cache/h#{height}/#{file_name}"
-    if ( not File.exists? thumb_path ) and File.exists? "#{PHOTOS_ROOT}/#{file_name}"
-      mm = MiniMagick::Image.from_file("#{PHOTOS_ROOT}/#{file_name}")
+    File.makedirs("#{cache_folder}/h#{height}/#{File.dirname(file_name)}")
+    thumb_path = "#{cache_folder}/h#{height}/#{file_name}"
+    if ( not File.exists? thumb_path ) and File.exists? "#{photos_folder}/#{file_name}"
+      mm = MiniMagick::Image.from_file("#{photos_folder}/#{file_name}")
       mm.resize( "x#{height}", '-quality', '85%' )
       mm.write(thumb_path)
     end
-    "_cache/h#{height}/#{file_name}"
+    "#{cache_path_prefix}/h#{height}/#{file_name}"
   end
 
   # Update keywords values from array of hashes, having keywords data

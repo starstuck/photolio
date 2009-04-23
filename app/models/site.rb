@@ -62,4 +62,9 @@ class Site < ActiveRecord::Base
     end
   end
 
+  # Get site template options object
+  def site_params
+    @site_params ||= SiteParams.for_site(self)
+  end
+
 end

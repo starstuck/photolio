@@ -63,7 +63,7 @@ div#content_scrollframe{
     position: relative;
     overflow: auto;
     width: 100%;
-    height: 100%
+    height: 560;
 }
 
 div#content_scrollable{
@@ -107,6 +107,18 @@ span.content_corner_br{
     background-image: url(../images/content-corner-br.gif); 
 }
 
+
+/* top info bar */
+
+#topbar{
+    width: 100%;
+    height: 15px;
+}
+
+#userinfo{
+    position: absolute;
+    right: 5px;
+}
 
 /* Topic page */
 

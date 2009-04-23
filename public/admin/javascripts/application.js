@@ -19,6 +19,7 @@ function resize_content_on_window_resize(event){
     updated_content_height = 570;
   }
   $('content').style.height = updated_content_height + 'px';
+  $('content_scrollframe').style.height = (updated_content_height - 15) + 'px';
 }
 Event.observe(document.onresize ? document : window, "resize", resize_content_on_window_resize);
 Event.observe(window, "load", resize_content_on_window_resize);
