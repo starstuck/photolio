@@ -17,8 +17,8 @@ module Admin::AdminBaseHelper
   # Build javascript tag, that loads tinymce to all textareas on page
   def load_tinymce_tag
     javascript_tag <<-EOS
-      document.write(unescape("%3cscript src='#{javascript_path('/tiny_mce/tiny_mce')}' type='text/javascript'%3E%3C/script%3E"));
-      add_onload_handler(function(){ tinyMCE.init({mode: 'textareas', theme: 'advanced',}); });
+      document.write(unescape("%3cscript src='#{compute_public_path('tiny_mce', 'tiny_mce', 'js')}' type='text/javascript'%3E%3C/script%3E"));
+      Event.observe(window, 'load', function(){ tinyMCE.init({mode: 'textareas', theme: 'advanced',}); });
     EOS
   end
 

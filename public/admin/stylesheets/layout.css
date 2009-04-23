@@ -63,7 +63,7 @@ div#content_scrollframe{
     position: relative;
     overflow: auto;
     width: 100%;
-    height: 560;
+    height: 560px;
 }
 
 div#content_scrollable{
