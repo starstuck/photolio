@@ -110,19 +110,28 @@ class Admin::UsersController < Admin::AdminBaseController
         end
       end
 
+      if params[:user_update_action] == 'change_password'
+        action_name = 'change_password'
+      else
+        action_name = 'new' 
+      end
+
       if not failed and @user.update_attributes(params[:user])
         if (params[:user_roles_empty] or params[:user_roles]) and current_user.has_role('users_manager')
           @user.update_roles(params[:user_roles])
         end
-        flash[:notice] = "User was succesfully updated."
-        format.html { redirect_to admin_user_path }
-        format.xml { render :xml => @user, :status => :created, :location => admin_user_path }
-      else
-        if params[:user_update_action] == 'change_password'
-          action_name = 'change_password'
+        if action_name == 'change_password'
+          flash[:notice] = "Password was succesfully updated."
+          @user.must_change_password = false
+          @user.save
+          format.html { redirect_back_or_default(admin_root_path) }
+          format.xml { head :ok }
         else
-          action_name = 'new' 
+          flash[:notice] = "User data was succesfully updated."
+          format.html { redirect_to admin_user_path }
+          format.xml { head :ok }
         end
+      else
         if action_name == 'new'
           populate_roles_selection
           populate_sites_selection

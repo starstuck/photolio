@@ -18,8 +18,13 @@ class Admin::SessionsController < Admin::AdminBaseController
       self.current_user = user
       new_cookie_flag = (params[:remember_me] == "1")
       handle_remember_cookie! new_cookie_flag
-      redirect_back_or_default(admin_root_path)
-      flash[:notice] = "Logged in successfully"
+      if user.must_change_password
+        flash[:notice] = "You must change your password"
+        redirect_to change_password_admin_user_path(user)
+      else
+        redirect_back_or_default(admin_root_path)
+        flash[:notice] = "Logged in successfully"
+      end
     else
       note_failed_signin
       @login       = params[:login]
