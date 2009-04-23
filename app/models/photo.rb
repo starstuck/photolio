@@ -6,7 +6,6 @@ require 'mini_magick'
 class Photo < ActiveRecord::Base
 
   PHOTOS_ROOT = "#{RAILS_ROOT}/public/photos"
-  STORE_HEIGHT = 400
 
   has_many :gallery_items, :dependent => :destroy
   has_and_belongs_to_many :galleries, :readonly => true # Simple access skiping assoc table
@@ -38,10 +37,12 @@ class Photo < ActiveRecord::Base
   # We can set file name after photo site is set
   def update_file_name_and_metadata
     if @uploaded_file
-      self.file_name = "#{site.name}/#{@uploaded_file.original_filename}"
+      self.file_name = "#{@uploaded_file.original_filename}"
       image = MiniMagick::Image.from_blob(@uploaded_file.read, self.file_name.split('.')[-1])
-      if image[:height] != STORE_HEIGHT
-        image.resize( "x#{STORE_HEIGHT}" )
+      #photo_store_size = site.template_options.photo_store_size
+      photo_store_size = 'x400'
+      if not image.match_max_size(photo_store_size)
+        image.resize(photo_store_size)
       end
       self.width = image[:width]
       self.height = image[:height]
