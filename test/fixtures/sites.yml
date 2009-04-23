@@ -7,4 +7,7 @@ polinostudio:
 kasiak:
   id: 2
   name: kasia_konieczka
-  brand: artists
+  
+foka:
+  id: 3
+  name: foka

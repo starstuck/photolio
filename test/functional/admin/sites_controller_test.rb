@@ -11,19 +11,34 @@ class Admin::SitesControllerTest < ActionController::TestCase
   def test_should_get_index
     get :index
     assert_response :success
-    assert_not_nil assigns(:sites)
+    assert_not_equal Site.count, assigns(:sites).size
+  end
+
+  def test_should_get_full_index
+    login_as users(:quentin)
+    get :index
+    assert_response :success
+    assert_equal Site.count, assigns(:sites).size
+  end
+
+  def test_should_deny_get_new
+    get :new
+    assert_response :redirect
+    assert_match  'insufficient permissions', flash[:notice]
   end
 
   def test_should_get_new
+    login_as users(:quentin)
     get :new
     assert_response :success
   end
 
+
   def test_should_create_site
+    login_as users(:quentin)
     assert_difference('Site.count') do
       post :create, :site => { :name => 'New site' }
     end
-
     assert_redirected_to admin_sites_path
   end
 
@@ -34,10 +49,9 @@ class Admin::SitesControllerTest < ActionController::TestCase
   end
 
   def test_should_deny_show_site
-    login_as users(:quentin)
-    get :show, :id => sites(:polinostudio).id
+    get :show, :id => sites(:foka).id
     assert_response :redirect
-    assert_equal 'You have insufficient permissions to manage site: polinostudio', flash[:notice]
+    assert_match 'insufficient permissions', flash[:notice]
   end
 
   def test_should_get_edit

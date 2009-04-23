@@ -1,8 +1,8 @@
 class Admin::UsersController < Admin::AdminBaseController
 
-  before_filter :user_manager_required, :only => [:index, :new, :create, :destroy, :reset_password]
+  before_filter :users_manager_required, :only => [:index, :new, :create, :destroy, :reset_password]
   before_filter :user_manager_or_owner_required, :only => [:show, :edit, :update]
-  before_filter :owner_required, :only => [:change_password]
+  before_filter :user_owner_required, :only => [:change_password]
 
   def index
     @users = User.find(:all, :order => 'login')
@@ -153,29 +153,18 @@ class Admin::UsersController < Admin::AdminBaseController
 
   private
 
-  def user_manager_required
-    if not current_user.has_role('users_manager')
-      insufficient_priv
-    end
-  end
-  
   def user_manager_or_owner_required
     @user  = User.find(params[:id])
     if not (current_user == @user or current_user.has_role('users_manager'))
-      insufficient_priv
+      handle_insufficient_priv
     end
   end
 
-  def owner_required
+  def user_owner_required
     @user  = User.find(params[:id])
     if not (current_user == @user)
-      insufficient_priv
+      handle_insufficient_priv
     end
-  end
-
-  def insufficient_priv
-    flash[:notice] = 'You have insufficient permissions to access requested page.'
-    access_denied
   end
 
   def gen_password
@@ -186,22 +175,8 @@ class Admin::UsersController < Admin::AdminBaseController
   end
 
   def populate_roles_selection
-    @all_user_roles = [['Users manager', 'users_manager']]
+    @all_user_roles = UserRole::ROLES_NAMES.collect{|r| [r.humanize, r]}
     @selected_user_roles = @user.user_roles.find(:all).collect{|x| x.name}
-  end
-
-  def update_user_with_roles_selection
-    roles_to_delete = []
-    for role_name in params[:users_roles]
-      if not @user.user_roels.exist? :name => role_name
-
-
-        @user_roles.create(:name => role_name)
-
-
-      end
-    end
-        
   end
 
   def populate_sites_selection

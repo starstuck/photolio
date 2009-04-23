@@ -32,7 +32,10 @@
 <hr />
 
 <div class="page_actions">
-  <%= link_to 'New site', new_admin_site_path %> |
+  <% if @current_user.has_role 'sites_manager' -%>
+    <%= link_to 'New site', new_admin_site_path %>
+  <% end -%>
+  <% if @current_user.has_role 'sites_manager' and @current_user.has_role 'users_manager'-%>|<% end -%>
   <% if @current_user.has_role 'users_manager' -%>
       <%= link_to 'Manage accounts', admin_users_path %>
   <% end -%>    

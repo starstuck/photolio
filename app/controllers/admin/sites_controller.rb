@@ -4,10 +4,17 @@ class Admin::SitesController < Admin::AdminBaseController
   before_filter :setup_site_context
   skip_before_filter :setup_site_context, :only => [:index, :new, :create]
 
+  before_filter :sites_manager_required, :only => [:new, :create]
+
+
   # GET /admin_sites
   # GET /admin_sites.xml
   def index
-    @sites = current_user.sites.find(:all, :order => 'name')
+    if current_user.has_role('sites_manager')
+      @sites = Site.find(:all, :order => 'name')
+    else
+      @sites = current_user.sites.find(:all, :order => 'name')
+    end
 
     respond_to do |format|
       format.html # index.html.erb
@@ -262,7 +269,7 @@ class Admin::SitesController < Admin::AdminBaseController
 
   def setup_site_context
     @site = Site.find(params[:id])
-    test_user_allowed_access_site
+    site_manager_or_owner_required
   end
 
 end

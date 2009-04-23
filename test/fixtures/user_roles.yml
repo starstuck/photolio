@@ -4,3 +4,7 @@ quentin_users_manager:
   user_id: 1
   name: users_manager
 
+quentin_sites_manager:
+  user_id: 1
+  name: sites_manager
+

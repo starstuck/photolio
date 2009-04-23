@@ -22,17 +22,46 @@ class Admin::AdminBaseController < ApplicationController
   def new_session_path
     new_admin_session_path
   end
-  
+
+  #
+  # Context setup filters
+  #
+
   def setup_site_context
     @site = Site.find(params[:site_id])
-    test_user_allowed_access_site
+    site_manager_or_owner_required
   end
 
-  def test_user_allowed_access_site
-    if not current_user.has_site_role(@site)
+  #
+  # Permission checking filters
+  #
+  
+  def sites_manager_required
+    if not current_user.has_role('sites_manager')
+      handle_insufficient_priv
+    end
+  end
+
+  def site_manager_or_owner_required
+    if not (current_user.has_site_role(@site) or current_user.has_role('sites_manager'))
       flash[:notice] = 'You have insufficient permissions to manage site: ' + @site.name
       access_denied
     end
+  end
+
+  def users_manager_required
+    if not current_user.has_role('users_manager')
+      handle_insufficient_priv
+    end
+  end
+
+  #
+  # Hanle insufficeint privilages error
+  # 
+
+  def handle_insufficient_priv
+    flash[:notice] = 'You have insufficient permissions to access requested page.'
+    access_denied
   end
 
 end
