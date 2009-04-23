@@ -3,4 +3,4 @@
 	url = git://github.com/rails/render_component.git
 [submodule "vendor/plugins/restful_authentication"]
 	path = vendor/plugins/restful_authentication
-	url = git://github.com/technoweenie/restful_authentication.git
+	url = git://github.com/technoweenie/restful-authentication.git
