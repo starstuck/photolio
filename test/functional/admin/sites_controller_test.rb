@@ -139,79 +139,65 @@ class Admin::SitesControllerTest < ActionController::TestCase
 end
 
 
-module PublishSetup
-  def setup_with_publish
-    # setup temporary public directory
-    @old_public_path = Rails.public_path
-    @temp_dir = File.join(RAILS_ROOT, 'tmp', "test_#{rand.to_s[2..-1]}")
-    FileUtils.mkdir_p(@temp_dir)
-    Rails.public_path = @temp_dir    
-  end
-
-  def teardown_with_publish
-    # Cleanup temporary public directory
-    Rails.public_path = @old_public_path
-    FileUtils.rm_rf [@temp_dir]
-  end  
-end
-
-
 class Admin::PublishSiteTest < ActionController::TestCase
-  include PublishSetup
   include AuthenticatedTestHelper
   
   tests Admin::SitesController
-  
+
+  def set_polinostudio_publish_location(location)
+    eval <<-EOS
+      module SiteParams::PolinostudioParams
+        def publish_location; '#{location}'; end
+      end
+    EOS
+  end
+
+  # patch publisher to skip assets publication for speed
+  def setup_publisher_patch
+    eval <<-EOS
+      class Publisher::AbstractPublisher
+        alias_method :copy_assets_folder_without_patch_test, :copy_assets_folder
+        def copy_assets_folder
+        end
+      end
+    EOS
+  end
+
+  def teardown_publisher_patch
+    eval <<-EOS
+      class Publisher::AbstractPublisher
+        alias_method :copy_assets_folder, :copy_assets_folder_without_patch_test
+      end
+    EOS
+  end
+
   def setup
-    setup_with_publish
+    # Setup temporary public directory
+    @old_public_path = sites(:polinostudio).site_params.publish_location
+    @temp_dir = File.join(RAILS_ROOT, 'tmp', "test_#{rand.to_s[2..-1]}")
+    FileUtils.mkdir_p(@temp_dir)
+    set_polinostudio_publish_location(@temp_dir)
+    setup_publisher_patch
     login_as users(:aaron)
   end
-
+  
   def teardown
-    teardown_with_publish
-  end
+    # Cleanup temporary public directory
+    set_polinostudio_publish_location(@old_public_path)
+    teardown_publisher_patch
+    FileUtils.rm_rf [@temp_dir]
+  end  
 
-  def test_publish
+  def test_publish_with_update
     get :publish, :id => sites(:polinostudio).id
+
     assert_redirected_to :action => 'show'
     assert_match /2 galleries/, flash[:notice]
     assert_match /2 topics/, flash[:notice]
     assert_match /3 photos/, flash[:notice]
+    assert_match /0 other/, flash[:notice]
 
-    assert_equal DateTime.new(2008, 1, 1), File.mtime( File.join(@temp_dir, 'polinostudio', 'gallery', '1.html') )
+    assert_equal DateTime.new(2008, 1, 1), File.mtime( File.join(@temp_dir, 'gallery', '1.html') )
   end
 
-  def should_test_cleanup
-    #TODO: fill
-  end
-
-end
-
-
-class Admin::PublishRemoteLocationSiteTest < ActionController::TestCase
-  include AuthenticatedTestHelper
-  include PublishSetup
-
-  tests Admin::SitesController
-  
-  def setup
-    setup_with_publish
-    @temp2_dir = File.join(RAILS_ROOT, 'tmp', "test_#{rand.to_s[2..-1]}")
-    FileUtils.mkdir_p(@temp2_dir)
-    Site.publish_remote_location = @temp2_dir
-    login_as users(:aaron)
-  end
-
-  def teardown
-    teardown_with_publish
-    #FileUtils.rm_rf [@temp2_dir]
-    Site.publish_remote_location = nil
-  end
-
-  def test_publish_with_remote_location
-    get :publish, :id => sites(:polinostudio).id
-    assert_redirected_to :action => 'show'
-    assert_match /remote location/, flash[:notice]
-    assert_equal Dir.entries(@temp_dir), Dir.entries(@temp2_dir)
-  end
 end

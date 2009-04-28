@@ -1,4 +1,6 @@
-# -*- coding: iso-8859-2 -*-
+require 'publisher'
+
+
 class Admin::SitesController < Admin::AdminBaseController
 
   before_filter :setup_site_context
@@ -187,52 +189,54 @@ class Admin::SitesController < Admin::AdminBaseController
     end
   end
 
-  # Pusblish page. First cache all pages in public directory. 
-  # If remote location is configured, synchronize this directory with remote location.
+  # Publish page. 
+  #
+  # Write pages content to files on defined site publish location folder.
+  #
+  # Publish use module attributes to indicate, that page is being published.
+  # This makes publishing not thread save
+  # 
   def publish
-    sitemap = Site::SiteController.raw_sitemap(@site)
+    publisher = Publisher::publisher_for_location(self, @site)
     
+    # Publish all pages from sitemap
+    sitemap = Site::SiteController.raw_sitemap(@site)
+
     galleries_count = 0
     topics_count = 0
     photos_count = 0
+    others_count = 0
     max_lastmod = DateTime.new
 
-    # TODO optimize, by not deleting old files, only updating based on mtime
-
-    # Clean old published files
-    for folder in ['gallery', 'topic', 'photo']
-      FileUtils.rm_rf File.join( Rails.public_path, folder )
-    end
-
-    # Cache all pages from sitemap
     for page in sitemap
-      page_path = save_page(page['loc'], page['lastmod'])
-
+      published = publisher.publish(page['loc'], page['lastmod'])
       max_lastmod = page['lastmod'] if page['lastmod'] > max_lastmod
-      if page_path =~ /^\/[^\/]*\/gallery\//:
-        galleries_count += 1
-      elsif page_path =~ /^\/[^\/]*\/topic\//:
-        topics_count += 1
-      elsif page_path =~ /^\/[^\/]*\/photo\//:
-        photos_count += 1
+        if published
+          controller_name = page['loc'][:controller]
+          if controller_name =~ /gallery/
+            galleries_count += 1
+          elsif controller_name =~ /topic/
+            topics_count += 1
+          elsif controller_name =~ /photo/
+            photos_count += 1
+          else
+            others_count += 1
+          end
       end
     end
 
-    save_page({ :controller => '/site/site',
-                :action => 'sitemap',
-                :site_name => @site.name,
-                :format => 'xml',
-                :published => true
-              }, max_lastmod)
+    # Publish sitemap page
+    publisher.publish({ :controller => '/site/site',
+                        :action => 'sitemap',
+                        :site_name => @site.name,
+                        :format => 'xml',
+                      }, max_lastmod)
 
-    flash[:notice] = "Site #{@site.name} is published. #{galleries_count} galleries, #{topics_count} topics, #{photos_count} photos saved."
-
-    if Site.publish_remote_location
-      logger.info "Publishing site to remote location: #{Site.publish_remote_location} ..."
-      rsync = IO.popen("rsync --recursive --times #{Rails.public_path}/* #{Site.publish_remote_location}")
-      logger.info( rsync.readlines.join("\n") )
-      flash[:notice] += " Content copied to remote location."
-    end
+    # Publish site assets 
+    # Photo previews should be already generated after page displaying
+    publisher.copy_assets_folder
+    
+    flash[:notice] = "Site #{@site.name} is published. #{galleries_count} galleries, #{topics_count} topics, #{photos_count} photos and #{others_count} other pages updated."
 
     respond_to do |format|
         format.html { redirect_to(admin_site_path(@site)) }
@@ -241,31 +245,6 @@ class Admin::SitesController < Admin::AdminBaseController
   end
 
   private
-
-  # Save page to file, and set ctime acording to lastmod
-  # Returns page path (relative to server root)
-  def save_page(location, ctime)
-    page_params = location.clone
-    page_controller = page_params.delete(:controller)
-    page_action = page_params.delete(:action)
-    body = render_component_as_string( :controller => page_controller,
-                                       :action => page_action,
-                                       :params => page_params )
-    
-    page_path = url_for( location.merge( :only_path => true, :skip_relative_url_root => true ) )
-    page_file_path = File.join( Rails.public_path, page_path )
-    FileUtils.mkdir_p( File.dirname( page_file_path ) )
-    File.open(page_file_path, "wb+"){ |f| f.write(body) }
-    
-    if ctime.is_a? DateTime
-      ctime = ctime.to_time
-    elsif ctime.is_a? ActiveSupport::TimeWithZone
-      ctime = ctime.time
-    end        
-    File.utime(Time.new, ctime, page_file_path)
-    
-    return page_path
-  end
 
   def setup_site_context
     @site = Site.find(params[:id])

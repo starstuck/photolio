@@ -26,6 +26,3 @@ config.action_controller.asset_host = "http://assets.photolio.webstylizer.eu"
 
 # Enable threaded mode
 # config.threadsafe!
-
-Site.publish_remote_location = 'www-data-rsync@www.polinostudio.com:/var/www/polinostudio'
-

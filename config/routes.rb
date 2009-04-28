@@ -71,11 +71,12 @@ ActionController::Routing::Routes.draw do |map|
       controller_path_part = controller != 'site' ? "/#{controller}" : ""
       identifier_path_part = id_method != "" ? "/:#{controller}_#{id_method}" : ""
       file_path_part = action != 'show' ? "/#{action}" : ""
-      map.send("#{action}_site#{controller_name_part}", 
-               ":site_name#{controller_path_part}#{identifier_path_part}#{file_path_part}.:format",
-               :controller => "site/#{controller}",
-               :action => action
-               )             
+      r_name = "#{action}_site#{controller_name_part}"
+      r_path = ":site_name#{controller_path_part}#{identifier_path_part}#{file_path_part}.:format"
+      r_params = {
+        :controller => "site/#{controller}",
+        :action => action }             
+      map.send(r_name, r_path, r_params)
     end
   end
   

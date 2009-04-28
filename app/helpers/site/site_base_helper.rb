@@ -6,9 +6,19 @@ module Site::SiteBaseHelper
 
   def site_controller_path(site, obj, controller, action, id_method, options={})
     options[:format] = 'html' unless options.key? 'format'
-    options[:published] = params[:published] unless options.key? 'published'
     id_value = (id_method and id_method != '') ? obj.send(id_method) : obj
-    @controller.send("#{action}_site_#{controller}_path", site.name, id_value, options)
+    path = @controller.send("#{action}_site_#{controller}_path", site.name, id_value, options)
+    if params[:published]
+      site_prefix = "/#{@site.name}"
+      site_prefix_range = 0..(site_prefix.size-1)
+      if path[site_prefix_range] == site_prefix
+        path[site_prefix_range] = ''
+      end
+      if @site.site_params.published_url_prefix
+        path = @site.site_params.published_url_prefix + path
+      end
+    end
+    path
   end
 
   # Register paths calculation function with user friendly names
@@ -41,7 +51,21 @@ module Site::SiteBaseHelper
   protected
 
   def compute_public_path(source, dir, ext=nil)
-    compute_public_path_without_site(source, "#{@site.name}/#{dir}", ext)
+    path = compute_public_path_without_site(source, "#{@site.name}/#{dir}", ext)
+    if params[:published]
+      site_prefix = "/#{@site.name}"
+      if host = ActionController::Base.asset_host
+        site_prefix = host + site_prefix
+      end
+      site_prefix_range = 0..(site_prefix.size-1)
+      if path[site_prefix_range] == site_prefix
+        path[site_prefix_range] = ''
+      end
+      if @site.site_params.published_assets_url_prefix
+        path = @site.site_params.published_assets_url_prefix + path
+      end
+    end
+    path
   end
 
 end
