@@ -105,15 +105,7 @@ class Admin::SitesController < Admin::AdminBaseController
     end
   end
 
-  def layout_gallery_photos_partial
-    @gallery = @site.galleries.find(params[:gallery_id])
-
-    render(:partial => "layout_gallery_photos",
-           :locals => {:gallery => @gallery})
-  end
-
   def layout_unassigned_photos_partial
-    @site = Site.find(params[:id])
     @unassigned_photos = @site.unassigned_photos
 
     render(:partial => "layout_unassigned_photos",
@@ -122,7 +114,11 @@ class Admin::SitesController < Admin::AdminBaseController
 
   def layout_add_gallery_photo
     @gallery = @site.galleries.find(params[:gallery_id])
-    @photo = @site.photos.find(params[:photo_id].split('_')[-1])
+    source_gallery_id, photo_id = params[:photo_id].split('_')[-2..-1]
+    @photo = @site.photos.find(photo_id)
+    if source_gallery_id != 'unassigned'
+      @source_gallery = @site.galleries.find(source_gallery_id) 
+    end
     position = params[:position].to_i
 
     if @gallery and @photo
@@ -130,24 +126,41 @@ class Admin::SitesController < Admin::AdminBaseController
     end
       
     respond_to do |format|
-      format.html { layout_gallery_photos_partial }
-      format.xml  { head :ok  }
+
+      format.js do
+        render :update do |page|
+          @gallery.gallery_items(true)
+          page.replace_html( "gallery_#{@gallery.id}_photos_list", 
+                             :partial => 'layout_gallery_photos', 
+                             :locals => { :gallery => @gallery } )
+          if @source_gallery
+            if @source_gallery.id != @gallery.id
+              page.replace_html( "gallery_#{@source_gallery.id}_photos_list", 
+                                 :partial => 'layout_gallery_photos', 
+                                 :locals => { :gallery => @source_gallery } )
+            end
+          else
+            page.replace_html( "unassigned_photos_list", 
+                               :partial => 'layout_unassigned_photos' )
+          end
+        end
+      end
+      
+      format.xml { head :ok  }
     end
   end
 
   def layout_remove_gallery_photo
     # We must query for photo object, because @site.photo.find returns photo
     # object with joins data, which brakes @photo.id attribute
-    @photo = Photo.find(params[:photo_id].split('_')[-1],
-                        :conditions => {:site_id => @site.id})
+    source_gallery_id, photo_id = params[:photo_id].split('_')[-2..-1]
+    @photo = @site.photos.find(photo_id)
+    @source_gallery = @site.galleries.find(source_gallery_id)
 
-    if params.key? :gallery_id
-      
-      # If gallery os provided, remove photo only from this gallery
-      gallery = @site.galleries.find(params[:gallery_id])
-      gallery.remove_photo(@photo)
+    if @source_gallery
+      # If gallery is provided, remove photo only from this gallery
+      @source_gallery.remove_photo(@photo)
     else
-      
       # If it is not provided, remove photo from all galleries in site
       @site.galleries.each do |gallery|
         gallery_photo_ids = gallery.gallery_items.map{|item| item.photo_id}
@@ -158,8 +171,18 @@ class Admin::SitesController < Admin::AdminBaseController
     end
 
     respond_to do |format|
-      format.html { layout_unassigned_photos_partial }
-      format.xml  { head :ok  }
+
+      format.js do 
+        render :update do |page| 
+          page.replace_html( "gallery_#{@source_gallery.id}_photos_list", 
+                             :partial => 'layout_gallery_photos', 
+                             :locals => { :gallery => @source_gallery } )
+          page.replace_html( "unassigned_photos_list", 
+                             :partial => 'layout_unassigned_photos' )
+        end
+      end
+
+      format.xml { head :ok  }
     end
 
   end
@@ -171,7 +194,7 @@ class Admin::SitesController < Admin::AdminBaseController
     @gallery.add_separator(position)
 
     respond_to do |format|
-      format.html { layout_gallery_photos_partial }
+      format.html { render :partial => 'layout_gallery_photos', :locals => {:gallery => @gallery} }
       format.xml  { head :ok  }
     end
   end
@@ -184,7 +207,7 @@ class Admin::SitesController < Admin::AdminBaseController
     @gallery.gallery_items(true)
     
     respond_to do |format|
-      format.html { layout_gallery_photos_partial }
+      format.html { render :partial => 'layout_gallery_photos', :locals => {:gallery => @gallery} }
       format.xml  { head :ok  }
     end
   end

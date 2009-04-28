@@ -32,16 +32,15 @@
       <td>
 	<table id="unassigned_photos_holder" class="photos_list_table">
 	  <tr id="unassigned_photos_list">
-	    <%= @controller.layout_unassigned_photos_partial -%>
+	    <%= render :partial => "layout_unassigned_photos" -%>
 	  </tr>
 	  <%= drop_receiving_element 'unassigned_photos_holder',
 	      :accept => 'assigned_photo',
-	      :update => 'unassigned_photos_list',
-	      :url => {:action => 'layout_remove_gallery_photo', :id => @site},
-	      :with => "'photo_id=' + encodeURIComponent(element.id)",
-	      :loading => "Element.update('unassigned_photos_list', '<td style=\"width: 100px;\">#{loading_tag}</td>')",
 	      :hoverclass => 'hover',
-	      :scroll => "'content_scrollframe'"
+	      :scroll => "'content_scrollframe'",
+	      :url => {:action => 'layout_remove_gallery_photo', :id => @site, :format => :js},
+	      :with => "'photo_id=' + encodeURIComponent(element.id)",
+	      :loading => "Element.update('unassigned_photos_list', '<td style=\"width: 100px;\">#{loading_tag}</td>')"
 	      -%>
 	</table>
       </td>

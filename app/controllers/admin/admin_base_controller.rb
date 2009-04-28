@@ -1,5 +1,7 @@
 class Admin::AdminBaseController < ApplicationController
   include AuthenticatedSystem
+
+  layout "admin"
   
   before_filter :login_required
 

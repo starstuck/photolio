@@ -2,7 +2,6 @@
 
 * Turn off java script in untested browsers and all extrass
 * Setup proper metadata depenging on page content
-* Add support for resize - center frame ? to reconsider ?
 * Fix scroller partially disapearing in IE, when dragging
 * In back button check handling functionreferer field. If it is outsite our domain,  
   dont go there, instead go back to default site page
@@ -11,10 +10,6 @@
   focus on assed_id generated for joined stylesheets and javascripts. You must also solve 
   issues with images references from css (maybe link them in page header).
   If it is ok, extend expire times to one year.
-* Solve race conditions when moving photo to other gallery. Sometimes origin gallery updates
-  before target, withoun knowing, that one item is going to be deleted in few moments
 * Add javascript triggered loading screen during page load
 * Checkout posibilities for speeding up dragables under firefox
-* Accounts with permisions management
-* Content versioning
 * Content translation

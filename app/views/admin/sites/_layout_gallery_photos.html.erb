@@ -19,24 +19,23 @@
       <div class="item_box">
 	<div id="<%= "item_#{item.id}_droppable_left" -%>"
 	     class="item_droppable_left"></div>
-	<%= drop_receiving_element "item_#{item.id}_droppable_left",
-	    :accept => 'draggable_photo',
-	    :update => "gallery_#{gallery.id}_photos_list",
-	    :url => {:action => 'layout_add_gallery_photo', :id => @site, :gallery_id => gallery, :position => index},
-	    :with => "'photo_id=' + encodeURIComponent(element.id)",
-	    :loading => "Element.update('gallery_#{gallery.id}_photos_list', 'a<td style=\"width: 100px;\">#{loading_tag}</td>')",
-	    :hoverclass => 'hover',
-	    :scroll => "'content_scrollframe'"
+	<% if index == 0 -%>
+	  <%= drop_receiving_element "item_#{item.id}_droppable_left",
+	      :accept => 'draggable_photo',
+	      :hoverclass => 'hover',
+	      :scroll => "'content_scrollframe'",
+	      :url => {:action => 'layout_add_gallery_photo', :id => @site, :gallery_id => gallery, :position => index, :format => :js},
+	      :with => "'photo_id=' + encodeURIComponent(element.id)",
+	      :loading => "Element.update('gallery_#{gallery.id}_photos_list', '<td style=\"width: 100px;\">#{loading_tag}</td>')"
 	    -%>
+	<% end -%>
 	<% if item.is_a? GalleryPhoto -%>
 	  <%= image_tag compute_photo_thumbnail_path(130, item.photo),
-	      :id => "photo_#{item.photo_id}",
+	      :id => "photo_#{gallery.id}_#{item.photo_id}",
 	      :alt => index, # Used by context menu
 	      :class => "assigned_photo draggable_photo gallery_#{gallery.id}_photo"-%>
-	  <%= draggable_element "photo_#{item.photo_id}",
+	  <%= draggable_element "photo_#{gallery.id}_#{item.photo_id}",
 	      :revert => draggable_revert_js,
-	      :onEnd => draggable_on_end_js(:update => "gallery_#{gallery.id}_photos_list",
-					    :url => {:action => 'layout_gallery_photos_partial', :id => @site, :gallery_id => gallery}),
 	      :scroll => "'content_scrollframe'"
 	      -%>
 	<% else -%>
@@ -59,12 +58,11 @@
 	     class="item_droppable_right"></div>
 	<%= drop_receiving_element "item_#{item.id}_droppable_right",
 	    :accept => 'draggable_photo',
-	    :update => "gallery_#{gallery.id}_photos_list",
-	    :url => {:action => 'layout_add_gallery_photo', :id => @site, :gallery_id => gallery, :position => index + 1},
-	    :with => "'photo_id=' + encodeURIComponent(element.id)",
-	    :loading => "Element.update('gallery_#{gallery.id}_photos_list', 'a<td style=\"width: 100px;\">#{loading_tag}</td>')",
 	    :hoverclass => 'hover',
-	    :scroll => "'content_scrollframe'"
+	    :scroll => "'content_scrollframe'",
+	    :url => {:action => 'layout_add_gallery_photo', :id => @site, :gallery_id => gallery, :position => index + 1, :format => :js},
+	    :with => "'photo_id=' + encodeURIComponent(element.id)",
+	    :loading => "Element.update('gallery_#{gallery.id}_photos_list', 'a<td style=\"width: 100px;\">#{loading_tag}</td>')"
 	    -%>
       </div>
     </td>
