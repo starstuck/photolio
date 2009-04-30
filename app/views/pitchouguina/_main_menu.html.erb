@@ -1,0 +1,22 @@
+<ul id="main_menu" class="controlls_menu">
+  <li>
+    <% link_to '#' do %>
+      <%= image_tag 'menu_label_collections_en.png', :alt => 'COLLECTIONS' %>
+    <% end -%>
+  </li>
+  <li>
+    <% link_to show_site_topic_path(@site, 'bio') do %>
+      <%= image_tag 'menu_label_bio_en.png', :alt => 'BIO' %>
+    <% end -%>
+  </li>
+  <li>
+    <% link_to show_site_topic_path(@site, 'news') do %>
+      <%= image_tag 'menu_label_news_en.png', :alt => 'NEWS' %>
+    <% end -%>
+  </li>
+  <li>
+    <% link_to show_site_topic_path(@site, 'contact') do %>
+      <%= image_tag 'menu_label_contact_en.png', :alt => 'CONTACT' %>
+    <% end -%>
+  </li>
+</ul>

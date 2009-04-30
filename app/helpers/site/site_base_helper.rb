@@ -2,7 +2,11 @@ module Site::SiteBaseHelper
 
   def site_controller_path(site, obj, controller, action, id_method, options={})
     options[:format] = 'html' unless options.key? 'format'
-    id_value = (id_method and id_method != '') ? obj.send(id_method) : obj
+    if obj.is_a? String or obj.is_a? Integer
+      id_value = obj
+    else
+      id_value = (id_method and id_method != '') ? obj.send(id_method) : obj
+    end
     path = @controller.send("#{action}_site_#{controller}_path", site.name, id_value, options)
     if params[:published]
       site_prefix = "/#{@site.name}"

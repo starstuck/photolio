@@ -1,0 +1,294 @@
+/*
+ * Colours
+ */
+
+body,
+#content {
+    background-color: #f1f1f1;
+}
+
+body,
+content,
+a,
+.controlls_menu a.active,
+.controlls_menu a:hover
+{
+    color: #626262;
+}
+
+a:hover,
+a.active,
+.controlls_menu a{
+    color: #a0a0a0
+}
+
+#extframe {
+    background-color: #ffffff;
+}
+
+#extframe,
+#content
+{
+    border-color: #d5d5d5;
+}
+
+
+/*
+ * Text styles
+ */
+
+body {
+    font-family: helvetica, sans-serif;
+    font-weight: normal;
+    font-size: 16px;
+}
+
+b{
+    font-weight: bold;
+}
+
+a {
+    text-decoration: none;
+}
+
+a img{
+    border: 0px none;
+}
+
+h1, h2, h3, h4{
+    margin-left: 1em; 
+    font-weight: bold;
+}
+
+h2{
+    font-size: 32px;
+}
+
+h2{
+    font-size: 24px;
+}
+
+h3{
+    font-size: 18px;
+}
+
+h4{
+    font-size: 16px;
+}
+
+p{
+    margin: 0.25em 1em 0.75em 1em;
+}
+
+hr {
+    border: 0px;
+    height: 1px;
+    width: 99%;
+}
+
+
+/*
+ * Main Layout
+ */
+
+body {
+    margin: 0px;
+    padding: 0px;
+    background-image: url(../images/body_gradient.png);
+    background-repeat: repeat-x;
+}
+
+#header,
+#extframe,
+#extframe_inner
+{
+    width: 830px;
+}
+
+#header {
+    height: 50px;
+    margin: 20px auto;
+}
+
+#header h1{
+    font-size: 45px;
+    margin-left: 0px;
+    margin-top: 5px;
+}
+
+#extframe,
+#extframe_inner
+{
+    height: 525px;    
+}
+
+#extframe {
+    position: relative;
+    margin: 0px auto 15px auto;
+    border-width: 1px;
+    border-style: solid;
+}
+
+#extframe_inner{
+    position: absolute;
+    top: 0px;
+    left: 0px;
+}
+
+#extframe_tl,
+#extframe_t,
+#extframe_tr,
+#extframe_l,
+#extframe_r,
+#extframe_bl,
+#extframe_b,
+#extframe_br
+{
+    position: absolute;
+    z-index: -1;
+}
+
+#extframe_t,
+#extframe_b
+{
+    width: 832px;
+    left: -1px;
+    background-image: url(../images/extframe_border_tb.png);
+    background-repeat: repeat-x;
+}
+
+#extframe_b {
+    background-position: 0px -16px;
+}
+
+#extframe_l,
+#extframe_r
+{
+    height: 527px;
+    top: -1px;
+    background-image: url(../images/extframe_border_lr.png);
+    background-repeat: repeat-y;
+}
+
+#extframe_r {
+    background-position: -16px 0px;
+}
+
+#extframe_tl,
+#extframe_tr,
+#extframe_bl,
+#extframe_br
+{
+    background-image: url(../images/extframe_border_corn.png);
+}
+
+#extframe_tr {
+    background-position: -16px 0px;
+}
+
+#extframe_bl {
+    background-position: 0px -16px;
+}
+
+#extframe_br {
+    background-position: -16px -16px;
+}
+
+#extframe_tl,
+#extframe_t,
+#extframe_tr
+{
+    height: 16px;
+    top: -17px;
+}
+
+#extframe_tl,
+#extframe_l,
+#extframe_bl
+{
+    width: 16px;
+    left: -17px;
+}
+
+#extframe_tr,
+#extframe_r,
+#extframe_br
+{
+    width: 16px;
+    left: 831px;
+}
+
+#extframe_bl,
+#extframe_b,
+#extframe_br
+{
+    height: 16px;
+    top: 526px;
+}
+
+#content,
+#page_controlls 
+{
+    width: 800px;
+}
+
+#content {
+    height: 450px;
+    margin: 14px 14px 14px 14px;
+    border-width: 1px;
+    border-style: solid;
+}
+
+#page_controlls {
+    height: 30px;
+    margin: 0px 14px 0px 14px;
+    padding-top: 4px;
+}
+
+/*
+ * Page controlls menu layout
+ */
+
+.controlls_menu{
+    display: block;
+    list-style: none;
+    height: 30px;
+    font-size: 20px;
+    padding: 0px;
+    margin: 0px;
+    font-weight: lighter;
+}
+
+.controlls_menu li{
+    display: inline;
+    padding-right: 25px;
+}
+
+.controlls_menu a img{
+    opacity: 0.8;
+}
+
+.controlls_menu a:hover img,
+.controlls_menu a.active img
+{
+    opacity: 1;
+}
+
+/* 
+ * Welcome page layout
+ */
+
+#welcome_label{
+    position: absolute;
+    top: 90px;
+    right: 100px;
+    z-index: 1;
+}
+
+/*
+ * Topic page layout
+ */
+
+#topic_body {
+    margin: 1em;
+}

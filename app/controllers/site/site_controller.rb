@@ -3,14 +3,17 @@ require 'publisher'
 
 class Site::SiteController < Site::SiteBaseController
 
-  # redirect to default gallery
+  # redirect to default gallery if page template does not exists
   def show
-    @gallery = @site.galleries_in_order.first
-    redirect_to( :controller => 'gallery',
-                 :action => 'show',
-                 :gallery_name => @gallery.name, 
-                 :format => 'html',
-                 :status => 307  )
+    begin 
+      render :template => (template_for :site), :layout => layout
+    rescue ActionView::MissingTemplate 
+      redirect_to( :controller => 'gallery',
+                   :action => 'show',
+                   :gallery_name => @site.galleries_in_order.first.name, 
+                   :format => 'html',
+                   :status => 307  )
+    end
   end
 
   def sitemap
