@@ -14,10 +14,7 @@
   </div>
 
   <div id="photo_box" style="width: <%= @photo.width -%>px;">
-    <%= image_tag( compute_photo_path(@photo), 
-		   :size => "#{@photo.width}x#{@photo.height}", 
-		   :alt => @photo.alt_text )
-	-%>
+    <%= photo_image_tag(@photo)	-%>
 
     <table class="photo_description">
 

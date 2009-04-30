@@ -24,10 +24,7 @@
       <% for item in @gallery.gallery_items -%>
 	<% if item.is_a? GalleryPhoto -%>
 	  <span class="gallery_photo">
-	    <%= link_to( image_tag( compute_photo_path(item.photo), 
-				    :alt => item.photo.alt_text, 
-				    :height => "400",
-				    :width => (item.photo.width.to_f / item.photo.height * 400).to_i ),  
+	    <%= link_to( photo_image_tag(item.photo),
 			 show_site_photo_path( @site, item.photo ),
 			 { :title => item.photo.alt_text })
 		-%>

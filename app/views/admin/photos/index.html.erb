@@ -13,9 +13,7 @@
   <tbody>
     <% for photo in @photos %>
       <tr>
-	<td><%= image_tag compute_photo_thumbnail_path(32, photo), 
-		:style => 'height: 32px',
-		:alt => photo.title -%></td>
+	<td><%= photo_image_tag photo, :size => 'x32', :alt => photo.title -%></td>
 	<td><%=h photo.file_name %></td>
 	<td><%=h photo.title %></td>
 	<td class="actions">

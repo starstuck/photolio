@@ -16,6 +16,7 @@ class Photo < ActiveRecord::Base
   after_save :write_file
   after_destroy :delete_file
 
+  # File name is full file location relative to photos base folder
   attr_readonly :file_name
 
   validates_length_of :file_name, :maximum => 255, :allow_blank => false
@@ -36,12 +37,13 @@ class Photo < ActiveRecord::Base
     "#{RAILS_ROOT}/public/#{site.name}/photos"
   end
   
-  def cache_path_prefix
-    ".cache"
+  # Resized photos path prefix relative to master photos folder
+  def resized_path_prefix
+    "_resized"
   end
 
-  def cache_folder
-    "#{photos_folder}/#{cache_path_prefix}"
+  def resized_photos_folder
+    "#{photos_folder}/#{resized_path_prefix}"
   end
 
   # We can set file name after photo site is set
@@ -74,26 +76,40 @@ class Photo < ActiveRecord::Base
     if Photo.count(:conditions => {'file_name' => file_name}) <= 1
       # Remove photo data
       FileUtils.rm_rf("#{photos_folder}/#{file_name}")
-
-      # Remove cached thumbnails
-      Find.find("#{cache_folder}") do |path|
-        if path =~ /#{file_name}\Z/
-          FileUtils.rm_rf(path)
-        end
-      end
+      # Remove resized thumbnails
+      FileUtils.rm_rf("#{resized_path_prefix}/#{file_name_without_ext}")
     end
   end  
   
-  # Get path for thumbnail, in selected size. If thumbnail is not generated yet, it will be created
-  def thumbnail_path(height)
-    File.makedirs("#{cache_folder}/h#{height}/#{File.dirname(file_name)}")
-    thumb_path = "#{cache_folder}/h#{height}/#{file_name}"
-    if ( not File.exists? thumb_path ) and File.exists? "#{photos_folder}/#{file_name}"
-      mm = MiniMagick::Image.from_file("#{photos_folder}/#{file_name}")
-      mm.resize( "x#{height}", '-quality', '85%' )
-      mm.write(thumb_path)
+  # Get fiel name (with path prefix) for resized version of photo. 
+  # If resized thumbnail is not generated yet, it will be created.
+  # Size is supposed to be in format <width>x<height>. If one is missing,
+  # photo will be resized to preserve aspect ratio.
+  def resized_file_name(size)
+    r_width, r_height = size.split('x')
+    
+    if r_width.to_s.empty? and not r_height.to_s.empty?
+      r_width = (r_height.to_f * width / height).to_i
+    elsif r_height.to_s.empty? and not r_width.to_s.empty?
+      r_width = (r_width.to_f * height / width).to_i
+    elsif r_height.to_s.empty? and r_width.to_s.empty?
+      return file_name
     end
-    "#{cache_path_prefix}/h#{height}/#{file_name}"
+
+    resized_file_name = "#{resized_path_prefix}/#{file_name_without_ext}/#{r_width}x#{r_height}"
+    if not file_name_ext.empty?
+      resized_file_name += ".#{file_name_ext}"
+    end
+    resized_file_path = "#{photos_folder}/#{resized_file_name}"
+    File.makedirs(File.dirname(resized_file_path))
+
+    if ( not File.exists? resized_file_path ) and File.exists? "#{photos_folder}/#{file_name}"
+      mm = MiniMagick::Image.from_file("#{photos_folder}/#{file_name}")
+      mm.resize( size, '-quality', '85%' )
+      mm.write(resized_file_path)
+    end
+    
+    resized_file_name
   end
 
   # Update keywords values from array of hashes, having keywords data
@@ -156,6 +172,22 @@ class Photo < ActiveRecord::Base
     photo_keywords.each{|k| res << k}
     res << title if description and description.size > 0
     res.join('; ')
+  end
+
+  private
+
+    
+  def file_name_ext
+    ext = file_name.split('.')[-1]
+    if ext == file_name or ext.include? '/' or ext.include? '\\'
+      ''
+    else
+      ext
+    end
+  end
+
+  def file_name_without_ext
+    file_name[0..-(2 + file_name_ext.length)]
   end
 
 end

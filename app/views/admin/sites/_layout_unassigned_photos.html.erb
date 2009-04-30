@@ -5,7 +5,8 @@
 <% else -%>
   <% for photo in @site.unassigned_photos -%>
     <td>
-      <%= image_tag compute_photo_thumbnail_path(130, photo),
+      <%= photo_image_tag photo,
+	  :size => 'x130',
 	  :id => "photo_unassigned_#{photo.id}",
 	  :class => 'unassigned_photo draggable_photo'-%>
       <%= draggable_element "photo_unassigned_#{photo.id}", 

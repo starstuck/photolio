@@ -1,7 +1,3 @@
-module ActionView::Helpers::AssetTagHelper
-  alias_method :compute_public_path_without_site, :compute_public_path
-end
-
 module Site::SiteBaseHelper
 
   def site_controller_path(site, obj, controller, action, id_method, options={})
@@ -39,21 +35,14 @@ module Site::SiteBaseHelper
     show_site_gallery_path(site, site.galleries_in_order.first)
   end
 
-  def compute_photo_path(photo)
-    compute_public_path(photo.file_name, 'photos')
-  end
-
-  def compute_photo_thumbnail_path(size, photo)
-    compute_public_path(photo.thumbnail_path(size), 'photos')
-  end
-
-
   protected
 
   def compute_public_path(source, dir, ext=nil)
-    path = compute_public_path_without_site(source, "#{@site.name}/#{dir}", ext)
+    logger.info "--> Computing path for #{source}, #{dir}, #{ext}"
+    path = compute_public_path_without_photolio(source, "#{@site.name}/#{dir}", ext)
     if params[:published]
       site_prefix = "/#{@site.name}"
+      logger.info "--> Computing published path for #{path}"
       if host = ActionController::Base.asset_host
         site_prefix = host + site_prefix
       end
@@ -66,6 +55,14 @@ module Site::SiteBaseHelper
       end
     end
     path
+  end
+
+  def compute_site_public_path(site, source, dir, ext=nil)
+    if site.id == @site.id
+      compute_public_path(source, dir, ext=nil)
+    else
+      raise RuntimeError('Using assets from foreign sites is currently unsupported')
+    end
   end
 
 end

@@ -4,6 +4,25 @@ end
 
 module Admin::AdminBaseHelper
 
+  #
+  # Slots used by admin template. 
+  #
+  # You can overwrite these in your helpers, to customize layout used fot
+  # particular controller
+  #
+  def extra_head_tags
+    nil
+  end
+
+  def page_title
+    'Photolio'
+  end
+  
+  #
+  # End slots
+  #
+
+
   def remote_callback(options={})
     options[:with] ||= "'id=' + encodeURIComponent(element.id)"
     options[:loading] ||= "Element.update('#{options[:update]}', '<td style=\"width: 100px;\">#{loading_tag}</td>')"
@@ -28,14 +47,6 @@ module Admin::AdminBaseHelper
     %(new Proto.Menu(#{options_for_javascript(options)});)
   end
 
-  def compute_photo_path(photo)
-    compute_public_path_without_admin(photo.file_name, "#{photo.site.name}/photos")
-  end
-
-  def compute_photo_thumbnail_path(size, photo)
-    compute_public_path_without_admin(photo.thumbnail_path(size), "#{photo.site.name}/photos")
-  end
-
   def login_path
     new_admin_session_path
   end
@@ -44,18 +55,10 @@ module Admin::AdminBaseHelper
     delete_admin_session_path
   end
 
-  #
-  # Main template slots customization 
-  #
-
-  def page_title
-    'Photolio'
-  end
-
   protected
 
   def compute_public_path(source, dir, ext=nil)
-    compute_public_path_without_admin(source, "admin/#{dir}", ext)
+    compute_public_path_without_photolio(source, "admin/#{dir}", ext)
   end
 
 end
