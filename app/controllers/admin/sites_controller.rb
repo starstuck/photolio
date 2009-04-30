@@ -232,10 +232,10 @@ class Admin::SitesController < Admin::AdminBaseController
     max_lastmod = DateTime.new
 
     for page in sitemap
-      published = publisher.publish(page['loc'], page['lastmod'])
-      max_lastmod = page['lastmod'] if page['lastmod'] > max_lastmod
+      published = publisher.publish(page[:loc], page[:lastmod])
+      max_lastmod = page[:lastmod] if page[:lastmod] > max_lastmod
         if published
-          controller_name = page['loc'][:controller]
+          controller_name = page[:loc][:controller]
           if controller_name =~ /gallery/
             galleries_count += 1
           elsif controller_name =~ /topic/

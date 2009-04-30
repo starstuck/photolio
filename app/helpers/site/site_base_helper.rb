@@ -38,11 +38,9 @@ module Site::SiteBaseHelper
   protected
 
   def compute_public_path(source, dir, ext=nil)
-    logger.info "--> Computing path for #{source}, #{dir}, #{ext}"
     path = compute_public_path_without_photolio(source, "#{@site.name}/#{dir}", ext)
     if params[:published]
       site_prefix = "/#{@site.name}"
-      logger.info "--> Computing published path for #{path}"
       if host = ActionController::Base.asset_host
         site_prefix = host + site_prefix
       end

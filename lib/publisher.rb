@@ -18,11 +18,26 @@ module Publisher
       path
     end
 
+    # compute page path for location
+    def compute_page_path(page_info)
+      path = @context.url_for(page_info.merge(:only_path => true, 
+                                              :skip_relative_url_root => true))
+      clenup_site_part_from_path(path)
+    end
+
+    def compute_page_url(page_info)
+      path = compute_page_path(page_info)
+      if @site.site_params.published_url_prefix
+        @site.site_params.published_url_prefix + path
+      else
+        path
+      end
+    end
+
     # Publish single page
     def publish(page_info, mtime)
       mtime = normalize_time(mtime)
-      page_path = @context.url_for( page_info.merge( :only_path => true, :skip_relative_url_root => true ) )
-      page_path = clenup_site_part_from_path(page_path)
+      page_path = compute_page_path(page_info)
       if older?(page_path, mtime)
         if File.exists?(File.join(@base_path, page_path))
           fmtime = File.new(File.join(@base_path, page_path)).mtime
