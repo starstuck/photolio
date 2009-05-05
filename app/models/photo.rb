@@ -1,9 +1,9 @@
-require 'find'
-require 'ftools'
-require 'mini_magick_utils'
+require 'common/file_model_mixin'
 
 
 class Photo < ActiveRecord::Base
+
+  include Common::FileModelMixin
 
   has_many :gallery_items, :dependent => :destroy
   has_and_belongs_to_many :galleries, :readonly => true # Simple access skiping assoc table
@@ -12,106 +12,16 @@ class Photo < ActiveRecord::Base
   has_many :photo_participants, :dependent => :destroy
   has_many :photo_keywords, :dependent => :destroy
 
-  before_validation_on_create :update_file_name_and_metadata
-  after_save :write_file
-  after_destroy :delete_file
+  before_validation_on_create :resize_on_upload
 
-  # File name is full file location relative to photos base folder
-  attr_readonly :file_name
-
-  validates_length_of :file_name, :maximum => 255, :allow_blank => false
-  validates_uniqueness_of :file_name, :scope => :site_id
   validates_presence_of :site
   validates_length_of :title, :maximum => 255, :allow_nil => true
   validates_length_of :description, :maximum => 255, :allow_nil => true
   validates_associated :photo_participants, :photo_keywords
-  validates_length_of :format, :maximum => 8
-  validates_numericality_of :width, :only_integer => true
-  validates_numericality_of :height, :only_integer => true
 
-  def file=(file_data)
-    @uploaded_file = file_data
-  end
+  set_files_folder 'photos'
 
-  def photos_folder
-    "#{RAILS_ROOT}/public/#{site.name}/photos"
-  end
   
-  # Resized photos path prefix relative to master photos folder
-  def resized_path_prefix
-    "_resized"
-  end
-
-  def resized_photos_folder
-    "#{photos_folder}/#{resized_path_prefix}"
-  end
-
-  # We can set file name after photo site is set
-  def update_file_name_and_metadata
-    if @uploaded_file
-      self.file_name = "#{@uploaded_file.original_filename}"
-      image = MiniMagick::Image.from_blob(@uploaded_file.read, self.file_name.split('.')[-1])
-      photo_store_size = site.site_params.photo_store_size
-      if not image.match_max_size(photo_store_size)
-        image.resize(photo_store_size)
-      end
-      self.width = image[:width]
-      self.height = image[:height]
-      self.format = image[:format]
-      @file_data = image.to_blob
-    end      
-  end
-
-  def write_file
-    if @file_data
-      File.makedirs("#{photos_folder}")
-      File.open("#{photos_folder}/#{file_name}", "w") do |f|
-        f.write(@file_data)
-      end
-    end
-  end
-
-  # Delete file ony if no other foto uses it
-  def delete_file
-    if Photo.count(:conditions => {'file_name' => file_name}) <= 1
-      # Remove photo data
-      FileUtils.rm_rf("#{photos_folder}/#{file_name}")
-      # Remove resized thumbnails
-      FileUtils.rm_rf("#{resized_path_prefix}/#{file_name_without_ext}")
-    end
-  end  
-  
-  # Get fiel name (with path prefix) for resized version of photo. 
-  # If resized thumbnail is not generated yet, it will be created.
-  # Size is supposed to be in format <width>x<height>. If one is missing,
-  # photo will be resized to preserve aspect ratio.
-  def resized_file_name(size)
-    r_width, r_height = size.split('x')
-    
-    if r_width.to_s.empty? and not r_height.to_s.empty?
-      r_width = (r_height.to_f * width / height).to_i
-    elsif r_height.to_s.empty? and not r_width.to_s.empty?
-      r_width = (r_width.to_f * height / width).to_i
-    elsif r_height.to_s.empty? and r_width.to_s.empty?
-      return file_name
-    end
-
-    resized_file_name = "#{resized_path_prefix}/#{file_name_without_ext}/#{r_width}x#{r_height}"
-    if not file_name_ext.empty?
-      resized_file_name += ".#{file_name_ext}"
-    end
-    resized_file_path = "#{photos_folder}/#{resized_file_name}"
-    File.makedirs(File.dirname(resized_file_path))
-
-    if ( not File.exists? resized_file_path ) and File.exists? "#{photos_folder}/#{file_name}"
-      mm = MiniMagick::Image.from_file("#{photos_folder}/#{file_name}")
-      mm.resize( size, '-quality', '85%' )
-      mm.write(resized_file_path)
-    end
-    
-    resized_file_name
-  end
-
   # Update keywords values from array of hashes, having keywords data
   # Keywords are matched by name
   def update_keywords(keywords_data)
@@ -174,20 +84,19 @@ class Photo < ActiveRecord::Base
     res.join('; ')
   end
 
-  private
+  alias_method :image_alt, :alt_text # for compatybility with attachmentt object
 
-    
-  def file_name_ext
-    ext = file_name.split('.')[-1]
-    if ext == file_name or ext.include? '/' or ext.include? '\\'
-      ''
-    else
-      ext
-    end
-  end
+  protected
 
-  def file_name_without_ext
-    file_name[0..-(2 + file_name_ext.length)]
+  def resize_on_upload
+    if @uploaded_data
+      image = MiniMagick::Image.from_blob(@uploaded_data, file_name_extension)
+      photo_store_size = site.site_params.photo_store_size
+      if not image.match_max_size(photo_store_size)
+        image.resize(photo_store_size)
+        @uploaded_data = image.to_blob
+      end
+    end      
   end
 
 end

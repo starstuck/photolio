@@ -108,7 +108,7 @@ class Admin::PhotosController < Admin::AdminBaseController
     @photo.destroy
 
     respond_to do |format|
-      format.html { redirect_to(admin_site_photos_url(@site)) }
+      format.html { redirect_to(admin_site_photos_path(@site)) }
       format.xml  { head :ok }
     end
   end

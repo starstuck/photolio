@@ -13,22 +13,59 @@ module ApplicationHelper
   # Compute path to photo image. 
   # See Photo.resized_file_name for description of size definition
   def photo_image_path(photo, size=nil)
-    if size
-        compute_site_public_path(photo.site, photo.resized_file_name(size), 'photos')
-    else
-        compute_site_public_path(photo.site, photo.file_name, 'photos')
-    end
+    compute_resized_mixin_file_path(photo, size)
   end
   # alias to avoid resource name colision
   alias_method :path_to_photo_image, :photo_image_path
 
+  # Generate path to attachment file.
+  def attachment_file_path(attachment)
+    compute_mixin_file_path(attachment)
+  end
+  # alias to avoid resource name colision
+  alias_method :path_to_attachment_file, :attachment_file_path
+
+  def attachment_image_path(attachment, size=nil)
+    compute_resized_mixin_file_path(attachment, size)
+  end
+  # alias to avoid resource name colision
+  alias_method :path_to_attachment_image, :attachment_image_path
+
   # Generate img tag for photo, if only one of with/height attribute is provided,
   # the other one will be calculated from photo aspect ration
   def photo_image_tag(photo, options={})
+    mixin_file_image_tag(photo, options)
+  end
+
+  # Generate img tag for attachment
+  def attachment_image_tag(attachment, options)
+    mixin_file_image_tag(attachment, options)
+  end
+
+
+  protected 
+
+  def compute_site_public_path(site, source, dir, ext=nil)
+    compute_public_path_without_photolio(source, "#{site.name}/#{dir}", ext)
+  end
+
+  def compute_mixin_file_path(obj)
+    compute_site_public_path(obj.site, obj.file_name, obj.class.files_folder)
+  end
+
+  def compute_resized_mixin_file_path(obj, size=nil)
+    if not size
+      compute_mixin_file_path(obj)
+    else
+      compute_site_public_path(obj.site, obj.resized_file_name(size), obj.class.files_folder)
+    end
+  end
+
+  def mixin_file_image_tag(obj, options={})
     opts = {}.update(options)
 
     if not opts.key? :alt
-      opts[:alt] = photo.alt_text
+      opts[:alt] = obj.image_alt
     end
 
     if opts.key? :size
@@ -46,23 +83,17 @@ module ApplicationHelper
       size ||= "#{opts[:width]}x#{opts[:height]}"
     elsif opts.key? :height and not opts.key? :width
       size ||= "#x#{opts[:width]}"
-      opts[:width] = (opts[:height].to_f * photo.width.to_f / photo.height).to_i
+      opts[:width] = (opts[:height].to_f * obj.image_width.to_f / obj.image_height).to_i
     elsif opts.key? :width and not opts.key? :height
       size ||= "##{opts[:width]}x"
-      opts[:height] = (opts[:width].to_f * photo.width.to_f / photo.height).to_i      
+      opts[:height] = (opts[:width].to_f * obj.image_height.to_f / obj.image_width).to_i      
     else
-      opts[:width] = photo.width
-      opts[:height] = photo.height
+      opts[:width] = obj.image_width
+      opts[:height] = obj.image_height
     end
 
-    opts[:src] = path_to_photo_image(photo, size)
+    opts[:src] = compute_resized_mixin_file_path(obj, size)
     tag('img', opts)
-  end
-
-  protected 
-
-  def compute_site_public_path(site, source, dir, ext=nil)
-    compute_public_path_without_photolio(source, "#{site.name}/#{dir}", ext)
   end
 
 end

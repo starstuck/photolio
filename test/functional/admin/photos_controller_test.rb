@@ -20,11 +20,23 @@ class Admin::PhotosControllerTest < ActionController::TestCase
   end
 
   def test_should_create_photo
+    file_path = File.expand_path(File.dirname(__FILE__) + "/../../fixtures/files/x.png")
+    @temp_dir = File.join(RAILS_ROOT, 'tmp', "test_#{rand.to_s[2..-1]}")
+    FileUtils.mkdir_p(@temp_dir)
+    
+    Photo.instance_variable_set :@public_root, @temp_dir
     assert_difference('Photo.count') do
-      post :create, :site_id => 1, :photo => { :file_name => 'some_file.jpg', :width => 100, :height => 100, :format => 'JPEG' }
+      f = File.open(file_path, "r")
+      post :create, :site_id => 1, :photo => { :file => f }
+      f.close
     end
+    Photo.instance_variable_set :@public_root, nil
 
+    created_path = File.expand_path(@temp_dir + "/polinostudio/photos/x.png")
+    assert((File.exists? created_path), "Does not exists: " + created_path)
     assert_redirected_to admin_site_photo_path(assigns(:site), assigns['photo'])
+
+    FileUtils.rm_rf @temp_dir
   end
 
   def test_should_show_photo

@@ -2,6 +2,7 @@ class Site < ActiveRecord::Base
 
   BRANDS = ['artists', 'models']
   
+  has_many :attachments, :dependent => :destroy, :order => 'file_name'
   has_many :galleries, :dependent => :destroy, :order => 'name' 
   has_many :photos, :dependent => :destroy, :order => 'file_name'
   has_many :topics, :dependent => :destroy, :order => 'title'

@@ -1,0 +1,27 @@
+<h2>Upload attachment for <%= @site.name -%> site</h2>
+
+<% form_for(@attachment, :url => admin_site_attachments_path, :html =>
+  {:multipart => true}) do |f| %>
+  <div class="record_fields">
+    <%= f.error_messages %>
+
+    <p>
+      <%= f.label :file, 'Attachment file' %><br />
+      <%= f.file_field :file %>
+    </p>
+    <p>
+      <%= f.label :label %><br />
+      <%= f.text_field :label, :size => 46 %>
+    </p>
+
+    <p>
+      <%= f.submit "Create" %>
+    </p>
+  </div>
+<% end %>
+
+<hr />
+
+<div class="page_actions">
+  <%= link_to 'Back to attachments list', admin_site_attachments_path(@site) %>
+</div>

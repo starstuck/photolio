@@ -1,0 +1,23 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+
+one:
+  site_id: 1
+  file_name: one.png
+  label: welcome photo
+  mime_major: image
+  mime_minor: png
+  size: 10000
+  image_width: 400
+  image_height: 200
+  image_alt: Welcome
+
+two:
+  site_id: 1
+  file_name: two.pdf
+  label: Importand document
+  mime_major: document
+  mime_minor: pdf
+  size: 40000
+  image_width: 
+  image_height: 
+  image_alt: 

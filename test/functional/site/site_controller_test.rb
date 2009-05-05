@@ -14,9 +14,9 @@ class Site::SiteControllerTest < ActionController::TestCase
     sitemap = Site::SiteController.raw_sitemap(sites(:polinostudio))
     assert_equal 7, sitemap.size
 
-    assert_equal '/site/gallery', sitemap[0]['loc'][:controller]
-    assert_equal '1', sitemap[0]['loc'][:gallery_name]
-    assert_equal DateTime.new(2008, 1, 1), sitemap[0]['lastmod']
+    assert_equal '/site/gallery', sitemap[0][:loc][:controller]
+    assert_equal '1', sitemap[0][:loc][:gallery_name]
+    assert_equal DateTime.new(2008, 1, 1), sitemap[0][:lastmod]
   end
   
   def test_update_gallery_timestamp
@@ -25,8 +25,8 @@ class Site::SiteControllerTest < ActionController::TestCase
     
     sitemap = Site::SiteController.raw_sitemap(sites(:polinostudio))
 
-    assert_equal DateTime.now.strftime('%F'), sitemap[0]['lastmod'].strftime('%F')
-    assert_equal DateTime.now.strftime('%F'), sitemap[1]['lastmod'].strftime('%F')
+    assert_equal DateTime.now.strftime('%F'), sitemap[0][:lastmod].strftime('%F')
+    assert_equal DateTime.now.strftime('%F'), sitemap[1][:lastmod].strftime('%F')
   end
 
   def test_update_photo_timestamp 
@@ -36,8 +36,8 @@ class Site::SiteControllerTest < ActionController::TestCase
     sitemap = Site::SiteController.raw_sitemap(sites(:polinostudio))
 
     sitemap = Site::SiteController.raw_sitemap(sites(:polinostudio))
-    assert_equal DateTime.now.strftime('%F'), sitemap[0]['lastmod'].strftime('%F')
-    assert_equal DateTime.new(2008, 1, 1), sitemap[1]['lastmod']
+    assert_equal DateTime.now.strftime('%F'), sitemap[0][:lastmod].strftime('%F')
+    assert_equal DateTime.new(2008, 1, 1), sitemap[1][:lastmod]
   end
 
   # TODO: more verbose changes on nested elements

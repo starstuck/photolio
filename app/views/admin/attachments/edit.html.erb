@@ -1,0 +1,48 @@
+<% if @attachment.mime_major == 'image' -%>
+  <%= attachment_image_tag @attachment,
+      :size => '600x', :style => "float:right; margin: 10px;"
+      -%>
+<% end -%>
+
+<h2>Editing attachment info</h2>
+
+<% form_for(@attachment, :url => admin_site_attachment_path(@site, @attachment)) do |f| %>
+  <div class="record_fields">
+    <%= f.error_messages %>
+    
+    <p>
+      <b>File name</b><br>
+      <%= @attachment.file_name -%>
+    </p>
+
+    <p>
+      <b>File type</b><br>
+      <%= @attachment.mime_type -%>
+    </p>
+
+    <p>
+      <%= f.label :label %><br />
+      <%= f.text_field :label, :size => 46 %>
+    </p>
+
+    <% if @attachment.mime_major == 'image' -%>
+      <p>
+	<%= f.label :image_alt, "Image alternate text" %><br />
+	<%= f.text_field :image_alt, :size => 46 %>
+      </p>
+    <% end -%>
+
+    <p>
+      <%= f.submit "Update" %>
+    </p>
+  </div>
+
+<% end %>
+
+<br style="clear: both;"/>
+<hr />
+
+<div class="page_actions">
+  <%= link_to 'Show', admin_site_attachment_path(@site, @attachment) %> |
+  <%= link_to 'Back to attachments list', admin_site_attachments_path(@site) %>
+</div>

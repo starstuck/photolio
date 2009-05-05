@@ -174,11 +174,11 @@ class Admin::SitesController < Admin::AdminBaseController
 
       format.js do 
         render :update do |page| 
+          page.replace_html( "unassigned_photos_list", 
+                             :partial => 'layout_unassigned_photos' )
           page.replace_html( "gallery_#{@source_gallery.id}_photos_list", 
                              :partial => 'layout_gallery_photos', 
                              :locals => { :gallery => @source_gallery } )
-          page.replace_html( "unassigned_photos_list", 
-                             :partial => 'layout_unassigned_photos' )
         end
       end
 
@@ -192,6 +192,7 @@ class Admin::SitesController < Admin::AdminBaseController
     position = params[:position].to_i
       
     @gallery.add_separator(position)
+    @gallery.gallery_items(true)
 
     respond_to do |format|
       format.html { render :partial => 'layout_gallery_photos', :locals => {:gallery => @gallery} }

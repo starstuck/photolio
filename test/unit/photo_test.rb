@@ -17,5 +17,36 @@ class PhotoTest < ActiveSupport::TestCase
     assert_equal ["One: Some One", "Two: Some Two"], photo.photo_participants.map{|k| "#{k.role}: #{k.name}"}
   end
 
+  def test_mime_type
+    assert_equal 'image/png', Common::FileModelMixin::MimeFinder.instance.mime_type('x.png')
+    assert_equal 'image/gif', Common::FileModelMixin::MimeFinder.instance.mime_type('loading.gif')
+  end
 
+  def test_update_file_meta
+    photo = Photo.new
+    file_path = File.expand_path(File.dirname(__FILE__) + "/../fixtures/files/x.png")
+
+    f = File.open(file_path, "r")
+    photo.instance_variable_set(:@uploaded_file, f)
+    Photo.class_eval "public :update_file_meta"
+
+    photo.update_file_meta
+
+    Photo.class_eval "protected :update_file_meta"
+    f.close
+
+    assert_equal 'x.png', photo.file_name
+    assert_equal 250, photo.size
+    assert_equal 'image/png', photo.mime_type
+    assert_equal 12, photo.image_width
+    assert_equal 11, photo.image_height
+  end
+
+  def test_resized_file_name
+    photo = photos(:one)
+
+    assert_equal '_resized/studio/one/160x80.jpg', photo.resized_file_name('x80')
+    assert_equal '_resized/studio/one/120x80.jpg', photo.resized_file_name('120x80')
+    assert_equal '_resized/studio/one/80x40.jpg', photo.resized_file_name('80x')
+  end
 end
