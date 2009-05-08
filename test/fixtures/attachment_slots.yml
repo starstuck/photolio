@@ -1,0 +1,17 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+
+love_stories_label_slot:
+  name: menu_label
+  having_attachment_type: Gallery
+  having_attachment_id: 4
+  attachment_type: Asset
+  attachment: love_stories_label
+
+pitchouguina_welcome:
+  name: welcome_photo
+  having_attachment_type: Site
+  having_attachment_id: 3
+  attachment_type: Photo
+  attachment_id: 1
+  
+

@@ -13,3 +13,4 @@
 * Add javascript triggered loading screen during page load
 * Checkout posibilities for speeding up dragables under firefox
 * Content translation
+* Build prety, ajax driven attachment selector with attachment type tabs

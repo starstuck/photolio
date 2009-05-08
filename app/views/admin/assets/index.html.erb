@@ -1,0 +1,42 @@
+<h2>Listing asset files in <%= @site.name -%></h2>
+
+<table class="listing">
+
+  <thead>
+    <tr>
+      <th>Preview</th>
+      <th>File name</th>
+      <th>File type</th>
+      <th>Label</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% for asset in @assets %>
+      <tr>
+	<td>
+	  <% if asset.mime_major == 'image' -%>
+	    <%= asset_image_tag asset, :size => 'x32' -%>
+	  <% end -%>
+	</td>
+	<td><%=h asset.file_name %></td>
+	<td><%=h asset.mime_type %></td>
+	<td><%=h asset.label %></td>
+	<td class="actions">
+	  <%= link_to 'Show', admin_site_asset_path(@site, asset) %> |
+	  <%= link_to 'Edit', edit_admin_site_asset_path(@site, asset) %> |
+	  <%= link_to 'Destroy', admin_site_asset_path(@site, asset), :confirm => 'Are you sure?', :method => :delete %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+  
+</table>
+
+<hr />
+
+<div class="page_actions">
+  <%= link_to 'Upload new asset file', new_admin_site_asset_path(@site) %> 
+  <span class="actions_separator">|</span>
+  <%= link_to 'Back to site', admin_site_path(@site) -%>
+</div>

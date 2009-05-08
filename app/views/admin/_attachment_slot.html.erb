@@ -1,0 +1,11 @@
+<% if attachment_slot.attachment -%>
+  <% if attachment_slot.attachment.is_a? Asset -%>
+    <%= render :partial => 'admin/asset', :object => attachment_slot.attachment -%>
+  <% elsif attachment_slot.attachment.is_a? Photo -%>
+    <%= render :partial => 'admin/photo', :object => attachment_slot.attachment -%>
+  <% elsif attachment_slot.attachment.is_a? Topic -%>
+    <%= render :partial => 'admin/topic', :object => attachment_slot.attachment -%>
+  <% else -%>
+    <%= attachment_slot.attachment -%> attachment
+  <% end -%>
+<% end -%>

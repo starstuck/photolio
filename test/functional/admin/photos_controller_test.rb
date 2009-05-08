@@ -24,15 +24,15 @@ class Admin::PhotosControllerTest < ActionController::TestCase
     @temp_dir = File.join(RAILS_ROOT, 'tmp', "test_#{rand.to_s[2..-1]}")
     FileUtils.mkdir_p(@temp_dir)
     
-    Photo.instance_variable_set :@public_root, @temp_dir
+    Photo.instance_variable_set :@public_path, @temp_dir
     assert_difference('Photo.count') do
       f = File.open(file_path, "r")
       post :create, :site_id => 1, :photo => { :file => f }
       f.close
     end
-    Photo.instance_variable_set :@public_root, nil
+    Photo.instance_variable_set :@public_path, nil
 
-    created_path = File.expand_path(@temp_dir + "/polinostudio/photos/x.png")
+    created_path = File.expand_path(@temp_dir + "/polinostudio/files/photos/x.png")
     assert((File.exists? created_path), "Does not exists: " + created_path)
     assert_redirected_to admin_site_photo_path(assigns(:site), assigns['photo'])
 

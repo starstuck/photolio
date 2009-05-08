@@ -51,7 +51,7 @@ ActionController::Routing::Routes.draw do |map|
                                 'layout_remove_gallery_separator',
                                 'publish'] 
                     ) do |site|
-      site.resources :attachments
+      site.resources :assets
       site.resources :galleries
       site.resources :photos do |photo|
         photo.resources :photo_keywords, :as => 'keywords', :name_prefix => 'admin_site_'

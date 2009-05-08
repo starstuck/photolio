@@ -22,3 +22,11 @@ one_in_kasiak:
   name: "1"
   created_at: 2008-01-01
   updated_at: 2008-01-01
+
+love_stories:
+  id: 4
+  site_id: 3
+  name: love_stories
+  title: Love Stories
+  created_at: 2009-01-01
+  updated_at: 2009-01-01

@@ -166,6 +166,10 @@ div.record_fields p{
     text-indent: -2em;    
 }
 
+div.record_fields .attachment_selector{
+    margin-left: 2em;
+}
+
 
 /*
  * Listing table, used in record indexes views
@@ -308,6 +312,38 @@ a.separator_close_button{
     position: absolute;
     right: 5px;
     z-index: 2;
+}
+
+
+/* Attachment selection style */
+
+.attachment_label_with_icon {
+    height: 32px;
+    line-height: 32px;
+}
+
+.attachment_label_with_icon img{
+    float: left;
+    margin-right: 0.5em;
+}
+
+.attachment_selector {
+    position: relative;
+    width: 320px;
+    height: 32px;
+    padding: 1px;
+    line-height: 32px;
+    border: solid 1px #333;
+}
+
+.attachment_selector .action{
+    display: block;
+    position: absolute;
+    right: 0px;
+    height: 32px;
+    width: 80px;
+    text-align: center;
+    border-left: dotted 1px #333;
 }
 
 

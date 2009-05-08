@@ -21,6 +21,17 @@
     <%=h @gallery.display_in_index ? 'Yes' : 'No' -%>
   </p>
 
+  <% slots = @gallery.attachment_slots_with_empty -%>
+  <% if slots.size > 0 -%>
+    <h3>Attachments</h3>
+    <% for slot in slots -%>
+      <p>
+	<b><%= slot.name.humanize -%></b><br />
+	<%= render :partial => 'admin/attachment_slot', :object => slot-%>
+      </p>
+    <% end -%>
+  <% end -%>
+  
 </div>
 
 <hr />

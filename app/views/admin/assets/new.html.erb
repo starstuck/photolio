@@ -1,12 +1,12 @@
-<h2>Upload attachment for <%= @site.name -%> site</h2>
+<h2>Upload asset file for <%= @site.name -%> site</h2>
 
-<% form_for(@attachment, :url => admin_site_attachments_path, :html =>
+<% form_for(@asset, :url => admin_site_assets_path, :html =>
   {:multipart => true}) do |f| %>
   <div class="record_fields">
     <%= f.error_messages %>
 
     <p>
-      <%= f.label :file, 'Attachment file' %><br />
+      <%= f.label :file, 'Asset file' %><br />
       <%= f.file_field :file %>
     </p>
     <p>
@@ -23,5 +23,5 @@
 <hr />
 
 <div class="page_actions">
-  <%= link_to 'Back to attachments list', admin_site_attachments_path(@site) %>
+  <%= link_to 'Back to assets list', admin_site_assets_path(@site) %>
 </div>

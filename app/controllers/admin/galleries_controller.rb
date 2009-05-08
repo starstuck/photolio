@@ -43,10 +43,19 @@ class Admin::GalleriesController < Admin::AdminBaseController
   # POST /admin_galleries
   # POST /admin_galleries.xml
   def create
+    if params[:gallery].key? :attachment_slots
+      slots_data = params[:gallery].delete(:attachment_slots)
+    end
+
     @gallery = @site.galleries.build(params[:gallery])
+    saved = @gallery.save
+
+    if saved and slots_data
+      @gallery.update_attachment_slots(slots_data)
+    end
 
     respond_to do |format|
-      if @gallery.save
+      if saved
         flash[:notice] = 'Gallery was successfully created.'
         format.html { redirect_to admin_site_galleries_path(@site) }
         format.xml  { render :xml => @gallery, :status => :created, :location => admin_site_galleries_path(@site) }
@@ -61,6 +70,11 @@ class Admin::GalleriesController < Admin::AdminBaseController
   # PUT /admin_galleries/1.xml
   def update
     @gallery = @site.galleries.find(params[:id])
+
+    if params[:gallery].key? :attachment_slots
+      slots_data = params[:gallery].delete(:attachment_slots)
+      @gallery.update_attachment_slots(slots_data)
+    end
 
     respond_to do |format|
       if @gallery.update_attributes(params[:gallery])

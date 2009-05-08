@@ -2,10 +2,10 @@ require 'find'
 require 'ftools'
 require 'mini_magick_utils'
 
-module Common::FileModelMixin
+module ModelExtensions::HasFile
 
-  def self.included(base) #:nodoc:
-    base.class_eval do
+  def has_file 
+    class_eval do
       include InstanceMethods
       extend ClassMethods
       
@@ -74,8 +74,8 @@ module Common::FileModelMixin
       @files_folder = name
     end
     
-    def public_root
-      @public_root ||= File.join(RAILS_ROOT, 'public')
+    def public_path
+      @public_path ||= defined?(Rails.public_path) ? Rails.public_path : File.join(RAILS_ROOT, "public")
     end
 
   end
@@ -102,7 +102,12 @@ module Common::FileModelMixin
     def file_name_without_extension
       file_name[0..-(2 + file_name_extension.length)]
     end
-    
+
+    # Check if file is browser supported image
+    def is_image?
+      (mime_major == 'image') and %w(png gif jpeg).include? mime_minor
+    end
+
     def mime_type
       "#{mime_major}/#{mime_minor}"
     end
@@ -131,7 +136,7 @@ module Common::FileModelMixin
         resized_file_name += ".#{file_name_extension}"
       end
       resized_file_path = "#{files_folder_disk_path}/#{resized_file_name}"
-      
+
       if ( not File.exists? resized_file_path ) and File.exists? file_disk_path
         File.makedirs(File.dirname(resized_file_path))
         mm = MiniMagick::Image.from_file(file_disk_path)
@@ -146,7 +151,7 @@ module Common::FileModelMixin
     protected
     
     def files_folder_disk_path
-      File.join(self.class.public_root, site.name, self.class.files_folder)
+      File.join(self.class.public_path, site.name, self.class.files_folder)
     end
     
     def file_disk_path

@@ -40,8 +40,8 @@ class Site::SiteController < Site::SiteBaseController
     sitemap = []
 
     # Calcualte times for menu items
-    last_gallery_updated = Gallery.maximum('updated_at')
-    last_topic_updated = Topic.maximum('updated_at')
+    last_gallery_updated = site.galleries.maximum('updated_at')
+    last_topic_updated = site.topics.maximum('updated_at')
     
     # add gelleries_pages
     for gallery in site.galleries

@@ -18,18 +18,18 @@ module ApplicationHelper
   # alias to avoid resource name colision
   alias_method :path_to_photo_image, :photo_image_path
 
-  # Generate path to attachment file.
-  def attachment_file_path(attachment)
-    compute_mixin_file_path(attachment)
+  # Generate path to asset file.
+  def asset_file_path(asset)
+    compute_mixin_file_path(asset)
   end
   # alias to avoid resource name colision
-  alias_method :path_to_attachment_file, :attachment_file_path
+  alias_method :path_to_asset_file, :asset_file_path
 
-  def attachment_image_path(attachment, size=nil)
-    compute_resized_mixin_file_path(attachment, size)
+  def asset_image_path(attachment, size=nil)
+    compute_resized_mixin_file_path(asset, size)
   end
   # alias to avoid resource name colision
-  alias_method :path_to_attachment_image, :attachment_image_path
+  alias_method :path_to_asset_image, :asset_image_path
 
   # Generate img tag for photo, if only one of with/height attribute is provided,
   # the other one will be calculated from photo aspect ration
@@ -37,9 +37,9 @@ module ApplicationHelper
     mixin_file_image_tag(photo, options)
   end
 
-  # Generate img tag for attachment
-  def attachment_image_tag(attachment, options)
-    mixin_file_image_tag(attachment, options)
+  # Generate img tag for asset
+  def asset_image_tag(asset, options)
+    mixin_file_image_tag(asset, options)
   end
 
 

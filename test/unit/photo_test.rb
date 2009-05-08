@@ -17,11 +17,6 @@ class PhotoTest < ActiveSupport::TestCase
     assert_equal ["One: Some One", "Two: Some Two"], photo.photo_participants.map{|k| "#{k.role}: #{k.name}"}
   end
 
-  def test_mime_type
-    assert_equal 'image/png', Common::FileModelMixin::MimeFinder.instance.mime_type('x.png')
-    assert_equal 'image/gif', Common::FileModelMixin::MimeFinder.instance.mime_type('loading.gif')
-  end
-
   def test_update_file_meta
     photo = Photo.new
     file_path = File.expand_path(File.dirname(__FILE__) + "/../fixtures/files/x.png")

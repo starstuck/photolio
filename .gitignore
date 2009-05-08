@@ -4,5 +4,5 @@ db/schema.rb
 db/*.sqlite3
 doc/*
 log
-public/*/photos
+public/*/files
 tmp

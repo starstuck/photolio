@@ -2,6 +2,8 @@
 
 class Topic < ActiveRecord::Base
 
+  acts_as_attachment
+
   NAME_TRANSTABLE = [ 'ÀÁÂÃÄÅĄÇĆÈÉÊËĘÌÍÎÏÐŁÑŃÒÓÔÕÖ×ØŚÙÚÛÜÝŻŹàáâãäåąçèéêëęìíîïłñńòóôõöøśùúûüýżź', 
                       'AAAAAAACCEEEEEIIIIDLNNOOOOOxOSUUUUYZZaaaaaaaceeeeeiiiilnnoooooosuuuuyzz' ]
   NAME_TRANSMAP = Hash[ * NAME_TRANSTABLE.map{|s| s.split('')}.transpose.flatten ]

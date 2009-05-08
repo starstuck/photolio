@@ -1,9 +1,7 @@
-require 'common/file_model_mixin'
-
-
 class Photo < ActiveRecord::Base
 
-  include Common::FileModelMixin
+  has_file
+  acts_as_attachment
 
   has_many :gallery_items, :dependent => :destroy
   has_and_belongs_to_many :galleries, :readonly => true # Simple access skiping assoc table
@@ -19,7 +17,7 @@ class Photo < ActiveRecord::Base
   validates_length_of :description, :maximum => 255, :allow_nil => true
   validates_associated :photo_participants, :photo_keywords
 
-  set_files_folder 'photos'
+  set_files_folder 'files/photos'
 
   
   # Update keywords values from array of hashes, having keywords data

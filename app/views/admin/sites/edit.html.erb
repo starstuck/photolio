@@ -8,10 +8,24 @@
       <%= f.label :name %><br />
       <%= f.text_field :name %>
     </p>
-    <p>
-      <%= f.label :brand %><br />
-      <%= f.select :brand, Site.brands_selection %>
-    </p>
+
+
+    <% slots = @site.attachment_slots_with_empty -%>
+    <% if slots.size > 0 -%>
+      <h3>Attachments</h3>
+      <% for slot in slots -%>
+	<p>
+	  <b><%= f.label "attachment_slots_#{slot.name}_attachment_id", slot.name.humanize -%></b><br />
+	  <%= hidden_field_tag "site[attachment_slots][#{slot.name}][attachment_type]", "Photo" -%>
+	  <%= select_tag("site[attachment_slots][#{slot.name}][attachment_id]",
+			 options_for_select([['', nil]] + Photo.find(:all).map{|a| ["#{a.title} [#{a.file_name}]", a.id]},
+					    slot.attachment && slot.attachment.id
+					    )) -%>
+	</p>
+      <% end -%>
+    <% end -%>
+
+
     <p>
       <%= f.submit "Update" %>
     </p>

@@ -5,7 +5,7 @@ class Admin::GalleriesControllerTest < ActionController::TestCase
 
   def setup
     super
-    login_as users(:aaron)
+    login_as users(:quentin)
   end
 
   def test_should_get_index
@@ -38,7 +38,20 @@ class Admin::GalleriesControllerTest < ActionController::TestCase
   end
 
   def test_should_update_gallery
-    put :update, :site_id => sites(:polinostudio), :id => galleries(:one).id, :gallery => { :name => '10' }
+    put(:update, 
+        :site_id => sites(:pitchouguina), 
+        :id => galleries(:love_stories).id, 
+        :gallery => { 
+          :name => 'NY Love stories',
+          :attachment_slots => {
+            :banner => {
+              :attachment_id => assets(:love_stories_banner).id,
+              :attachment_type => 'Asset' },
+            :menu_label => {
+              :attachment_id => '',
+              :attachment_type => 'Asset'
+            }}
+        })
     assert_redirected_to admin_site_galleries_path(assigns(:site))
   end
 

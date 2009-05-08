@@ -1,0 +1,57 @@
+<% if @asset.mime_major == 'image' -%>
+  <%= asset_image_tag @asset,
+      :size => '600x', :style => "float:right; margin: 10px;"
+      -%>
+<% end -%>
+
+
+<h2> Asset file details </h2>
+
+<div class="record_fields">
+  
+  <p>
+    <b>File name</b><br />
+    <%=h @asset.file_name %>
+  </p>
+
+  <p>
+    <b>File type</b><br />
+    <%=h @asset.mime_type %>
+  </p>
+
+  <p>
+    <b>File size</b><br />
+    <%=h @asset.size %>
+  </p>
+
+  <p>
+    <b>Label</b><br />
+    <%=h @asset.label %>
+  </p>
+
+  <% if @asset.mime_major == 'image' -%>
+    <p>
+      <b>Image width</b><br />
+      <%=h @asset.image_width %>
+    </p>
+
+    <p>
+      <b>Image height</b><br />
+      <%=h @asset.image_height %>
+    </p>
+
+    <p>
+      <b>Image alternate text</b><br />
+      <%=h @asset.image_alt %>
+    </p>
+  <% end -%>
+  
+</div>
+
+<br style="clear: both;"/>
+<hr/>
+
+<div class="page_actions">
+  <%= link_to 'Edit', edit_admin_site_asset_path(@site, @asset) %> |
+  <%= link_to 'Back to assets list', admin_site_assets_path(@site) %>
+</div>

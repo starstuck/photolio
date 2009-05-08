@@ -20,6 +20,33 @@
       <%= f.label :mark_as_new %><br />
       <%= f.check_box :mark_as_new %>
     </p>
+    
+    <% slots = @gallery.attachment_slots_with_empty -%>
+    <% if slots.size > 0 -%>
+      <h3>Attachments</h3>
+      <% for slot in slots -%>
+	<p>
+	  <b><%= f.label "attachment_slots_#{slot.name}_attachment_id", slot.name.humanize -%></b><br />
+	  <%= hidden_field_tag "gallery[attachment_slots][#{slot.name}][attachment_type]", "Asset" -%>
+	  <%= select_tag("gallery[attachment_slots][#{slot.name}][attachment_id]",
+			 options_for_select([['', nil]] + Asset.find(:all).map{|a| ["#{a.label} [#{a.file_name}]", a.id]},
+					    slot.attachment && slot.attachment.id
+					    )) -%>
+
+	  <!-- TODO replace to ajax invocation which display preety table with
+	       different attachment types
+	  <div id="gallery_attachment_slots_<%= slot.name -%>_slector"
+	       class="attachment_selector">
+	    <div id="gallery_attachment_slots_<%= slot.name -%>_container">
+	      <%= render :partial => 'admin/attachment_slot', :object => slot -%>
+	    </div>
+	    <%= link_to 'Change', '#', :html => {:class => "action"} -%>
+	  </div>
+          -->
+	</p>
+      <% end -%>
+    <% end -%>
+
     <p>
       <%= f.submit "Update" %>
     </p>

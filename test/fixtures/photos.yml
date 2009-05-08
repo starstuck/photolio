@@ -51,3 +51,16 @@ four:
   image_height: 100
   created_at: 2008-01-01
   updated_at: 2008-01-01
+
+pitchouguina_welcome:
+  id: 5
+  site_id: 3
+  file_name: Welcome.jpg
+  title: Welcome
+  mime_major: image
+  mime_minor: jpeg
+  size: 16000
+  image_width: 800
+  image_height: 450
+  created_at: 2009-02-01
+  updated_at: 2009-02-01

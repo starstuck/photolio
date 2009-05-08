@@ -1,8 +1,10 @@
 class Site < ActiveRecord::Base
 
+  has_attachment
+
   BRANDS = ['artists', 'models']
   
-  has_many :attachments, :dependent => :destroy, :order => 'file_name'
+  has_many :assets, :dependent => :destroy, :order => 'file_name'
   has_many :galleries, :dependent => :destroy, :order => 'name' 
   has_many :photos, :dependent => :destroy, :order => 'file_name'
   has_many :topics, :dependent => :destroy, :order => 'title'
@@ -62,6 +64,11 @@ class Site < ActiveRecord::Base
   # Get site template options object
   def site_params
     @site_params ||= SiteParams.for_site(self)
+  end
+
+  # Aliast to self object, for compatybility with other site entities
+  def site
+    self
   end
 
 end

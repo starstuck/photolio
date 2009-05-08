@@ -49,7 +49,7 @@ class Admin::SitesControllerTest < ActionController::TestCase
   end
 
   def test_should_deny_show_site
-    get :show, :id => sites(:foka).id
+    get :show, :id => sites(:pitchouguina).id
     assert_response :redirect
     assert_match 'insufficient permissions', flash[:notice]
   end
@@ -131,11 +131,9 @@ class Admin::PublishSiteTest < ActionController::TestCase
   tests Admin::SitesController
 
   def set_polinostudio_publish_location(location)
-    eval <<-EOS
-      module SiteParams::PolinostudioParams
-        def publish_location; '#{location}'; end
-      end
-    EOS
+    SiteParams::PolinostudioParams.class_eval do
+      publish_location location
+    end
   end
 
   # patch publisher to skip assets publication for speed

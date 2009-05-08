@@ -1,0 +1,6 @@
+<span class="attachment_label_with_icon">
+  <% if asset.is_image? -%>
+    <%= asset_image_tag asset, :size => 'x32' -%>
+  <% end -%>
+  <%= asset.label -%>[<%= asset.file_name -%>]
+</span>

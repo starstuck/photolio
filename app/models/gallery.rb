@@ -1,5 +1,7 @@
 class Gallery < ActiveRecord::Base
 
+  has_attachment
+
   belongs_to :site
   has_many :gallery_items, :order => 'position',
            :dependent => :destroy # Access for many-to-many through 

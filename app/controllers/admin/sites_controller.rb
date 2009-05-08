@@ -68,6 +68,11 @@ class Admin::SitesController < Admin::AdminBaseController
   # PUT /admin_sites/1
   # PUT /admin_sites/1.xml
   def update
+    if params[:site].key? :attachment_slots
+      slots_data = params[:site].delete(:attachment_slots)
+      @site.update_attachment_slots(slots_data)
+    end
+
     respond_to do |format|
       if @site.update_attributes(params[:site])
         flash[:notice] = 'Site was successfully updated.'

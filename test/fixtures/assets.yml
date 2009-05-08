@@ -1,0 +1,42 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+
+love_stories_banner:
+  site_id: 3
+  file_name: love_stories.jpg
+  label: Love Stories banner
+  mime_major: image
+  mime_minor: jpeg
+  size: 10000
+  image_width: 850
+  image_height: 150
+  image_alt: Love Stories
+
+love_stories_label:
+  site_id: 3
+  file_name: label_love_stories.png
+  label: Love Stories banner
+  mime_major: image
+  mime_minor: png
+  size: 5000
+  image_width: 97
+  image_height: 27
+  image_alt: Love Stories
+
+love_stories_label_pl:
+  site_id: 3
+  file_name: label_love_stories_pl.png
+  label: Love Stories polish banner
+  mime_major: image
+  mime_minor: png
+  size: 5000
+  image_width: 97
+  image_height: 27
+  image_alt: Milosne historie
+
+shows_timetable:
+  site_id: 1
+  file_name: shows.pdf
+  label: Importand document
+  mime_major: document
+  mime_minor: pdf
+  size: 40000

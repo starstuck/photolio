@@ -1,25 +1,39 @@
-<h2><%= @site.name.titleize -%> site</h2>
+<h2><%= @site.name.titleize -%> site content</h2>
+
+<ul>
+  <li><%= link_to 'Galleries', admin_site_galleries_path(@site) %></li>
+  <li><%= link_to 'Topics', admin_site_topics_path(@site) %></li>
+  <li><%= link_to 'Photos', admin_site_photos_path(@site) %></li>
+  <li><%= link_to 'Asset files', admin_site_assets_path(@site) %></li>
+</ul>
+
+<hr />
+
+<h2><%= @site.name.titleize -%> site info</h2>
 
 <div class="record_fields">
   <p>
     <b>Name</b><br />
     <%=h @site.name %>
   </p>
+
+  <% slots = @site.attachment_slots_with_empty -%>
+  <% if slots.size > 0 -%>
+    <h3>Attachments</h3>
+    <% for slot in slots -%>
+      <p>
+	<b><%= slot.name.humanize -%></b><br />
+	<%= render :partial => 'admin/attachment_slot', :object => slot-%>
+      </p>
+    <% end -%>
+  <% end -%>
   
-  <p>
-    <b>Brand</b><br />
-    <%=h @site.brand %>
-  </p>
 </div>  
 
 <hr />
 
 <div class="page_actions">
-  <%= link_to 'Galleries', admin_site_galleries_path(@site) %> |
-  <%= link_to 'Layout', layout_admin_site_path(@site) %> |
-  <%= link_to 'Topics', admin_site_topics_path(@site) %> |
-  <%= link_to 'Photos', admin_site_photos_path(@site) %> |
-  <%= link_to 'Attachments', admin_site_attachments_path(@site) %> |
+  <%= link_to 'Layout galleries', layout_admin_site_path(@site) %> |
   <%= link_to 'Edit site info', edit_admin_site_path(@site) %> |
   <%= link_to 'Publish', publish_admin_site_path(@site) %>
   <% if @current_user.has_multisite_view -%>

@@ -19,7 +19,6 @@ aaron:
   remember_token_expires_at: 
   remember_token:            
 
-
 old_password_holder:
   id:                        3
   login:                     old_password_holder
