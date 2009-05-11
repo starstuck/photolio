@@ -52,7 +52,7 @@ class Admin::AssetsController < Admin::AdminBaseController
     @asset = @site.assets.find(params[:id])
 
     respond_to do |format|
-      if @asset.update_attributes(params[:photo])
+      if @asset.update_attributes(params[:asset])
         flash[:notice] = 'Asset was successfully updated.'
         format.html { redirect_to admin_site_asset_path(@site, @asset) }
         format.xml  { head :ok }
