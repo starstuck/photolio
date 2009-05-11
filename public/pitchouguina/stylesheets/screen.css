@@ -250,6 +250,7 @@ body {
  */
 
 .controlls_menu{
+    float: left;
     display: block;
     list-style: none;
     height: 30px;
@@ -259,9 +260,23 @@ body {
     font-weight: lighter;
 }
 
+.controlls_menu.right{
+    float: right;
+}
+
 .controlls_menu li{
+    float: left;
     display: inline;
     padding-right: 25px;
+}
+
+.controlls_menu.right li{
+    padding-right: 0px;
+    padding-left: 25px;
+}
+
+.controlls_menu li img{
+    padding-top: 1px;
 }
 
 .controlls_menu a img{
@@ -273,6 +288,7 @@ body {
 {
     opacity: 1;
 }
+
 
 /* 
  * Welcome page layout
@@ -286,8 +302,56 @@ body {
 }
 
 /*
+ * Galleries list layout
+ */
+
+#galleries{
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+}
+
+#galleries .gallery_banner {
+    display: block;
+    width: 100%;
+    height: 150%;
+
+    text-align: center;
+    font-size: 24px;
+    line-height: 150px;
+}
+
+
+/*
+ * Gallery page layout
+ */
+
+#gallery{
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+}
+
+#gallery_body{
+    width: 10000px;
+    height: 435px;
+    overflow: hidden;
+}
+
+#gallery img.photo{
+    float: left;
+}
+
+
+/*
  * Topic page layout
  */
+
+#topic{
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+}
 
 #topic_body {
     margin: 1em;

@@ -2,12 +2,25 @@ module Site::SiteBaseHelper
 
   def site_controller_path(site, obj, controller, action, id_method, options={})
     options[:format] = 'html' unless options.key? 'format'
+
+    if controller == 'site'
+      path_name = "#{action}_site"
+    else
+      path_name = "#{action}_site_#{controller}"
+    end
+
     if obj.is_a? String or obj.is_a? Integer
       id_value = obj
-    else
+    elsif obj and id_method
       id_value = (id_method and id_method != '') ? obj.send(id_method) : obj
     end
-    path = @controller.send("#{action}_site_#{controller}_path", site.name, id_value, options)
+
+    if id_value
+      path = @controller.send("#{path_name}_path", site.name, id_value, options)
+    else
+      path = @controller.send("#{path_name}_path", site.name, options)
+    end
+
     if params[:published]
       site_prefix = "/#{@site.name}"
       site_prefix_range = 0..(site_prefix.size-1)
@@ -22,16 +35,26 @@ module Site::SiteBaseHelper
   end
 
   # Register paths calculation function with user friendly names
-  for controller, actions, id_method in [['gallery', ['show'], 'name'],
+  for controller, actions, id_method in [['site', ['show'], nil],
+                                         ['galleries', ['show'], nil],
+                                         ['gallery', ['show'], 'name'],
                                          ['photo', ['show'], 'id'],
                                          ['topic', ['show'], 'name'],
                                         ]
     for action in actions
-      class_eval <<-EOS
-        def #{action}_site_#{controller}_path(site, obj, options={})
-          site_controller_path(site, obj, '#{controller}', '#{action}', '#{id_method}', options)
-        end
-      EOS
+      if id_method
+        class_eval <<-EOS
+          def #{action}_site_#{controller}_path(site, obj, options={})
+            site_controller_path(site, obj, '#{controller}', '#{action}', '#{id_method}', options)
+          end
+        EOS
+      else
+        class_eval <<-EOS
+          def #{action}_site_#{controller}_path(site, options={})
+            site_controller_path(site, nil, '#{controller}', '#{action}', '#{id_method}', options)
+          end
+        EOS
+      end
     end
   end
 

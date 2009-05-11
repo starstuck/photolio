@@ -1,22 +1,27 @@
 <ul id="main_menu" class="controlls_menu">
   <li>
-    <% link_to '#' do %>
-      <%= image_tag 'menu_label_collections_en.png', :alt => 'COLLECTIONS' %>
+    <% link_to show_site_galleries_path(@site) do %>
+      <%= image_tag 'menu_label_collections_en.png', :alt => 'COLLECTIONS', :size => '110x27' %>
     <% end -%>
   </li>
   <li>
     <% link_to show_site_topic_path(@site, 'bio') do %>
-      <%= image_tag 'menu_label_bio_en.png', :alt => 'BIO' %>
+      <%= image_tag 'menu_label_bio_en.png', :alt => 'BIO', :size => '26x27' %>
     <% end -%>
   </li>
   <li>
     <% link_to show_site_topic_path(@site, 'news') do %>
-      <%= image_tag 'menu_label_news_en.png', :alt => 'NEWS' %>
+      <%= image_tag 'menu_label_news_en.png', :alt => 'NEWS', :size => '45x27' %>
+    <% end -%>
+  </li>
+  <li>
+    <% link_to show_site_topic_path(@site, 'press') do %>
+      <%= image_tag 'menu_label_press_en.png', :alt => 'PRESS', :size => '44x27' %>
     <% end -%>
   </li>
   <li>
     <% link_to show_site_topic_path(@site, 'contact') do %>
-      <%= image_tag 'menu_label_contact_en.png', :alt => 'CONTACT' %>
+      <%= image_tag 'menu_label_contact_en.png', :alt => 'CONTACT', :size => '78x27' %>
     <% end -%>
   </li>
 </ul>

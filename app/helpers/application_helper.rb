@@ -38,7 +38,7 @@ module ApplicationHelper
   end
 
   # Generate img tag for asset
-  def asset_image_tag(asset, options)
+  def asset_image_tag(asset, options={})
     mixin_file_image_tag(asset, options)
   end
 

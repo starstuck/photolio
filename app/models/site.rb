@@ -30,35 +30,62 @@ class Site < ActiveRecord::Base
                       :order => 'file_name')
   end
 
-  # Get gallereis, sorted by  titel in user firendly way (numbers are treated as numbers)
-  def galleries_in_order(limit_by_display_in_index = true)
-    gals = galleries
-    gals.reject!{ |g| not g.display_in_index } if limit_by_display_in_index
-    gals.sort do |x, y|
-      # Sort galeries like numbers if name starts from digits (2 is lower then 10)
-      xn = x.name
-      yn = y.name
-      x_is_num = (xn.to_i != 0 or xn[0] == '0')
-      y_is_num = (yn.to_i != 0 or yn[0] == '0')
-      
-      result = begin
-                 if x_is_num and y_is_num
-                   xn.to_i <=> yn.to_i
-                 elsif x_is_num
-                   -1
-                 elsif y_is_num
-                   1
-                 else
-                   nil
+  # Get gallereis, sorted by title in user firendly way (numbers are treated as numbers)
+  def galleries_in_order(limit_by_display_in_index = true, refresh = false)
+    @galleries_in_order = nil if refresh
+    @galleries_in_order ||= begin
+      gals = galleries
+      gals.reject!{ |g| not g.display_in_index } if limit_by_display_in_index
+      gals.sort do |x, y|
+        # Sort galeries like numbers if name starts from digits (2 is lower then 10)
+        xn = x.name
+        yn = y.name
+        x_is_num = (xn.to_i != 0 or xn[0] == '0')
+        y_is_num = (yn.to_i != 0 or yn[0] == '0')
+        
+        result = begin
+                   if x_is_num and y_is_num
+                     xn.to_i <=> yn.to_i
+                   elsif x_is_num
+                     -1
+                   elsif y_is_num
+                     1
+                   else
+                     nil
+                   end
                  end
-               end
-          
-      if result and result != 0
-        result
-      else
-        xn <=> yn #falback to string comparision
-      end        
+        
+        if result and result != 0
+          result
+        else
+          xn <=> yn #falback to string comparision
+        end        
+      end
     end
+  end
+
+  # Get previous gallery, than provided, from galleries in order list
+  def previous_gallery_in_order(gallery)
+    previous = nil
+    for current in galleries_in_order
+      if current.id == gallery.id
+        return previous
+      end
+      previous = current
+    end
+    nil
+  end
+
+  # Get previous gallery, than provided, from galleries in order list
+  def next_gallery_in_order(gallery)
+    previous = nil
+    for current in galleries_in_order
+      if previous and previous.id == gallery.id
+        return current
+      end
+      previous = current
+    end
+    nil
   end
 
   # Get site template options object

@@ -43,6 +43,8 @@ class Site::SiteController < Site::SiteBaseController
     last_gallery_updated = site.galleries.maximum('updated_at')
     last_topic_updated = site.topics.maximum('updated_at')
     
+    #TODO: for each page category first check if template for it exists
+
     # add gelleries_pages
     for gallery in site.galleries
       last_item_assigned = GalleryItem.maximum('updated_at', :conditions => ['gallery_id = ?', gallery.id])
@@ -99,6 +101,12 @@ class Site::SiteController < Site::SiteBaseController
       end
     end
 
+    # TODO
+    # add site main page, only if there is template for it
+
+    # TODO
+    # add galleries ist, only if there is template for it
+    
     sitemap
   end
 

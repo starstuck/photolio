@@ -63,6 +63,7 @@ ActionController::Routing::Routes.draw do |map|
 
   # Map public views published, live
   for controller, actions, id_method in [['site', ['show', 'sitemap'], ''],
+                                         ['galleries', ['show'], ''],
                                          ['gallery', ['show'], 'name'],
                                          ['photo', ['show'], 'id'],
                                          ['topic', ['show'], 'name']

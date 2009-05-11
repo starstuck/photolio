@@ -14,3 +14,9 @@
 * Checkout posibilities for speeding up dragables under firefox
 * Content translation
 * Build prety, ajax driven attachment selector with attachment type tabs
+* While building sitemap must check if template for each page type exists
+* Optimize sitemap lastmod calculations:
+  * While calculating lastmod times include onlt topics/galleries presents in menu and only
+    for pages which uses these menus.
+  * Include template file lastmod time
+* Add automaticaly agregated functional tests separated for each site
