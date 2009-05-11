@@ -18,7 +18,7 @@
 	  <b><%= f.label "attachment_slots_#{slot.name}_attachment_id", slot.name.humanize -%></b><br />
 	  <%= hidden_field_tag "site[attachment_slots][#{slot.name}][attachment_type]", "Photo" -%>
 	  <%= select_tag("site[attachment_slots][#{slot.name}][attachment_id]",
-			 options_for_select([['', nil]] + Photo.find(:all).map{|a| ["#{a.title} [#{a.file_name}]", a.id]},
+			 options_for_select([['', nil]] + @site.photos.find(:all).map{|a| ["#{a.title} [#{a.file_name}]", a.id]},
 					    slot.attachment && slot.attachment.id
 					    )) -%>
 	</p>
