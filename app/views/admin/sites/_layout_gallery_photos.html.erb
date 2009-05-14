@@ -4,11 +4,10 @@
   </td>
   <%= drop_receiving_element "gallery_#{gallery.id}_dropbox",
       :accept => 'draggable_photo',
-      :update => "gallery_#{gallery.id}_photos_list",
+      :hoverclass => 'hover',
       :url => {:action => 'layout_add_gallery_photo', :id => @site, :gallery_id => gallery},
       :with => "'photo_id=' + encodeURIComponent(element.id)",
-      :loading => "Element.update('gallery_#{gallery.id}_photos_list', 'a<td style=\"width: 100px;\">#{loading_tag}</td>')",
-      :hoverclass => 'hover'
+      :loading => "Element.update('gallery_#{gallery.id}_photos_list', '<td style=\"width: 100px;\">#{loading_tag}</td>')"
       -%>
   
 <% else -%>

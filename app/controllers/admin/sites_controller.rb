@@ -110,13 +110,6 @@ class Admin::SitesController < Admin::AdminBaseController
     end
   end
 
-  def layout_unassigned_photos_partial
-    @unassigned_photos = @site.unassigned_photos
-
-    render(:partial => "layout_unassigned_photos",
-           :locals => {:unassigned_photos => @unassigned_photos})
-  end
-
   def layout_add_gallery_photo
     @gallery = @site.galleries.find(params[:gallery_id])
     source_gallery_id, photo_id = params[:photo_id].split('_')[-2..-1]
