@@ -1,6 +1,6 @@
 <div id="galleries">
   <div id="galleries_body">
-    <% for gallery in @site.galleries -%>
+    <% for gallery in @site.galleries_in_order -%>
       <a href="<%= show_site_gallery_path @site, gallery -%>" 
 	 title="<%= gallery.title -%>" 
 	 class="gallery_banner">

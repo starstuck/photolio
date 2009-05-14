@@ -30,12 +30,13 @@ class Site < ActiveRecord::Base
                       :order => 'file_name')
   end
 
-  # Get gallereis, sorted by title in user firendly way (numbers are treated as numbers)
-  def galleries_in_order(limit_by_display_in_index = true, refresh = false)
+  # Get gallereis, sorted by title in user firendly way. 
+  # Limit to galleries marked as visible only
+  def galleries_in_order(refresh = false)
     @galleries_in_order = nil if refresh
     @galleries_in_order ||= begin
-      gals = galleries
-      gals.reject!{ |g| not g.display_in_index } if limit_by_display_in_index
+      gals = galleries(refresh)
+      gals.reject!{ |g| not g.display_in_index } 
       gals.sort do |x, y|
         # Sort galeries like numbers if name starts from digits (2 is lower then 10)
         xn = x.name
