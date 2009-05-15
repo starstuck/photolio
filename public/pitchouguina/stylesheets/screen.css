@@ -96,6 +96,7 @@ body {
     padding: 0px;
     background-image: url(../images/body_gradient.png);
     background-repeat: repeat-x;
+    overflow: hidden;
 }
 
 #header,
@@ -306,6 +307,7 @@ body {
  */
 
 #galleries{
+    position: relative;
     width: 100%;
     height: 100%;
     overflow: auto;
@@ -314,11 +316,31 @@ body {
 #galleries .gallery_banner {
     display: block;
     width: 100%;
-    height: 150%;
-
+    height: 100%;
     text-align: center;
     font-size: 24px;
     line-height: 150px;
+}
+
+#galleries_scroll_button_up,
+#galleries_scroll_button_down
+{
+    width: 58px;
+    height: 29px;
+    position: absolute;
+    left: 382px;
+    display: none;
+    cursor: pointer;
+    background-image: url(../images/arrow_tb.png);
+}
+
+#galleries_scroll_button_up {
+    top: 0px;
+}
+
+#galleries_scroll_button_down {
+    bottom: 0px;
+    background-position: 0px -29px;
 }
 
 
