@@ -6,7 +6,7 @@
 	 class="gallery_banner">
 	<% banner = gallery.get_attachment('banner') -%>
 	<% if banner -%>
-	  <%= asset_image_tag banner, :size => '800x150' -%>
+	  <%= asset_image_tag banner, :size => '800x150', :alt => gallery.title -%>
 	<% else -%>
 	  <%= gallery.title -%>
 	<% end -%>

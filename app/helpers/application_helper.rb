@@ -64,6 +64,9 @@ module ApplicationHelper
   def mixin_file_image_tag(obj, options={})
     opts = {}.update(options)
 
+    if (not opts.key? :alt) and opts.key?(:backup_alt) and obj.image_alt.to_s.empty?
+      opts[:alt] = opts.delete(:backup_alt)
+    end
     if not opts.key? :alt
       opts[:alt] = obj.image_alt
     end

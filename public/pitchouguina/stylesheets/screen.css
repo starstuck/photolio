@@ -258,6 +258,7 @@ body {
     display: block;
     list-style: none;
     height: 30px;
+    width: auto;
     font-size: 20px;
     padding: 0px;
     margin: 0px;
@@ -266,10 +267,12 @@ body {
 
 .controlls_menu.right{
     float: right;
+    width: auto;
 }
 
 .controlls_menu li{
     float: left;
+    width: auto;
     display: inline;
     padding-right: 25px;
 }

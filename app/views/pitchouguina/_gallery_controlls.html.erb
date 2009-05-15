@@ -2,7 +2,7 @@
   <li>
     <% label_asset = @gallery.get_attachment('menu_label') -%>
     <% if label_asset -%>
-      <%= asset_image_tag label_asset %>
+      <%= asset_image_tag label_asset, :backup_alt => @gallery.title.upcase %>
     <% else -%>
       <%= @gallery.title.upcase %>
     <% end -%>
