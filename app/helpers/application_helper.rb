@@ -42,6 +42,29 @@ module ApplicationHelper
     mixin_file_image_tag(asset, options)
   end
 
+  # Render topic with extending macros
+  def render_topic(topic)
+    # Extract macros with arguments
+    rendered = topic.body.gsub(/\[\[([a-z_ ]+)(\((.*)\))?\s*\]\]/) do |m| 
+      macro_name = $1.strip
+      args = $3 ? $3.split(',').map{|a| a.strip} : []
+      
+      if args.size > 0
+        if macro_name == 'asset_image_path'
+          file_name = args[0]
+          compute_site_public_path(topic.site, file_name, Asset.files_folder)
+        elsif macro_name == 'photo_image_path'
+          file_name = args[0]
+          compute_site_public_path(topic.site, file_name, Photo.files_folder)
+        else
+          ''
+        end
+      else
+        ''
+      end      
+    end
+    return rendered
+  end
 
   protected 
 

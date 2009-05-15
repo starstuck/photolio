@@ -228,6 +228,7 @@ function setup_galleries_list_scroll(){
 }
 Event.observe(window, 'load', setup_galleries_list_scroll);
 
+
 function setup_gallery_photos_scroll(){
   var gallery_viewport = $('gallery_viewport');
   if(gallery_viewport){
