@@ -1,10 +1,14 @@
 <div id="gallery">
-  <% photos_width = 0; @gallery.photos.each{|p| photos_width += p.image_width} -%>
-  <div id="gallery_body" style="width: <%= photos_width -%>px">
-    <% for photo in @gallery.photos -%>
-      <%= photo_image_tag photo, :class => 'photo' -%>
-    <% end -%>
-  </div>  
+  <div id="gallery_viewport">
+    <% photos_width = 0; @gallery.photos.each{|p| photos_width += p.image_width} -%>
+    <div id="gallery_body" style="width: <%= photos_width -%>px">
+      <% for photo in @gallery.photos -%>
+	<%= photo_image_tag photo, :class => 'photo' -%>
+      <% end -%>
+    </div>  
+  </div>
+  <div id="gallery_scroll_button_left"></div>
+  <div id="gallery_scroll_button_right"></div>
 </div>
 
 <% @page_controlls = render(:partial => 'pitchouguina/gallery_controlls') -%>

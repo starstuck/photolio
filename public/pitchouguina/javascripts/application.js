@@ -229,3 +229,88 @@ function setup_galleries_list_scroll(){
 }
 Event.observe(window, 'load', setup_galleries_list_scroll);
 
+function setup_gallery_photos_scroll(){
+  var gallery_viewport = $('gallery_viewport');
+  if(gallery_viewport){
+
+    /* Turn off html scrollbars */
+    gallery_viewport.setStyle({overflow: 'hidden'});
+    var gallery_body = $('gallery_body');
+    gallery_body.setStyle({height: '450px'});
+    var photos_width = gallery_body.offsetWidth;
+    var photos_viewport_width = gallery_viewport.offsetWidth;
+
+    if(photos_width > 800){
+
+      ScrollEffect = function(element){
+	var options = Object.extend({
+	  speed: 400, /* sppeed in pixels per second */
+	  transition: Effect.Transitions.linear
+	}, arguments[1] || {});
+	var start_position = element.scrollLeft;
+	var end_position;
+	if(options.offset == 'max_left') {
+	  end_position = 0;
+	} else if(options.offset == 'max_right') {
+	  end_position = photos_width - photos_viewport_width;
+	} else {
+	  end_position = start_position + options.offset;
+	  if(end_position < 0){
+	    end_position = 0;
+	  } else if(end_position > photos_width - photos_viewport_width){
+	    end_position = photos_width - photos_viewport_width;
+	  }
+	}
+	options.offset = end_position - start_position;
+	options.duration = 1.0 * options.offset / options.speed;
+	if(options.duration < 0) options.duration = -options.duration;
+	return new Effect.Tween(
+	  element,
+	  start_position,
+	  end_position,
+	  options,
+	  function(p){element.scrollLeft = p.round();}
+	);
+      };
+
+      var scroll_efect;
+
+      function start_scroll_left(){
+	scroll_efect = ScrollEffect(gallery_viewport, {offset: 'max_left'});
+      }
+
+      function start_scroll_right(){
+	scroll_efect = ScrollEffect(gallery_viewport, {offset: 'max_right'});
+      }
+
+      function start_scroll_on_wheel(event){
+	var scroll_offset = -(Event.wheel(event) * 40);
+	if(!scroll_efect || (scroll_efect.state != 'running')) {
+	  scroll_efect = ScrollEffect(gallery_viewport, {offset: scroll_offset});
+	}
+      }
+
+      function stop_scroll(){
+	if(scroll_efect) scroll_efect.cancel();
+      }
+
+
+      var button_left = $('gallery_scroll_button_left');
+      var button_right = $('gallery_scroll_button_right');
+
+      button_left.observe('mousedown', start_scroll_left);
+      button_left.observe('mouseup', stop_scroll);
+      button_left.observe('mouseout', stop_scroll);
+
+      button_right.observe('mousedown', start_scroll_right);
+      button_right.observe('mouseup', stop_scroll);
+      button_right.observe('mouseout', stop_scroll);
+
+      gallery_viewport.observe("mousewheel", start_scroll_on_wheel);
+      gallery_viewport.observe("DOMMouseScroll", start_scroll_on_wheel); //firefox
+
+      setup_show_hide_buttons(gallery_viewport, [button_left, button_right]);
+    }
+  }
+}
+Event.observe(window, 'load', setup_gallery_photos_scroll);
