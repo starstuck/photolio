@@ -91,12 +91,15 @@ hr {
  * Main Layout
  */
 
+html, body {
+    overflow: hidden;
+}
+
 body {
     margin: 0px;
     padding: 0px;
     background-image: url(../images/body_gradient.png);
     background-repeat: repeat-x;
-    overflow: hidden;
 }
 
 #header,
