@@ -1,9 +1,14 @@
 <div id="gallery">
   <div id="gallery_viewport">
     <% photos_width = 0; @gallery.photos.each{|p| photos_width += p.image_width} -%>
+    <% @gallery.gallery_items.each{|i| photos_width += 5 if i.type == 'GallerySeparator'} -%>
     <div id="gallery_body" style="width: <%= photos_width -%>px">
-      <% for photo in @gallery.photos -%>
-	<%= photo_image_tag photo, :class => 'photo' -%>
+      <% for item in @gallery.gallery_items -%>
+	<% if item.type == 'GalleryPhoto' -%>
+	  <%= photo_image_tag item.photo, :class => 'photo' -%>
+	<% elsif item.type == 'GallerySeparator' -%>
+	  <div class="separator"></div>
+	<% end -%>
       <% end -%>
     </div>  
   </div>

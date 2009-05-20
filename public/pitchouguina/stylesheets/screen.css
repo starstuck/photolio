@@ -32,6 +32,10 @@ a.active,
     border-color: #d5d5d5;
 }
 
+#gallery .separator {
+    background-color: #000000;
+}
+
 
 /*
  * Text styles
@@ -374,6 +378,12 @@ body {
 
 #gallery img.photo{
     float: left;
+}
+
+#gallery .separator{
+    float: left;
+    width: 5px;
+    height: 100%;
 }
 
 #gallery_scroll_button_left,
