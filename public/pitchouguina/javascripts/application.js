@@ -360,11 +360,11 @@ function setup_topic_scroll(){
       }
 
       function start_scroll_on_wheel(event){
-	var scroll_offset = -(Event.wheel(event) * 10);
+	var scroll_offset = -(Event.wheel(event) * 40);
 	if(!scroll_efect || (scroll_efect.state != 'running')) {
-	  scroll_efect = ScrollEffect(gallery_viewport,
+	  scroll_efect = ScrollEffect(topic_viewport,
 				      {offset: scroll_offset,
-				       mode: 'vertical'});
+				       direction: 'vertical'});
 	}
       }
 
