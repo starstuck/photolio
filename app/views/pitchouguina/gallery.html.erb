@@ -5,7 +5,8 @@
     <div id="gallery_body" style="width: <%= photos_width -%>px">
       <% for item in @gallery.gallery_items -%>
 	<% if item.type == 'GalleryPhoto' -%>
-	  <%= photo_image_tag item.photo, :class => 'photo' -%>
+	  <%= photo_image_tag item.photo, 
+	      :class => 'photo', :title => item.photo.image_alt -%>
 	<% elsif item.type == 'GallerySeparator' -%>
 	  <div class="separator"></div>
 	<% end -%>
