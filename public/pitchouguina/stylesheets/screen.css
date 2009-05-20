@@ -402,6 +402,12 @@ body {
  */
 
 #topic{
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
+
+#topic_viewport{
     width: 100%;
     height: 100%;
     overflow: auto;
@@ -409,4 +415,25 @@ body {
 
 #topic_body {
     margin: 1em;
+}
+
+#topic_scroll_button_up,
+#topic_scroll_button_down
+{
+    width: 58px;
+    height: 29px;
+    position: absolute;
+    left: 382px;
+    display: none;
+    cursor: pointer;
+    background-image: url(../images/arrow_tb.png);
+}
+
+#topic_scroll_button_up {
+    top: 0px;
+}
+
+#topic_scroll_button_down {
+    bottom: 0px;
+    background-position: 0px -29px;
 }

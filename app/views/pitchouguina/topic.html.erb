@@ -1,9 +1,11 @@
 <% @page_title = @topic.title -%>
 
 <div id="topic">
-
-  <div id="topic_body">
-    <%= render_topic @topic -%>
+  <div id="topic_viewport">
+    <div id="topic_body">
+      <%= render_topic @topic -%>
+    </div>
   </div>
-  
+  <div id="topic_scroll_button_up"></div>
+  <div id="topic_scroll_button_down"></div>
 </div>

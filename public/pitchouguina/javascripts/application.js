@@ -229,6 +229,57 @@ function setup_galleries_list_scroll(){
 Event.observe(window, 'load', setup_galleries_list_scroll);
 
 
+/*
+ * Scroll efect used to scroll galleries photos and topic content
+ */
+var ScrollEffect = function(element){
+  var options = Object.extend({
+    speed: 400, /* sppeed in pixels per second */
+    direction: 'horizontal', /* can be horizontal, or vertical */
+    transition: Effect.Transitions.linear
+  }, arguments[1] || {});
+  var start_position;
+  var end_position;
+  var viewport_size;
+  var maximum_position;
+  if(options.direction == 'horizontal'){
+    start_position = element.scrollLeft;
+    viewport_size = element.offsetWidth;
+    maximum_position = element.scrollWidth - viewport_size;
+  } else {
+    start_position = element.scrollTop;
+    viewport_size = element.offsetHeight;
+    maximum_position = element.scrollHeight - viewport_size;
+  }
+  if(options.offset == 'beginning') {
+    end_position = 0;
+  } else if(options.offset == 'finish') {
+    end_position = maximum_position;
+  } else {
+    end_position = start_position + options.offset;
+    if(end_position < 0){
+      end_position = 0;
+    } else if(end_position > maximum_position){
+      end_position = maximum_position;
+    }
+  }
+  options.offset = end_position - start_position;
+  options.duration = 1.0 * options.offset / options.speed;
+  if(options.duration < 0) options.duration = -options.duration;
+  var scroll_handler;
+  if(options.direction == 'horizontal'){
+    scroll_handler = function(p){element.scrollLeft = p.round();};
+  } else {
+    scroll_handler = function(p){element.scrollTop = p.round();};
+  }
+  return new Effect.Tween(element, start_position, end_position,
+			  options, scroll_handler);
+};
+
+
+/*
+ * Setup gallery photos list scroll controlls
+ */
 function setup_gallery_photos_scroll(){
   var gallery_viewport = $('gallery_viewport');
   if(gallery_viewport){
@@ -241,46 +292,14 @@ function setup_gallery_photos_scroll(){
     var photos_viewport_width = gallery_viewport.offsetWidth;
 
     if(photos_width > 800){
-
-      ScrollEffect = function(element){
-	var options = Object.extend({
-	  speed: 400, /* sppeed in pixels per second */
-	  transition: Effect.Transitions.linear
-	}, arguments[1] || {});
-	var start_position = element.scrollLeft;
-	var end_position;
-	if(options.offset == 'max_left') {
-	  end_position = 0;
-	} else if(options.offset == 'max_right') {
-	  end_position = photos_width - photos_viewport_width;
-	} else {
-	  end_position = start_position + options.offset;
-	  if(end_position < 0){
-	    end_position = 0;
-	  } else if(end_position > photos_width - photos_viewport_width){
-	    end_position = photos_width - photos_viewport_width;
-	  }
-	}
-	options.offset = end_position - start_position;
-	options.duration = 1.0 * options.offset / options.speed;
-	if(options.duration < 0) options.duration = -options.duration;
-	return new Effect.Tween(
-	  element,
-	  start_position,
-	  end_position,
-	  options,
-	  function(p){element.scrollLeft = p.round();}
-	);
-      };
-
       var scroll_efect;
 
       function start_scroll_left(){
-	scroll_efect = ScrollEffect(gallery_viewport, {offset: 'max_left'});
+	scroll_efect = ScrollEffect(gallery_viewport, {offset: 'beginning'});
       }
 
       function start_scroll_right(){
-	scroll_efect = ScrollEffect(gallery_viewport, {offset: 'max_right'});
+	scroll_efect = ScrollEffect(gallery_viewport, {offset: 'finish'});
       }
 
       function start_scroll_on_wheel(event){
@@ -314,3 +333,61 @@ function setup_gallery_photos_scroll(){
   }
 }
 Event.observe(window, 'load', setup_gallery_photos_scroll);
+
+
+/*
+ * Setup topic scroll controlls
+ */
+function setup_topic_scroll(){
+  var topic_viewport = $('topic_viewport');
+  if(topic_viewport){
+
+    /* Turn off html scrollbars */
+    topic_viewport.setStyle({overflow: 'hidden'});
+    var topic_viewport_height = topic_viewport.offsetHeight;
+
+    if(topic_viewport.scrollHeight > 450){
+      var scroll_efect;
+
+      function start_scroll_up(){
+	scroll_efect = ScrollEffect(topic_viewport,
+				    {offset: 'beginning', direction: 'vertical'});
+      }
+
+      function start_scroll_down(){
+	scroll_efect = ScrollEffect(topic_viewport,
+				    {offset: 'finish', direction: 'vertical'});
+      }
+
+      function start_scroll_on_wheel(event){
+	var scroll_offset = -(Event.wheel(event) * 10);
+	if(!scroll_efect || (scroll_efect.state != 'running')) {
+	  scroll_efect = ScrollEffect(gallery_viewport,
+				      {offset: scroll_offset,
+				       mode: 'vertical'});
+	}
+      }
+
+      function stop_scroll(){
+	if(scroll_efect) scroll_efect.cancel();
+      }
+
+      var button_up = $('topic_scroll_button_up');
+      var button_down = $('topic_scroll_button_down');
+
+      button_up.observe('mousedown', start_scroll_up);
+      button_up.observe('mouseup', stop_scroll);
+      button_up.observe('mouseout', stop_scroll);
+
+      button_down.observe('mousedown', start_scroll_down);
+      button_down.observe('mouseup', stop_scroll);
+      button_down.observe('mouseout', stop_scroll);
+
+      topic_viewport.observe("mousewheel", start_scroll_on_wheel);
+      topic_viewport.observe("DOMMouseScroll", start_scroll_on_wheel); //firefox
+
+      setup_show_hide_buttons(topic_viewport, [button_up, button_down]);
+    }
+  }
+}
+Event.observe(window, 'load', setup_topic_scroll);
