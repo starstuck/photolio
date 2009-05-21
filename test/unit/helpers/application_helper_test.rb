@@ -21,6 +21,12 @@ class ApplicationHelperTest < ActionView::TestCase
     # Existing file
     @topic.body = 'Some [[ asset_image_path ( love_stories.jpg ) ]] asset.'
     assert_equal 'Some /pitchouguina/files/assets/love_stories.jpg asset.', render_topic(@topic)
+    # Many macros in the same line
+    @topic.body = 'Some [[asset_image_path(love_stories.jpg )]] and '\
+                  '[[asset_image_path(smart.jpg)]] assets.'
+    assert_equal('Some /pitchouguina/files/assets/love_stories.jpg and '\
+                 '/pitchouguina/files/assets/smart.jpg assets.',
+                 render_topic(@topic))
   end
 
   def test_photo_image_topic_macro

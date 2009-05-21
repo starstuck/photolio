@@ -45,7 +45,7 @@ module ApplicationHelper
   # Render topic with extending macros
   def render_topic(topic)
     # Extract macros with arguments
-    rendered = topic.body.gsub(/\[\[([a-z_ ]+)(\((.*)\))?\s*\]\]/) do |m| 
+    rendered = topic.body.gsub(/\[\[([a-z_ ]+)(\(([^\(]*)\))?\s*\]\]/) do |m| 
       macro_name = $1.strip
       args = $3 ? $3.split(',').map{|a| a.strip} : []
       
