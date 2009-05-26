@@ -30,11 +30,11 @@ class BuildGalleriesAndTopicsMenu < ActiveRecord::Migration
 
     # Remove obsolete columns
     remove_column :galleries, :display_in_index
-    remove_column :topics, :display_in_index
+    remove_column :topics, :display_in_menu
   end
 
   def self.down
-    add_column :topics, :display_in_index, :default => true    
+    add_column :topics, :display_in_menu, :default => true    
     add_column :galleries, :display_in_index, :default => true
   end
 end
