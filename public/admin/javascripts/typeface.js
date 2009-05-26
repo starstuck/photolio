@@ -521,7 +521,9 @@ if (document.createStyleSheet) {
 
 } else if (document.styleSheets && document.styleSheets.length) {
 	var styleSheet = document.styleSheets[0];
-	document.styleSheets[0].insertRule(typefaceSelectors.join(',') + ' { visibility: hidden; }', styleSheet.cssRules.length); 
+	try {
+		document.styleSheets[0].insertRule(typefaceSelectors.join(',') + ' { visibility: hidden; }', styleSheet.cssRules.length);
+	} catch (e) {};
 }
 
 var backend = !!(window.attachEvent && !window.opera) ? 'vml' : window.CanvasRenderingContext2D || document.createElement('canvas').getContext ? 'canvas' : null;
