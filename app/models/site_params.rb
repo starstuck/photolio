@@ -71,6 +71,10 @@ module SiteParams
     # Published site assets files url prefix
     def_param :published_assets_url_prefix
 
+    # Site menus 'galleries' and 'topics' are special kind of menues, which are
+    # managed directly for gallery and topic page
+    def_param :menus
+
   end
 
 
@@ -92,6 +96,7 @@ module SiteParams
   class PolinostudioParams < DefaultParams
 
     publish_location '/var/www/polinostudio'
+    menus ['galleries', 'topics']
 
   end
 
@@ -100,6 +105,7 @@ module SiteParams
     
     photo_store_size 'x450'
     publish_location '/var/www/pitchouguina'
+    menus ['galleries']
 
     def_attachment_slot Site, 'welcome_photo', :valid_types => [Photo]
 

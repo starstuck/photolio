@@ -5,21 +5,23 @@
     <%= f.error_messages %>
     
     <p>
-      <%= f.label :name %><br />
-      <%= f.text_field :name %>
-    </p>
-    <p>
       <%= f.label :title %><br />
       <%= f.text_field :title %>
     </p>
-    <p>
-      <%= f.label :display_in_index %><br />
-      <%= f.check_box :display_in_index %>
-    </p>
-    <p>
-      <%= f.label :mark_as_new %><br />
-      <%= f.check_box :mark_as_new %>
-    </p>
+    <% if @site.has_menu? 'galleries' -%>
+      <%= render(:partial => 'admin/menu/edit_default_menu_for_target',
+		:locals => {
+		  :form => f,
+		  :target => @gallery
+		}
+		) -%>
+    <% end -%>
+    <% if @site.name == 'polinostudio' -%>
+      <p>
+	<%= f.label :mark_as_new %><br />
+	<%= f.check_box :mark_as_new %>
+      </p>
+    <% end -%>
     <p>
       <%= f.submit "Create" %>
     </p>

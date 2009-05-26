@@ -8,12 +8,16 @@
       <%= f.label :title %><br />
       <%= f.text_field :title %>
     </p>
+    <% if @site.has_menu? 'topics' -%>
+      <%= render(:partial => 'admin/menu/edit_default_menu_for_target',
+		:locals => {
+		  :form => f,
+		  :target => @topic
+		}
+		) -%>
+    <% end -%>
     <p>
-      <%= f.label :display_in_menu %><br />
-      <%= f.check_box :display_in_menu %>
-    </p>
-    <p>
-      <%= f.label :body %> <it>(Text will be formated using <a href="http://daringfireball.net/projects/markdown/syntax" target="_blank">markdown</a> processor)</it><br />
+      <%= f.label :body %><br />
       <%= f.text_area :body, :cols => 110, :rows => 25 %>
     </p>
     <p>

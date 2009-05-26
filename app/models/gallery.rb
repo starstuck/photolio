@@ -1,6 +1,8 @@
 class Gallery < ActiveRecord::Base
 
   has_attachment
+  acts_as_named_content
+  acts_as_menu_item_target
 
   belongs_to :site
   has_many :gallery_items, :order => 'position',
@@ -9,10 +11,9 @@ class Gallery < ActiveRecord::Base
   has_and_belongs_to_many :photos, :order => 'position', :uniq => true, :readonly => true
 
   validates_presence_of :site
-  validates_length_of :name, :maximum => 16
-  validates_uniqueness_of :name, :scope => 'site_id'
-  validates_length_of :title, :maximum => 255, :allow_nil => true
-
+  validates_length_of :name, :maximum => 255
+  validates_length_of :title, :maximum => 255
+ 
 
   # Add existing GalleryItem object to this gallery (maintain association)
   def add_item(item, position=nil)

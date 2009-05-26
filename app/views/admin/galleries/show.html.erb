@@ -2,7 +2,7 @@
 
 <div class="record_fields">
   <p>
-    <b>Name</b><br />
+    <b>Browser name (used in links)</b><br />
     <%=h @gallery.name %>
   </p>
 
@@ -11,15 +11,24 @@
     <%=h @gallery.title %>
   </p>
 
-  <p>
-    <b>Display in index</b><br />
-    <%=h @gallery.display_in_index ? 'Yes' : 'No' -%>
-  </p>
+  <% if @site.has_menu? 'galleries' -%>
+    <p>
+      <b>Display in galleries menu</b><br />
+      <%=h @gallery.display_in_default_menu ? 'Yes' : 'No' -%>
+    </p>
+    
+    <p>
+      <b>Label in galleries menu</b><br />
+      <%=h @gallery.default_menu_label_or_title -%>
+    </p>
+  <% end -%>
 
-  <p>
-    <b>Mark as new</b><br />
-    <%=h @gallery.display_in_index ? 'Yes' : 'No' -%>
-  </p>
+  <% if @site.name == 'polinostudio' -%>
+    <p>
+      <b>Mark as new</b><br />
+      <%=h @gallery.mark_as_new ? 'Yes' : 'No' -%>
+    </p>
+  <% end -%>
 
   <% slots = @gallery.attachment_slots_with_empty -%>
   <% if slots.size > 0 -%>

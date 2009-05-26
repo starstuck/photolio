@@ -12,11 +12,18 @@
     <b>Title</b><br />
     <%=h @topic.title %>
   </p>
-  
-  <p>
-    <b>Display in menu</b><br />
-    <%=h @topic.display_in_menu ? 'Yes' : 'No' %>
-  </p>
+
+  <% if @site.has_menu? 'topics' -%>
+    <p>
+      <b>Display in topics menu</b><br />
+      <%=h @topic.display_in_default_menu ? 'Yes' : 'No' %>
+    </p>
+    <p>
+      <b>Label in topics menu</b><br />
+      <%=h @topic.default_menu_label_or_title %>
+    </p>
+  <% end -%>
+
 </div>
 
 <p><b>Body preview</b></p>

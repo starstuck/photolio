@@ -4,20 +4,26 @@
   
   <thead>
     <tr>
-      <th>Name</th>
       <th>Title</th>
-      <th>Disp. in index</th>
-      <th>Mark as new</th>
+      <% if @site.has_menu? 'galleries' -%>
+	<th>Disp. in g. menu</th>
+      <% end -%>
+      <% if @site.name == 'polinostudio' -%>
+	<th>Mark as new</th>
+      <% end -%>
     </tr>
   </thead>
 
   <tbody>
     <% for gallery in @galleries %>
       <tr>
-	<td><%=h gallery.name %></td>
 	<td><%=h gallery.title %></td>
-	<td><%=h gallery.display_in_index ? 'Yes' : 'No' -%></td>
-	<td><%=h gallery.mark_as_new ? 'Yes' : 'No' -%></td>
+	<% if @site.has_menu? 'galleries' -%>
+	  <td><%=h gallery.display_in_default_menu ? 'Yes' : 'No' -%></td>
+	<% end -%>
+	<% if @site.name == 'polinostudio' -%>
+	  <td><%=h gallery.mark_as_new ? 'Yes' : 'No' -%></td>
+	<% end -%>
 	<td class="actions">
 	  <%= link_to 'Show', admin_site_gallery_path(@site, gallery) %> | 
 	  <%= link_to 'Edit', edit_admin_site_gallery_path(@site, gallery) %> |

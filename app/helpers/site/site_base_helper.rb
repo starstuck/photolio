@@ -59,7 +59,8 @@ module Site::SiteBaseHelper
   end
 
   def site_default_path(site)
-    show_site_gallery_path(site, site.galleries_in_order.first)
+    menu = site.get_menu('galleries')
+    show_site_gallery_path(site, menu.menu_items[0].target)
   end
 
   protected

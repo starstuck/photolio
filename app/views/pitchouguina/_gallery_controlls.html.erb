@@ -2,7 +2,7 @@
   <li>
     <% label_asset = @gallery.get_attachment('menu_label') -%>
     <% if label_asset -%>
-      <%= asset_image_tag label_asset, :backup_alt => @gallery.title.upcase %>
+      <%= asset_image_tag label_asset, :backup_alt => @gallery.default_menu_label_or_title %>
     <% else -%>
       <%= @gallery.title.upcase %>
     <% end -%>
@@ -10,15 +10,16 @@
 </ul>
 
 <ul id="gallery_actions" class="controlls_menu right">
+  <% menu = @site.get_menu('galleries') -%>
   <li>
-    <% previous = @site.previous_gallery_in_order(@gallery) || @site.galleries_in_order[-1] -%>
-    <% link_to show_site_gallery_path(@site, previous) do %>
+    <% previous = menu.previous_menu_item(@gallery) || menu.menu_items[-1] -%>
+    <% link_to show_site_gallery_path(@site, previous.target) do %>
       <%= image_tag 'menu_label_previous_en.png', :alt => 'PREVIOUS', :size => '75x27' %>
     <% end -%>
   </li>
   <li>
-    <% next_ = @site.next_gallery_in_order(@gallery) || @site.galleries_in_order[0] -%>
-    <% link_to show_site_gallery_path(@site, next_) do %>
+    <% next_ = @site.get_menu('galleries').next_menu_item(@gallery) || menu.menu_items[0] -%>
+    <% link_to show_site_gallery_path(@site, next_.target) do %>
       <%= image_tag 'menu_label_next_en.png', :alt => 'NEXT', :size => '40x27' %>
     <% end -%>
   </li>

@@ -4,9 +4,9 @@ polinostudio:
   id: 1
   name: polinostudio
 
-kasiak:
+syscenter:
   id: 2
-  name: kasia_konieczka
+  name: syscenter
   
 pitchouguina:
   id: 3

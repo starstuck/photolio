@@ -1,17 +1,19 @@
 <div id="gallery">
 
   <ul id="site_menu">
-    <% for topic in @menu_items -%>
+    <% for menu_item in @site.get_menu('topics').menu_items -%>
       <li class="site_menu_topic">
-	<%= link_to topic.title, show_site_topic_path(@site, topic) -%>
+	<%= link_to menu_item.label_or_target_title, 
+	    show_site_topic_path(@site, menu_item.target) -%>
       </li>
     <% end -%>
   </ul>
 
   <p id="gallery_switches">
     <span class="typeface-js gallery_switches_label">Gallery:</span>
-    <% for gallery in @galleries -%>
-      <%= link_to gallery.name, 
+    <% for menu_item in @site.get_menu('galleries').menu_items -%>
+      <% gallery = menu_item.target -%>
+      <%= link_to menu_item.label_or_target_title, 
 	  show_site_gallery_path(@site, gallery),
 	  { :class => "typeface-js gallery_switch" + ( gallery.id == @gallery.id ? ' active' : '' ), 
 	    :title => gallery.title } 

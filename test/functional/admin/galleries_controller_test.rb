@@ -21,7 +21,7 @@ class Admin::GalleriesControllerTest < ActionController::TestCase
 
   def test_should_create_gallery
     assert_difference('Gallery.count') do
-      post :create, :site_id => 1, :gallery => {:name => '3'}
+      post :create, :site_id => 1, :gallery => {:title => '4'}
     end
 
     assert_redirected_to admin_site_galleries_path(assigns(:site))

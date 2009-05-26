@@ -48,7 +48,7 @@ class GalleryTest < ActiveSupport::TestCase
     gallery = galleries(:one)
     gallery.remove_photo(photos(:two))
     assert_equal ['One', 'Three'], gallery.photos.map{|p| p.title}
-    assert_equal ['Two'], galleries(:one_in_kasiak).photos.map{|p| p.title}
+    assert_equal ['Two'], galleries(:one_in_syscenter).photos.map{|p| p.title}
   end
 
   def test_reorder_items

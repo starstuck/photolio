@@ -4,7 +4,9 @@
   <thead>
     <tr>
       <th>Title</th>
-      <th>In menu?</th>
+      <% if @site.has_menu? 'topics' -%>
+	<th>In topics menu?</th>
+      <% end -%>
     </tr>
   </thead>
 
@@ -12,7 +14,9 @@
     <% for topic in @topics %>
       <tr>
 	<td><%=h topic.title %></td>
-	<td><%=h topic.display_in_menu ? 'Yes' : 'No' %></td>
+	<% if @site.has_menu? 'topics' -%>
+	  <td><%=h topic.display_in_default_menu ? 'Yes' : 'No' %></td>
+	<% end -%>
 	<td class="actions">
 	  <%= link_to 'Show', admin_site_topic_path(@site, topic) %> |
 	  <%= link_to 'Edit', edit_admin_site_topic_path(@site, topic) %> |
