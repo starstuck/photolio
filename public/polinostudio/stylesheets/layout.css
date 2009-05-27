@@ -130,6 +130,13 @@ span.content_corner_br{
     padding-right: 10px;
 }
 
+.gallery_switch .new_mark{
+    font-size: 8px;
+    position: relative;
+    top: -4px;
+    left: 2px;
+}
+
 
 /* Gallery photos */
 
