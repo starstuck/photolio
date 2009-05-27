@@ -33,7 +33,6 @@ module ModelExtensions::ActsAsNamedContent
       raise(ArgumentError, 'Name can not be manualy updated')
     end
 
-
     def update_name
       write_attribute(:name, compute_name_for(title))
     end
@@ -45,10 +44,14 @@ module ModelExtensions::ActsAsNamedContent
       base_name = chars.join.downcase.gsub( NAME_CLEANUP_REGEXP, '_' )
       
       # If name exists, add numbers until unique name is found
-      blockers = self.class.find(:all, 
-                                 :conditions => ["site_id = ? AND name LIKE ?",
-                                                 site.id, "#{base_name}%"
-                                                ]).map{|t| t.name}
+      bcond = ["site_id = ? AND name LIKE ?",
+                       site.id, "#{base_name}%"]
+      if self.id
+        bcond[0] += ' AND id <> ?'
+        bcond << self.id
+      end
+      blockers = self.class.find(:all, :conditions => bcond).map{|t| t.name}
+
       if blockers.size > 0
         new_name = base_name
         i = 1

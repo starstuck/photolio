@@ -31,8 +31,11 @@ class TopicTest < ActiveSupport::TestCase
                           :title => "Contact")
     assert_equal 'contact', @topic.name
 
+    @topic.update_attributes :title => "CoNtact"
+    assert_equal 'contact', @topic.name
+
     @topic2 = Topic.create(:site => @site,
-                          :title => "contact")
+                           :title => "contact")
     assert_equal 'contact_1', @topic2.name
 
     @topic3 = Topic.create(:site => @site,
