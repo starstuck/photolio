@@ -114,13 +114,19 @@ module ModelExtensions::ActsAsMenuItemTarget
         menu_label_value = nil if menu_label_value == ''
         default_menu_item.label = menu_label_value
       else
-        if default_menu_item
-          @destroy_default_menu_item = true
+        begin
+          if default_menu_item
+            @destroy_default_menu_item = true
+          end
+        rescue Menu::NameError 
+          @default_menu_item = nil
+          @default_menu_item_queried = true
         end
       end
         
     end
 
+    # Depends on context set by prepare_default_menu_item
     def save_default_menu_item
       if @destroy_default_menu_item
         default_menu_item.destroy

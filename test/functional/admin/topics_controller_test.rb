@@ -36,8 +36,20 @@ class Admin::TopicsControllerTest < ActionController::TestCase
     assert_response :success
   end
 
-  def test_should_update_topic
+  def test_should_update_topic_which_has_menu
     put :update, :site_id => sites(:polinostudio), :id => topics(:one).id, :topic => { :title => 'Updated title' }
+    assert_equal false, assigns(:topic).display_in_default_menu
+    assert_redirected_to admin_site_topic_path(assigns(:site), assigns(:topic))
+
+    put :update, :site_id => sites(:polinostudio), :id => topics(:one).id, :topic => { :title => 'Updated title in menu', :display_in_default_menu => "1" }
+    assert_equal true, assigns(:topic).display_in_default_menu
+    assert_redirected_to admin_site_topic_path(assigns(:site), assigns(:topic))
+  end
+
+  def test_should_update_topic_which_has_no_menu
+    login_as users(:quentin)
+    topic = topics(:pitchouguina_about)
+    put :update, :site_id => topic.site_id, :id => topic.id, :topic => { :body => 'Updated about page.' }
     assert_redirected_to admin_site_topic_path(assigns(:site), assigns(:topic))
   end
 
