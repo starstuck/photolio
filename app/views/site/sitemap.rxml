@@ -3,7 +3,7 @@ xml.urlset(:xmlns=>'http://www.google.com/schemas/sitemap/0.9') {
     for item in @sitemap do
     xml.url {
         xml.loc( item[:url] )
-        xml.lastmod(item[:lastmod].strftime('%y-%m-%d%Y-%m-%dT%H:%M:%S+00:00'))
+        xml.lastmod(item[:lastmod].strftime('%Y-%m-%dT%H:%M:%S+00:00'))
 	xml.changefreq(item[:changefreq]) if item.key? 'priority'
 	xml.priority(item[:priority]) if item.key? 'priority'
     }
