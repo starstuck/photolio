@@ -154,7 +154,7 @@ class Site::SiteController < Site::SiteBaseController
               :photo_id => photo.id,
               :format => 'html',
             },
-            :lastmod => topic.updated_at,
+            :lastmod => photo.updated_at,
             :changefreq => 'weekly',
             :priority => '0.2'
           }
