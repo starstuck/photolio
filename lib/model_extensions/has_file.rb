@@ -4,6 +4,10 @@ require 'mini_magick_utils'
 
 module ModelExtensions::HasFile
 
+  def self.resized_file_mode
+    0644
+  end
+
   def has_file 
     class_eval do
       include InstanceMethods
@@ -142,6 +146,7 @@ module ModelExtensions::HasFile
         mm = MiniMagick::Image.from_file(file_disk_path)
         mm.resize( size, '-quality', '85%' )
         mm.write(resized_file_path)
+        FileUtils.chmod ModelExtensions::HasFile.resized_file_mode, resized_file_path
       end
       
       resized_file_name
