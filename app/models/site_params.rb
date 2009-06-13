@@ -96,6 +96,7 @@ module SiteParams
   class PolinostudioParams < DefaultParams
 
     publish_location '/var/www/polinostudio'
+    published_url_prefix 'http://www.polinostudio.com'
     menus ['galleries', 'topics']
 
   end
