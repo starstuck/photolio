@@ -8,7 +8,7 @@ module Site::GalleryHelper
     total = 0
     for item in gallery.gallery_items
       if item.is_a? GalleryPhoto
-        total += (item.photo.image_width.to_f / item.photo.image_height * 400).to_i
+        total += (item.photo.image_width.to_f / item.photo.image_height * 400).round
       elsif item.is_a? GallerySeparator
         total += separator_width
       end

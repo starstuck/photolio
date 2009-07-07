@@ -30,7 +30,7 @@
       <% for item in @gallery.gallery_items -%>
 	<% if item.is_a? GalleryPhoto -%>
 	  <span class="gallery_photo">
-	    <%= link_to( photo_image_tag(item.photo),
+	    <%= link_to( photo_image_tag(item.photo, :size => 'x400'),
 			 show_site_photo_path( @site, item.photo ),
 			 { :title => item.photo.alt_text })
 		-%>
