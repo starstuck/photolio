@@ -93,6 +93,7 @@ class Photo < ActiveRecord::Base
       if not image.match_max_size(photo_store_size)
         image.resize(photo_store_size)
         @uploaded_data = image.to_blob
+        update_image_meta
       end
     end      
   end
