@@ -62,7 +62,7 @@
 	    :scroll => "'content_scrollframe'",
 	    :url => {:action => 'layout_add_gallery_photo', :id => @site, :gallery_id => gallery, :position => index + 1, :format => :js},
 	    :with => "'photo_id=' + encodeURIComponent(element.id)",
-	    :loading => "Element.update('gallery_#{gallery.id}_photos_list', 'a<td style=\"width: 100px;\">#{loading_tag}</td>')"
+	    :loading => "Element.update('gallery_#{gallery.id}_photos_list', '<td style=\"width: 100px;\">#{loading_tag}</td>')"
 	    -%>
       </div>
     </td>
