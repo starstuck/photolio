@@ -1,11 +1,11 @@
 xml.instruct!
 xml.urlset(:xmlns=>'http://www.sitemaps.org/schemas/sitemap/0.9') {
-    for item in @sitemap do
+    for page in @sitemap do
     xml.url {
-        xml.loc( item[:url] )
-        xml.lastmod(item[:lastmod].strftime('%Y-%m-%dT%H:%M:%S+00:00'))
-	xml.changefreq(item[:changefreq]) if item.key? 'priority'
-	xml.priority(item[:priority]) if item.key? 'priority'
+    	xml.loc(page[:url])
+	xml.lastmod(page[:lastmod].strftime('%Y-%m-%dT%H:%M:%S+00:00')) if page.key? :lastmod
+	xml.changefreq(page[:changefreq]) if page.key? :changefreq
+	xml.priority(page[:priority]) if page.key? :priority
     }
     end
 }

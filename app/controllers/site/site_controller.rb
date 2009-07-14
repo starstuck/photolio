@@ -1,35 +1,15 @@
 require 'publisher'
+require 'generator'
 
 
-class Site::SiteController < Site::SiteBaseController
-
-  # redirect to default gallery if page template does not exists
-  def show
-    begin 
-      render :template => (template_for :site), :layout => layout
-    rescue ActionView::MissingTemplate 
-      begin
-        gname = @site.get_menu('galleries').menu_items.first.target.name
-      rescue Menu::NameError
-        gname = @site.galleries.first.name
-      end        
-      redirect_to( :controller => 'gallery',
-                   :action => 'show',
-                   :gallery_name => gname,
-                   :format => 'html',
-                   :status => 307  )
-    end
-  end
-
-  # alias for default page view
-  alias_method :index, :show
+class Site::SiteController < Site::BaseController
 
   def sitemap
     if params[:published]
       publisher = Publisher::publisher_for_location(self, @site)
     end
 
-    @sitemap = Site::SiteController.raw_sitemap(@site).map do |item|
+    @sitemap = self.class.site_pages(@site, in_sitemap_only = true).map do |item|
       if params[:published]
         item[:url] = publisher.compute_page_url(item[:loc])
       else
@@ -37,133 +17,87 @@ class Site::SiteController < Site::SiteBaseController
       end
       item
     end
-
+    
     respond_to do |format|
       format.xml { render :template => 'site/sitemap', :layout => false}
     end
   end
 
-  # compute raw_sitemap
-  def self.raw_sitemap(site)
-    sitemap = []
 
-    # Calcualte times for menu items
-    last_gallery_updated = site.galleries.maximum('updated_at')
-    last_topic_updated = site.topics.maximum('updated_at')
-
-    site_view_paths = self.view_paths
-
-    # add site main page, only if there is template for it
-    begin
-      site_view_paths.find_template("#{site.name}/site" ,'html')
-    rescue ActionView::MissingTemplate
-    else
-      sitemap << { 
-        :loc => { 
-          :controller => '/site/site',
-          :action => 'show',
-          :site_name => site.name,
-          :format => 'html',
-        },
-        :lastmod => [ last_gallery_updated, 
-                      last_topic_updated ].reject{|x| x == nil}.max,
-        :changefreq => 'weekly',
-        :priority => '0.5'
-      }
-    end    
-
-    # add galleries list page, only if there is template for it
-    begin
-      site_view_paths.find_template("#{site.name}/galleries" ,'html')
-    rescue ActionView::MissingTemplate
-    else
-      sitemap << { 
-        :loc => { 
-          :controller => '/site/galleries',
-          :action => 'show',
-          :site_name => site.name,
-          :format => 'html',
-        },
-        :lastmod => [ last_gallery_updated ].reject{|x| x == nil}.max,
-        :changefreq => 'weekly',
-        :priority => '0.5'
-      }
-    end
- 
-    # add gelleries_pages only if template exists
-    begin
-      site_view_paths.find_template("#{site.name}/gallery" ,'html')
-    rescue ActionView::MissingTemplate
-    else
-      for gallery in site.galleries
-        last_item_assigned = GalleryItem.maximum('updated_at', :conditions => ['gallery_id = ?', gallery.id])
-        last_photo_updated = Photo.maximum('updated_at', :conditions => ['id in (?)', gallery.photo_ids])
-        sitemap << { 
-          :loc => { 
-            :controller => '/site/gallery',
-            :action => 'show',
-            :site_name => gallery.site.name,
-            :gallery_name => gallery.name,
-            :format => 'html',
-          },
-          :lastmod => [ last_gallery_updated, 
-                        last_topic_updated, 
-                        last_item_assigned,
-                        last_photo_updated ].reject{|x| x == nil}.max,
-          :changefreq => 'daily',
-          :priority => '0.8'
-        }
-      end
-    end
-
-
-    # add topic pages only if suitable template exists
-    begin
-      site_view_paths.find_template("#{site.name}/topic" ,'html')
-    rescue ActionView::MissingTemplate
-    else
-      for topic in site.topics
-        sitemap << { 
-          :loc => { 
-            :controller => '/site/topic',
-            :action => 'show',
-            :site_name => gallery.site.name,
-            :topic_name => topic.name,
-            :format => 'html',
-          },
-          :lastmod => topic.updated_at,
-          :changefreq => 'daily',
-          :priority => '0.6'
-        }
-      end
-    end
-
-    # add photos pages, only if suitable template exists
-    begin
-      site_view_paths.find_template("#{site.name}/photo" ,'html')
-    rescue ActionView::MissingTemplate
-    else
-      hidden_photos = site.unassigned_photos
-      for photo in site.photos
-        unless hidden_photos.include? photo
-          sitemap << { 
-            :loc => { 
-              :controller => '/site/photo',
-              :action => 'show',
-              :site_name => gallery.site.name,
-              :photo_id => photo.id,
-              :format => 'html',
-            },
-            :lastmod => photo.updated_at,
-            :changefreq => 'weekly',
-            :priority => '0.2'
-          }
-        end
-      end
-    end
-
+  def self.site_pages(site, in_sitemap_only=false)
+    pages = []
+    theme_name = site.name
     
-    sitemap
+    controller_context_generators = {
+      'photo' => Generator.new do |g|
+        hidden_photo_ids = site.unassigned_photos.map{|x| x.id}
+        for photo in site.photos
+          if not hidden_photo_ids.include? photo.id
+            g.yield({:site_name => site.name, :photo_id => photo.id})
+          end
+        end
+      end,
+      'topic' => Generator.new do |g|
+        for topic in site.topics
+          g.yield({:site_name => site.name, :topic_name => topic.name})
+        end
+      end,
+      'gallery' => Generator.new do |g|
+        for gallery in site.galleries
+          g.yield({:site_name => site.name, :gallery_name => gallery.name})
+        end
+      end,
+      'site' => [{:site_name => site.name}],
+    }
+
+    for controller_name in %w(site gallery topic photo)
+      begin
+        ext_module = eval("Site::#{theme_name.camelize}::#{controller_name.camelize}ControllerExtension")
+      rescue NameError
+        next
+      end
+      for method_name in ext_module.public_instance_methods.reject {|n| n.starts_with? 'page_info_for'}
+        
+        # Find page info
+        info_method_name = "page_info_for_#{method_name}"
+        dummy = Object.new
+        dummy.extend(ext_module)
+        if dummy.respond_to? info_method_name 
+          info = dummy.send info_method_name
+        else
+          info = {}
+        end
+        info = { :priority => '0.5', :changefreq => 'weekly'}.update(info)
+
+        # Skip pages no in sitemap if requested to do so
+        if in_sitemap_only and info[:skip_sitemap]
+          next
+        end
+
+        if in_sitemap_only or not info[:formats]
+          page_formats = ['html']
+        else
+          page_formats = info[:formats]
+        end
+
+        context_generator = controller_context_generators[controller_name]
+        for context in context_generator
+
+          # TODO: add last_modified time calculation
+          for format in page_formats
+            info[:loc] = context.update( {
+              :controller => "site/#{controller_name}",
+              :action => 'dispatch',
+              :method_name => method_name,
+              :format => format,
+            } )
+            pages << info.dup
+          end
+        end
+        
+      end
+    end
+    pages
   end
 
 end

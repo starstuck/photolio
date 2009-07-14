@@ -1,4 +1,4 @@
-class Admin::TopicsController < Admin::AdminBaseController
+class Admin::TopicsController < Admin::BaseController
 
   before_filter(:setup_site_context)
   

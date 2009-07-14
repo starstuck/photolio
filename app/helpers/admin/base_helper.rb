@@ -2,7 +2,7 @@ module ActionView::Helpers::AssetTagHelper
   alias_method :compute_public_path_without_admin, :compute_public_path
 end
 
-module Admin::AdminBaseHelper
+module Admin::BaseHelper
 
   #
   # Slots used by admin template. 

@@ -1,4 +1,4 @@
-class Admin::PhotosController < Admin::AdminBaseController
+class Admin::PhotosController < Admin::BaseController
 
   before_filter(:setup_site_context)
 

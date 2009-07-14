@@ -1,13 +1,6 @@
-class Site::TopicController < Site::SiteBaseController
+class Site::TopicController < Site::BaseController
   
   before_filter :setup_topic_context
-
-  def show
-    respond_to do |format|
-      format.html { render :template => (template_for :topic), :layout => layout }
-      format.parthtml { render :template => (template_for :topic), :layout => false }
-    end
-  end
 
   private
   

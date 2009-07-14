@@ -1,7 +1,7 @@
 require 'publisher'
 
 
-class Admin::SitesController < Admin::AdminBaseController
+class Admin::SitesController < Admin::BaseController
 
   before_filter :setup_site_context
   skip_before_filter :setup_site_context, :only => [:index, :new, :create]
@@ -222,35 +222,40 @@ class Admin::SitesController < Admin::AdminBaseController
     publisher = Publisher::publisher_for_location(self, @site)
     
     # Publish all pages from sitemap
-    sitemap = Site::SiteController.raw_sitemap(@site)
+    sitemap = Site::SiteController.site_pages(@site)
 
     galleries_count = 0
     topics_count = 0
     photos_count = 0
     others_count = 0
-    max_lastmod = DateTime.new
+    max_lastmod = nil
 
-    for page in sitemap
+    for page in sitemap.reject{|x| x[:no_publish]}
       published = publisher.publish(page[:loc], page[:lastmod])
-      max_lastmod = page[:lastmod] if page[:lastmod] > max_lastmod
-        if published
-          controller_name = page[:loc][:controller]
-          if controller_name =~ /gallery/
-            galleries_count += 1
-          elsif controller_name =~ /topic/
-            topics_count += 1
-          elsif controller_name =~ /photo/
-            photos_count += 1
-          else
-            others_count += 1
-          end
+      if page[:lastmod] 
+        if (max_lastmod == nil) or (page[:lastmod] > max_lastmod)
+          max_lastmod = page[:lastmod] 
+        end
+      end
+      if published
+        controller_name = page[:loc][:controller]
+        if controller_name =~ /gallery/
+          galleries_count += 1
+        elsif controller_name =~ /topic/
+          topics_count += 1
+        elsif controller_name =~ /photo/
+          photos_count += 1
+        else
+          others_count += 1
+        end
       end
     end
 
     # Publish sitemap page
     publisher.publish({ :controller => '/site/site',
-                        :action => 'sitemap',
+                        :action => 'dispatch',
                         :site_name => @site.name,
+                        :method_name => 'sitemap',
                         :format => 'xml',
                       }, max_lastmod)
 

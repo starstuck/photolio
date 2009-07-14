@@ -1,12 +1,12 @@
-module Site::SiteBaseHelper
+module Site::BaseHelper
 
   def site_controller_path(site, obj, controller, action, id_method, options={})
     options[:format] = 'html' unless options.key? 'format'
 
     if controller == 'site'
-      path_name = "#{action}_site"
+      route_name = "site"
     else
-      path_name = "#{action}_site_#{controller}"
+      route_name = "site_#{controller}"
     end
 
     if obj.is_a? String or obj.is_a? Integer
@@ -15,11 +15,19 @@ module Site::SiteBaseHelper
       id_value = (id_method and id_method != '') ? obj.send(id_method) : obj
     end
 
-    if id_value
-      path = @controller.send("#{path_name}_path", site.name, id_value, options)
+    if ['show'].include? action
+      if id_value
+        path = @controller.send("#{action}_#{route_name}_path", site.name, id_value, options)
+      else
+        path = @controller.send("#{action}_#{route_name}_path", site.name, options)
+      end
     else
-      path = @controller.send("#{path_name}_path", site.name, options)
-    end
+      if id_value
+        path = @controller.send("dispatch_#{route_name}_path", site.name, id_value, action, options)
+      else
+        path = @controller.send("dispatch_#{route_name}_path", site.name, action, options)
+      end
+    end      
 
     if params[:published]
       site_prefix = "/#{@site.name}"
@@ -31,36 +39,8 @@ module Site::SiteBaseHelper
         path = @site.site_params.published_url_prefix + path
       end
     end
-    path
-  end
 
-  # Register paths calculation function with user friendly names
-  for controller, actions, id_method in [['site', ['show'], nil],
-                                         ['galleries', ['show'], nil],
-                                         ['gallery', ['show'], 'name'],
-                                         ['photo', ['show'], 'id'],
-                                         ['topic', ['show'], 'name'],
-                                        ]
-    for action in actions
-      if id_method
-        class_eval <<-EOS
-          def #{action}_site_#{controller}_path(site, obj, options={})
-            site_controller_path(site, obj, '#{controller}', '#{action}', '#{id_method}', options)
-          end
-        EOS
-      else
-        class_eval <<-EOS
-          def #{action}_site_#{controller}_path(site, options={})
-            site_controller_path(site, nil, '#{controller}', '#{action}', '#{id_method}', options)
-          end
-        EOS
-      end
-    end
-  end
-
-  def site_default_path(site)
-    menu = site.get_menu('galleries')
-    show_site_gallery_path(site, menu.menu_items[0].target)
+    path    
   end
 
   protected
@@ -87,7 +67,7 @@ module Site::SiteBaseHelper
     if site.id == @site.id
       compute_public_path(source, dir, ext=nil)
     else
-      raise RuntimeError('Using assets from foreign sites is currently unsupported')
+      raise RuntimeError.new('Using assets from foreign sites is currently unsupported')
     end
   end
 

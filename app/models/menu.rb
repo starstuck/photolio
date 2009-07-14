@@ -68,6 +68,8 @@ class Menu < ActiveRecord::Base
       previous = current
     end
     nil
+    all_items = menu_items.map{|x| x.id}
+    puts " --> Failed to find previous to: #{relative_to.id}, in #{all_items}"
   end
 
   # Find next menu item realtive to argument

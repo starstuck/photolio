@@ -1,9 +1,11 @@
 require 'ftools'
+require 'digest/md5'
 
 
 class ActionController::Base
   public :render_component_as_string
 end
+
 
 module Publisher
 
@@ -23,6 +25,11 @@ module Publisher
       path = @context.url_for(page_info.merge(:only_path => true, 
                                               :skip_relative_url_root => true))
       clenup_site_part_from_path(path)
+      # add index.html to root page path
+      if path == ''
+        path += '/index.html'
+      end
+      path
     end
 
     def compute_page_url(page_info)
@@ -35,21 +42,30 @@ module Publisher
     end
 
     # Publish single page
-    def publish(page_info, mtime)
+    def publish(page_info, mtime=nil)
       mtime = normalize_time(mtime)
       page_path = compute_page_path(page_info)
-      if older?(page_path, mtime)
-        if File.exists?(File.join(@base_path, page_path))
-          fmtime = File.new(File.join(@base_path, page_path)).mtime
-          equals = (fmtime == mtime)
-          @context.logger.info "-- file #{page_path} changed: #{fmtime} < #{mtime} [#{equals}]"
-        end
-        page_params = page_info.merge(:published => true)
-        page_controller = page_params.delete(:controller)
-        page_action = page_params.delete(:action)
-        body = @context.render_component_as_string( :controller => page_controller,
+      
+      # Skip if page last_modified time is provided and file is older
+      return if mtime and not older?(page_path, mtime)
+
+      # Build page body
+      page_params = page_info.merge(:published => true)
+      page_controller = page_params.delete(:controller)
+      page_action = page_params.delete(:action)
+      body = @context.render_component_as_string( :controller => page_controller,
                                                     :action => page_action,
                                                     :params => page_params )
+      
+      # Save and file only if differs, or was tested by modification time
+      if not mtime and differ?(page_path, Digest::MD5.hexdigest(body))
+        pmtime = mtime || 'unknown'
+        if File.exists?(File.join(@base_path, page_path))
+          fmtime = File.new(File.join(@base_path, page_path)).mtime
+          @context.logger.info "Publisher: Updated file: #{page_path} (#{fmtime} < #{pmtime})"
+        else
+          @context.logger.info "Publisher: New file: #{page_path} (#{pmtime})"
+        end
         save!(page_path, body, mtime)
         page_path
       end
@@ -109,8 +125,14 @@ module Publisher
       raise RuntimeError('Unimplemented')
     end
 
+    # Fallback modification check. used if page  does not provide its 
+    # modification time. Test if file md5 sum differs
+    def differ?(path, hex_md5sum)
+      raise RuntimeError('Unimplemented')
+    end
+
     # Save content in path with last change time equivalent to last page modification time
-    def save!(path, content, mtime)
+    def save!(path, content, mtime=nil)
       raise RuntimeError('Unimplemented')
     end
 
@@ -137,11 +159,17 @@ module Publisher
       return (not (File.exists?(file_path) and (File.new(file_path).mtime >= time)))
     end
 
-    def save!(path, content, mtime)
+    def differ?(path, hex_md5sum)
+      file_path = File.join(@base_path, path)
+      return (not (File.exists?(file_path) and \
+                   (Digest::MD5.hexdigest(File.read(file_path)) == hex_md5sum)))
+    end
+    
+    def save!(path, content, mtime=nil)
       file_path = File.join(@base_path, path)
       FileUtils.mkdir_p( File.dirname( file_path ) )
       File.open(file_path, "wb"){ |f| f.write(content) }
-      File.utime(Time.new, mtime, file_path)
+      File.utime(Time.new, mtime, file_path) if mtime
     end
   end
 

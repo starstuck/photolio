@@ -38,7 +38,7 @@ ActionController::Routing::Routes.draw do |map|
 
   # Map resources for admin screens
   map.namespace :admin do |admin|
-    admin.root :controller => 'admin_base'
+    admin.root :controller => 'admin/base'
     admin.resources :users, :member => ['change_password', 'reset_password']
     admin.resource :session, :member => ['delete']
     admin.resources(:sites, 
@@ -61,39 +61,74 @@ ActionController::Routing::Routes.draw do |map|
     end
   end
 
-  # Map public views published, live
-  for controller, actions, id_method in [['site', ['show', 'index', 'sitemap'], ''],
-                                         ['galleries', ['show'], ''],
-                                         ['gallery', ['show'], 'name'],
-                                         ['photo', ['show'], 'id'],
-                                         ['topic', ['show'], 'name']
-                                        ]
-    for action in actions
-      controller_name_part = controller != 'site' ? "_#{controller}" : ""
-      controller_path_part = controller != 'site' ? "/#{controller}" : ""
-      identifier_path_part = id_method != "" ? "/:#{controller}_#{id_method}" : ""
-      if controller == 'site'
-        if action == 'show'
-          file_path_part = '/index'
-        elsif action == 'index'
-          file_path_part = ''
-        else
-          file_path_part = "/#{action}"
-        end
-      else
-        file_path_part = action != 'show' ? "/#{action}" : ""
-      end
-      r_name = "#{action}_site#{controller_name_part}"
-      r_path = ":site_name#{controller_path_part}#{identifier_path_part}#{file_path_part}.:format"
-      r_params = {
-        :controller => "site/#{controller}",
-        :action => action }             
-      map.send(r_name, r_path, r_params)
-    end
-  end
+
+  map.show_site_gallery(':site_name/gallery/:gallery_name.:format',
+                        :controller => 'site/gallery',
+                        :action => 'dispatch',
+                        :method_name => 'show')
+  map.dispatch_site_gallery(':site_name/gallery/:gallery_name/:method_name.:format',
+                            :controller => 'site/gallery',
+                            :action => 'dispatch')
+
+  map.show_site_topic(':site_name/topic/:topic_name.:format',
+                      :controller => 'site/topic',
+                      :action => 'dispatch',
+                      :method_name => 'show')
+  map.dispatch_site_topic(':site_name/topic/:topic_name/:method_name.:format',
+                            :controller => 'site/topic',
+                            :action => 'dispatch')
+
+  map.show_site_photo(':site_name/photo/:photo_id.:format',
+                      :controller => 'site/photo',
+                      :action => 'dispatch',
+                      :method_name => 'show')
+  map.dispatch_site_photo(':site_name/photo/:photo_id/:method_name.:format',
+                            :controller => 'site/photo',
+                            :action => 'dispatch')
+
+  map.show_site(':site_name/', 
+                :controller => 'site/site',
+                :action => 'dispatch',
+                :method_name => 'show',
+                :format => 'html')
+  map.dispatch_site(':site_name/:method_name.:format', 
+                    :controller => 'site/site',
+                    :action => 'dispatch')
   
+
+  # Map public views published, live
+#  for controller, actions, id_method in [['site', ['show', 'index', 'sitemap'], ''],
+#                                         ['galleries', ['show'], ''],
+#                                         ['gallery', ['show'], 'name'],
+#                                         ['photo', ['show'], 'id'],
+#                                         ['topic', ['show'], 'name']
+#                                        ]
+#    for action in actions
+#      controller_name_part = controller != 'site' ? "_#{controller}" : ""
+#      controller_path_part = controller != 'site' ? "/#{controller}" : ""
+#      identifier_path_part = id_method != "" ? "/:#{controller}_#{id_method}" : ""
+#      if controller == 'site'
+#        if action == 'show'
+#          file_path_part = '/index'
+#        elsif action == 'index'
+#          file_path_part = ''
+#        else
+#          file_path_part = "/#{action}"
+#        end
+#      else
+#        file_path_part = action != 'show' ? "/#{action}" : ""
+#      end
+#      r_name = "#{action}_site#{controller_name_part}"
+#      r_path = ":site_name#{controller_path_part}#{identifier_path_part}#{file_path_part}.:format"
+#      r_params = {
+#        :controller => "site/#{controller}",
+#        :action => action }             
+#      map.send(r_name, r_path, r_params)
+#    end
+#  end
+
   # Redirects for easy address entering
-  map.root :controller => 'admin/admin_base', :action => 'index'
+  map.root :controller => 'admin/base', :action => 'index'
 
   # Install the default routes as the lowest priority.
   # Note: These default routes make all actions in every controller accessible via GET requests. You should

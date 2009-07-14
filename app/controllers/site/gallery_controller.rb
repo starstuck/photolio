@@ -1,18 +1,13 @@
-class Site::GalleryController < Site::SiteBaseController
+class Site::GalleryController < Site::BaseController
 
   before_filter :setup_gallery_context
-  
-  def show
-    respond_to do |format|
-      format.html { render :template => (template_for :gallery), :layout => layout }
-      format.parthtml { render :template => (template_for :gallery), :layout => false }
-    end
-  end
 
   private
 
   def setup_gallery_context
-    @gallery = @site.galleries.find( :first, :conditions => { 'name' => params[:gallery_name] } )
+    if not @gallery = @site.galleries.find_by_name(params[:gallery_name])
+      raise ActiveRecord::RecordNotFound.new("Gallery '#{params[:gallery_name]}' not found in '#{@site.name}' site")
+    end
   end
 
 end

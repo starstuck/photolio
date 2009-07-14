@@ -1,4 +1,4 @@
-class Site::GalleriesController < Site::SiteBaseController
+class Site::GalleriesController < Site::BaseController
   
   def show
     begin 

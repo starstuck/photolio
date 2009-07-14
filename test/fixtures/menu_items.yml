@@ -1,14 +1,22 @@
 # Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
 
-gallery_one:
+pls_gallery_one:
   menu: polinostudio_galleries
   position: 1
   label: One
   target_type: Gallery
   target_id: 1
 
-gallery_two:
+pls_gallery_two:
   menu: polinostudio_galleries
   position: 2
   target_type: Gallery
   target_id: 2
+
+pit_gallery_one:
+  menu: pitchouguina_galleries
+  position: 1
+  label: One
+  target_type: Gallery
+  target_id: 5
+

@@ -1,4 +1,4 @@
-class Admin::AdminBaseController < ApplicationController
+class Admin::BaseController < ApplicationController
   include AuthenticatedSystem
 
   layout "admin"

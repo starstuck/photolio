@@ -1,4 +1,4 @@
-class Admin::AssetsController < Admin::AdminBaseController
+class Admin::AssetsController < Admin::BaseController
 
   before_filter(:setup_site_context)
 

@@ -1,4 +1,4 @@
-class Admin::UsersController < Admin::AdminBaseController
+class Admin::UsersController < Admin::BaseController
 
   before_filter :users_manager_required, :only => [:index, :new, :create, :destroy, :reset_password]
   before_filter :user_manager_or_owner_required, :only => [:show, :edit, :update]
