@@ -116,11 +116,21 @@ module SiteParams
   end
 
 
+  class LafokaParams < DefaultParams
+    
+    photo_store_size 'x450'
+    publish_location '/var/www/lafoka'
+    
+  end
+
+
   def self.for_site(site)
     if site.name == 'polinostudio'
       params_factory = PolinostudioParams
     elsif site.name == 'pitchouguina'
       params_factory = PitchouguinaParams
+    elsif site.name == 'lafoka'
+      params_factory = LafokaParams
     else
       params_factory = DefaultParams
     end
