@@ -5,7 +5,7 @@ require 'base64'
 # Gif image 13 x 13 pixels
 IMAGE_DATA = "R0lGODlhDQANAIMAADAyMi0vLyorKyYoKCMlJSAhIR0eHhobGxYXFxMUFBAR\nEQ0NDQoKCgYHBwMDAwAAACH+Hmh0dHA6Ly93aWdmbGlwLmNvbS9jb3JuZXJz\naG9wLwAh+QQBAAAPACwAAAAADQANAAAEJRDIKUti7lFp8vsatYAk5ZHfdKLh\nyIKA8ZbrW8xkgoPM/tU+XAQAOw==\n"
 
-class MiniMagickTest < Test::Unit::TestCase
+class MiniMagickUtilsTest < Test::Unit::TestCase
 
   def setup
     @image = MiniMagick::Image.from_blob(Base64.decode64(IMAGE_DATA))

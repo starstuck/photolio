@@ -252,10 +252,9 @@ class Admin::SitesController < Admin::BaseController
     end
 
     # Publish sitemap page
-    publisher.publish({ :controller => '/site/site',
-                        :action => 'dispatch',
+    publisher.publish({ :controller => "site/#{@site.name}/site",
+                        :action => 'sitemap',
                         :site_name => @site.name,
-                        :method_name => 'sitemap',
                         :format => 'xml',
                       }, max_lastmod)
 

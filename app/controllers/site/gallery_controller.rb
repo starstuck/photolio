@@ -1,13 +1,9 @@
 class Site::GalleryController < Site::BaseController
 
-  before_filter :setup_gallery_context
-
-  private
-
-  def setup_gallery_context
-    if not @gallery = @site.galleries.find_by_name(params[:gallery_name])
-      raise ActiveRecord::RecordNotFound.new("Gallery '#{params[:gallery_name]}' not found in '#{@site.name}' site")
-    end
-  end
+  setup_controller_context( [:gallery],
+                            Proc.new { |site, context| [site.galleries.find_by_name(context)] },
+                            Proc.new { |vals| vals[0].name },
+                            Proc.new { |site| site.galleries.map{|g| g.name} }
+                            )
 
 end

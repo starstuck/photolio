@@ -38,7 +38,7 @@ ActionController::Routing::Routes.draw do |map|
 
   # Map resources for admin screens
   map.namespace :admin do |admin|
-    admin.root :controller => 'admin/base'
+    admin.root :controller => 'base'
     admin.resources :users, :member => ['change_password', 'reset_password']
     admin.resource :session, :member => ['delete']
     admin.resources(:sites, 
@@ -61,39 +61,50 @@ ActionController::Routing::Routes.draw do |map|
     end
   end
 
-
-  map.show_site_gallery(':site_name/gallery/:gallery_name.:format',
-                        :controller => 'site/gallery',
-                        :action => 'dispatch',
-                        :method_name => 'show')
-  map.dispatch_site_gallery(':site_name/gallery/:gallery_name/:method_name.:format',
-                            :controller => 'site/gallery',
-                            :action => 'dispatch')
-
-  map.show_site_topic(':site_name/topic/:topic_name.:format',
-                      :controller => 'site/topic',
-                      :action => 'dispatch',
-                      :method_name => 'show')
-  map.dispatch_site_topic(':site_name/topic/:topic_name/:method_name.:format',
-                            :controller => 'site/topic',
-                            :action => 'dispatch')
-
-  map.show_site_photo(':site_name/photo/:photo_id.:format',
-                      :controller => 'site/photo',
-                      :action => 'dispatch',
-                      :method_name => 'show')
-  map.dispatch_site_photo(':site_name/photo/:photo_id/:method_name.:format',
-                            :controller => 'site/photo',
-                            :action => 'dispatch')
-
-  map.show_site(':site_name/', 
-                :controller => 'site/site',
-                :action => 'dispatch',
-                :method_name => 'show',
-                :format => 'html')
-  map.dispatch_site(':site_name/:method_name.:format', 
-                    :controller => 'site/site',
-                    :action => 'dispatch')
+  # Map routes for each site
+  for site in Site.find(:all)
+    site_cinfo = nil
+      
+    # All controllers exept site controller pages
+    for cinfo in SiteIntrospector.introspect(site).controllers_infos
+      if cinfo.name == 'site'
+        site_cinfo = cinfo
+      else
+        map.connect( "#{site.name}/#{cinfo.name}/:controller_context.:format",
+                     :controller => cinfo.path,
+                     :action => cinfo.default_page.to_s,
+                     :site_name => site.name
+                     )
+        map.connect( "#{site.name}/#{cinfo.name}/:controller_context/:action.:format",
+                     :controller => cinfo.path,
+                     :site_name => site.name
+                     )
+        map.connect( "#{site.name}/#{cinfo.name}/:controller_context/:action/:action_context.:format",
+                     :controller => cinfo.path,
+                     :site_name => site.name
+                     )
+      end
+    end
+    
+    # Site controller pages
+    if site_cinfo
+      map.connect( "#{site.name}",
+                   :controller => site_cinfo.path,
+                   :action => site_cinfo.default_page.to_s,
+                   :format => 'html',
+                   :site_name => site.name
+                   )
+      map.connect( "#{site.name}/:action.:format",
+                   :controller => site_cinfo.path,
+                   :site_name => site.name
+                   )
+      map.connect( "#{site.name}/:action/:action_context.:format",
+                   :controller => '/' + site_cinfo.path,
+                   :site_name => site.name
+                   )
+    end
+    
+  end
   
 
   # Map public views published, live
@@ -127,8 +138,8 @@ ActionController::Routing::Routes.draw do |map|
 #    end
 #  end
 
-  # Redirects for easy address entering
-  map.root :controller => 'admin/base', :action => 'index'
+  # By default redirect to admin panel
+  map.root :admin_root
 
   # Install the default routes as the lowest priority.
   # Note: These default routes make all actions in every controller accessible via GET requests. You should

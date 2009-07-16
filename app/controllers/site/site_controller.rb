@@ -26,73 +26,56 @@ class Site::SiteController < Site::BaseController
 
   def self.site_pages(site, in_sitemap_only=false)
     pages = []
-    theme_name = site.name
     
-    controller_context_generators = {
-      'photo' => Generator.new do |g|
-        hidden_photo_ids = site.unassigned_photos.map{|x| x.id}
-        for photo in site.photos
-          if not hidden_photo_ids.include? photo.id
-            g.yield({:site_name => site.name, :photo_id => photo.id})
-          end
-        end
-      end,
-      'topic' => Generator.new do |g|
-        for topic in site.topics
-          g.yield({:site_name => site.name, :topic_name => topic.name})
-        end
-      end,
-      'gallery' => Generator.new do |g|
-        for gallery in site.galleries
-          g.yield({:site_name => site.name, :gallery_name => gallery.name})
-        end
-      end,
-      'site' => [{:site_name => site.name}],
-    }
-
-    for controller_name in %w(site gallery topic photo)
-      begin
-        ext_module = eval("Site::#{theme_name.camelize}::#{controller_name.camelize}ControllerExtension")
-      rescue NameError
-        next
-      end
-      for method_name in ext_module.public_instance_methods.reject {|n| n.starts_with? 'page_info_for'}
-        
-        # Find page info
-        info_method_name = "page_info_for_#{method_name}"
-        dummy = Object.new
-        dummy.extend(ext_module)
-        if dummy.respond_to? info_method_name 
-          info = dummy.send info_method_name
-        else
-          info = {}
-        end
-        info = { :priority => '0.5', :changefreq => 'weekly'}.update(info)
+    for cinfo in SiteIntrospector.introspect(site).controllers_infos
+      for pinfo in cinfo.pages_infos
 
         # Skip pages no in sitemap if requested to do so
-        if in_sitemap_only and info[:skip_sitemap]
+        if in_sitemap_only and not pinfo.in_sitemap?
           next
         end
 
-        if in_sitemap_only or not info[:formats]
+        info = { :priority => '0.5', :changefreq => 'weekly'}.update(pinfo.sitemap_info)
+
+        if in_sitemap_only or not pinfo.formats
           page_formats = ['html']
         else
-          page_formats = info[:formats]
+          page_formats = pinfo.formats
         end
 
-        context_generator = controller_context_generators[controller_name]
-        for context in context_generator
+        if cinfo.context_iterator 
+          c_contexts = cinfo.context_iterator.call(site)
+        elsif cinfo.name == 'site'
+          c_contexts = [nil]
+        else
+          next
+        end
 
-          # TODO: add last_modified time calculation
-          for format in page_formats
-            info[:loc] = context.update( {
-              :controller => "site/#{controller_name}",
-              :action => 'dispatch',
-              :method_name => method_name,
-              :format => format,
-            } )
-            pages << info.dup
+        for c_context in c_contexts
+
+          base_location = {:site_name => site.name}
+          base_location[:controller_context] = c_context if c_context
+          if pinfo.context_iterator
+            c_context_vals = cinfo.context_extractor.call(site, c_context)
+            locations = pinfo.context_iterator.call(c_context_vals).map do |pc|
+              location = base_location.dup
+              location[:action_context] = pc
+              location              
+            end
+          else
+            locations = [base_location]
           end
+          
+          for location in locations
+            # TODO: add last_modified time calculation
+            for format in page_formats
+              info[:loc] = location.update(:controller => cinfo.path,
+                                           :action => pinfo.name,
+                                           :format => format)
+              pages << info.dup
+            end
+          end
+
         end
         
       end

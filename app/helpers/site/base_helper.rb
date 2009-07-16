@@ -1,33 +1,42 @@
 module Site::BaseHelper
 
-  def site_controller_path(site, obj, controller, action, id_method, options={})
-    options[:format] = 'html' unless options.key? 'format'
+  protected
 
-    if controller == 'site'
-      route_name = "site"
-    else
-      route_name = "site_#{controller}"
+  # Calculate page path, arguments are in order, can be skipped:
+  #   controller_name
+  #   controller_context
+  #   action_name
+  #   action_context
+  #   options that will be forwarde to underlying url_for command
+  def page_url(site, controller, action, *args)
+
+    options = {
+      :format => 'html',
+      :only_path => true,
+      :controller => "/site/#{site.name}/#{controller}",
+      :site_name => site.name,
+      :action => action }
+
+    if args[-1].is_a? Hash
+      options.update(args.pop)
     end
 
-    if obj.is_a? String or obj.is_a? Integer
-      id_value = obj
-    elsif obj and id_method
-      id_value = (id_method and id_method != '') ? obj.send(id_method) : obj
+    # Extract arguments array in order of aperance
+    if controller != 'site'
+      arg = args.shift
+      if arg
+        if not arg.is_a? String 
+          cinfo = SiteIntrospector.introspect(site).controller_info(controller)
+          arg = [arg] if not is_a? Array
+          arg = cinfo.context_packer.call(arg)
+        end
+        options[:controller_context] = arg
+      end
     end
+    arg = args.shift
+    options[:action_context] = arg if arg
 
-    if ['show'].include? action
-      if id_value
-        path = @controller.send("#{action}_#{route_name}_path", site.name, id_value, options)
-      else
-        path = @controller.send("#{action}_#{route_name}_path", site.name, options)
-      end
-    else
-      if id_value
-        path = @controller.send("dispatch_#{route_name}_path", site.name, id_value, action, options)
-      else
-        path = @controller.send("dispatch_#{route_name}_path", site.name, action, options)
-      end
-    end      
+    path = url_for(options)
 
     if params[:published]
       site_prefix = "/#{@site.name}"
@@ -39,11 +48,9 @@ module Site::BaseHelper
         path = @site.site_params.published_url_prefix + path
       end
     end
-
+ 
     path    
   end
-
-  protected
 
   def compute_public_path(source, dir, ext=nil)
     path = compute_public_path_without_photolio(source, "#{@site.name}/#{dir}", ext)
