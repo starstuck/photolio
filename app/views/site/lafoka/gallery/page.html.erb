@@ -1,3 +1,64 @@
-<div>
-  La Foka gallery page: <%= @page_num -%>
+<div id="gallery_header">
+  <ul id="galleries_minors">
+    <% for gallery_minor, target in galleries_minor_labels_and_objects -%>
+      <li>
+	<%= link_to( gallery_minor, 
+		     page_site_gallery_path(@site, target, 1),
+		     :title => target.title,
+		     :class => target.id == @gallery.id ? 'active' : nil ) -%>
+      </li>
+    <% end -%>
+  </ul>
 </div>
+
+<div id="gallery">
+  <% if @page_photos.size == 2 -%>
+    <div id="left_photo_frame">
+      <%= photo_image_tag @page_photos[0],
+	  :class => 'photo', :title => @page_photos[0].image_alt -%>
+    </div>
+    <div id="right_photo_frame">
+      <%= photo_image_tag @page_photos[1],
+	  :class => 'photo', :title=> @page_photos[1].image_alt -%>
+    </div>
+  <% elsif @page_photos.size == 1 -%>
+    <div id="single_photo_frame">
+      <%= photo_image_tag @page_photos[0],
+	  :class => 'photo', :title => @page_photos[0].image_alt -%>
+    </div>
+  <% end -%>
+</div>
+
+<% @footer_extra = capture do -%>
+  <p id="footer_gallery_extra">
+  <% if @page_num > 1 -%>
+    <%= link_to( '&lt; Prev',
+		 page_site_gallery_path(@site, @gallery, @page_num - 1),
+		 :class => 'gallery_switch',
+		 :id => 'prev_page_switch'		 
+		 ) -%>
+  <% elsif prev_gallery = prev_gallery_by_minor_label -%>
+    <%= link_to( '&lt&lt; Prev chapter',
+		 page_site_gallery_path(@site, prev_gallery, 1),
+		 :class => 'gallery_switch',
+		 :id => 'prev_chapter_switch'
+		 ) -%>    
+  <% end -%>
+  <span id="page_number">
+    Page <%= @page_num -%> / <%= @page_count -%>
+  </span>
+  <% if @page_num < @page_count -%>
+    <%= link_to( 'Next &gt;',
+		 page_site_gallery_path(@site, @gallery, @page_num + 1),
+		 :class => 'gallery_switch',
+		 :id => 'next_page_switch'
+		 ) -%>
+  <% elsif next_gallery = next_gallery_by_minor_label -%>
+    <%= link_to( 'Next chapter &gt&gt;',
+		 page_site_gallery_path(@site, next_gallery, 1),
+		 :class => 'gallery_switch',
+		 :id => 'next_chapter_switch'
+		 ) -%>    
+  <% end -%>
+  </p>
+<% end -%>

@@ -8,9 +8,12 @@
 
     <style>
       body {
-        text-font: Helvetica, FreeSans, Arial, sans;
+        font-family: Helvetica, FreeSans, Arial, sans;
         margin: 0px;
         padding: 0px;
+      }
+      img {
+        border: 0px;
       }
       #content {
         margin: 20px auto 0px auto;
@@ -28,18 +31,21 @@
         margin-right: 6px;
       }
     </style>
-
   </head>
 
   <body>
     <div id="content" style="width: 758px;">
-      <div id="cover_page">
-	<div id="cover_left_bar"></div>
-	<%= image_tag "cover_page.jpg", :size => '366x550', :alt => "La Foka"-%>
-      </div>
-      <div id="left_page">
-	<%= image_tag "enter_page.jpg", :size => '366x550', :alt => "Enter" -%>
-      </div>
+      <% link_to( show_default_gallery_path,
+		  :title => "Enter La Foka site"
+		  ) do -%> 
+        <div id="cover_page">
+	  <div id="cover_left_bar"></div>
+	  <%= image_tag "cover_page.jpg", :size => '366x550', :alt => "La Foka"-%>
+	</div>
+	<div id="left_page">
+	  <%= image_tag "enter_page.jpg", :size => '366x550', :alt => "Enter" -%>
+	</div>
+      <% end -%>
     </div>
   </body>
 </head>

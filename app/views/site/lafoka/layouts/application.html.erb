@@ -6,14 +6,12 @@
     <meta http-equiv="content-type" content="text/html;charset=UTF-8" />
     <meta name="Description" content="La Foka portfolio." />
 
-    <%= stylesheet_link_tag('layout',
-                            'default')
+    <%= stylesheet_link_tag('screen')
     -%>
 
-    <%= javascript_include_tag('typeface',
-                               'typeface/',
-                               'typeface/neuropol',
-                               'application')
+    <%= javascript_include_tag('prototype',
+                               'cufon',
+                               'neuropol_x_free')
     -%>
 
     <!--[if gte IE 7]>
@@ -22,18 +20,70 @@
     <!--[if lte IE 6]>
       <%= stylesheet_link_tag 'ie6fix' %>
     <![endif]-->
+
+    <script type="text/javascript">
+      Cufon.set('fontFamily', 'Neuropol X Free');
+      Cufon.replace('h1');
+      Cufon.replace('h2');
+      Cufon.replace('#main_menu li');
+    </script>
+
   </head>
 
   <body>
 
     <div id="header">
-      <h1>La Foka</h1>
+      <h1>
+        La Foka
+      </h1>
+      
+      <ul id="main_menu">
+	<% for g_major_label in galleries_major_labels -%>
+	  <li>
+	    <%= link_to( g_major_label,
+			 page_site_gallery_path(@site, default_gallery_for_major_label(g_major_label), 1),
+			 :class => (@gallery and gallery_major_label == g_major_label) ? "active" : nil
+			 ) -%>
+	  </li>
+	<% end -%>
+	<% for menu_item in @site.get_menu('topics').menu_items -%>
+	  <li>
+	    <%= link_to( menu_item.label_or_target_title,
+			 show_site_topic_path(@site, menu_item.target),
+			 :class => (@topic and @topic.id == menu_item.target_id) ? "active" : nil
+			 ) -%>
+	  </li>
+	<% end -%>
+      </ul>
+      <hr id="header_ruler" />
     </div>
 
     <div id="content">
-
       <%= yield %>
+    </div>
 
+    <div id="footer">
+      <p id="credentials">
+	Design by <a href="http://www.polinostudio.com/">Polino Studio</a>.
+	Powered by <a href="http://www.webstylizer.eu/">WebStylizer</a>.
+      </p>
+      <p id="contact">
+	Makup artist &amp; stylist:
+	<span class="separator">&nbsp;</span>
+	Aleksandra Przyłuska
+	<span class="separator">&nbsp;</span>
+	<script type="application/javascript">
+	  var addr = 'mail' + unescape('%40') + 'la' + 'foka.com';
+	  document.write(unescape('%3C%61%20%68%72%65%66%3D%22%6D%61%69%6C%74%6F%3A') + 
+	                 addr + unescape('%22%3E%0A') + addr + unescape('%3C%2F%61%3E'));
+	</script>
+	
+	<span class="separator">&nbsp;</span>
+	tel.: + 48 501 582 867
+	<span class="separator">&nbsp;</span>
+	Poland
+      </p>
+      <%= @footer_extra -%>
     </div>
 
   </body>

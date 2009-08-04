@@ -120,7 +120,9 @@ module SiteParams
     
     photo_store_size 'x450'
     publish_location '/var/www/lafoka'
-    
+
+    menus ['galleries', 'topics']
+
   end
 
 

@@ -1,0 +1,211 @@
+/*
+ * Colours
+ */
+body,
+a,
+p#contact a:hover{
+    color: #999999;
+}
+
+hr {
+    background-color: #999999;
+}
+
+a.active, 
+a:hover,
+p#contact,
+p#contact a{
+    color: #333333;
+}
+
+/*
+ * Fonts and text styling
+ */
+body{
+    line-height: 1.2em;
+    font-family: Helvetica, FreeSans, Arial, sans;
+    font-size: 12px;
+}
+
+#header h1,
+#main_menu  {
+    font-family: 'Neuropol X Free', Helvetica, FreeSans, Arial, sans;
+}
+
+a {
+    text-decoration: none;
+}
+
+p { 
+    margin: 3px 0px;
+}
+
+hr {
+    height: 2px;
+    width: 100%;
+    border: 0px;
+}
+
+/*
+ * Layout
+ */
+body{
+    width: 100%;
+    margin: 0px;
+    padding: 0px;
+}
+
+#header,
+#content,
+#footer {
+    position: relative;
+    width: 870px;
+    margin: 0px auto 0px auto;
+    padding: 0px;
+}
+
+#header {
+    height: 52px;
+}
+
+#header h1{
+    display:block;
+    float: left;
+    margin: 4px 30px 0px 10px;
+    font-size: 42px;
+}
+
+#main_menu {
+    display: block;
+    padding-top: 27px;
+}
+
+#main_menu li {
+    list-style: none;
+    display: inline;
+    margin-left: 1em;
+}
+
+#header_ruler {
+    position: absolute;
+    bottom: 0px;
+}
+
+#content {
+    height: 468px;
+}
+
+#gallery_header {
+    height: 18px;
+}
+
+#gallery_header ul{
+    display: block;
+    position: absolute;
+    right: 90px;
+    padding: 0px;
+    margin: 0px;
+}
+
+#gallery_header li {
+    list-style: none;
+    display: inline;
+    margin: 0em 0.3em 0em 0em;
+    font-size: 16px;
+}
+
+#gallery {
+    padding: 0px;
+    margin: 0px;
+    position: relative;
+    height: 450px;
+    width: 100%;
+}
+
+#left_photo_frame,
+#right_photo_frame, 
+#single_photo_frame{
+    height: 450px;
+}
+
+#left_photo_frame {
+    position: absolute;
+    top: 0px;
+    right: 437px; 
+}
+
+#right_photo_frame {
+    position: absolute;
+    top: 0px;
+    left: 437px; 
+}
+
+#single_photo_frame{
+    text-align: center;
+    margin: 0px auto 0px auto;
+}
+
+#topic_body {
+    margin: 0px;
+    padding: 0px;
+    height: 466px;
+    width: 100%;
+    overflow: auto;
+}
+
+#topic_footer hr{
+    height: 2px;
+    width: 602px;
+    margin: 0px auto 0px auto;
+}
+
+#footer {
+    height: 58px;
+}
+
+p#credentials{
+    margin: -1px 0px 3px 0px;
+    padding-left: 510px;
+    font-size: 10px;
+}
+
+p#contact {
+    margin: 0px;
+    padding-left: 20px;
+}
+
+p#contact span.separator {
+    padding: 0em 1em;
+}
+
+p#footer_gallery_extra {
+    width: 100%;
+    position: relative;
+    margin: 7px 0px 0px 0px;
+    font-size: 18px;
+}
+
+#prev_page_switch,
+#prev_chapter_switch,
+#next_page_switch,
+#next_chapter_switch,
+#page_number {
+    position: absolute;
+}
+
+#page_number {
+    right: 160px;
+}
+
+#prev_page_switch,
+#prev_chapter_switch {
+    right: 280px;
+}
+
+#next_page_switch {
+    right: 75px;
+}
+
+#next_chapter_switch {
+    right: 0px;
+}

@@ -77,7 +77,7 @@ class Photo < ActiveRecord::Base
     res = []
     res << title if title and title.size > 0
     photo_participants.each{|p| res << "#{p.role}: #{p.name}"}
-    photo_keywords.each{|k| res << k}
+    photo_keywords.each{|k| res << k.name}
     res << title if description and description.size > 0
     res.join('; ')
   end
