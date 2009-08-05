@@ -326,7 +326,8 @@ body {
 #galleries .gallery_banner {
     display: block;
     width: 100%;
-    height: 100%;
+    height: 150px;
+    overflow: hide;
     text-align: center;
     font-size: 24px;
     line-height: 150px;
