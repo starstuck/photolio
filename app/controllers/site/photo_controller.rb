@@ -6,7 +6,7 @@ class Site::PhotoController < Site::BaseController
                             Proc.new do |site| 
                               hidden_photo_ids = site.unassigned_photos.map{|x| x.id}
                               site.photos.reject{ |p|
-                                not hidden_photo_ids.include? p.id
+                                hidden_photo_ids.include? p.id
                               }.map{|p| p.id}
                             end
                             )
