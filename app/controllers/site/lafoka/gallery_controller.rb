@@ -23,13 +23,6 @@ class Site::Lafoka::GalleryController < Site::GalleryController
   def page
     @page_num = params[:action_context].to_i || 1 # page number starting from 1
     setup_page_info
-    
-    # @page_num = 1
-    # @page_count = 1
-    # @page_photos = []
-
-    # logger.info "--> using context: #{@page_num}"
-
     render
   end
 
