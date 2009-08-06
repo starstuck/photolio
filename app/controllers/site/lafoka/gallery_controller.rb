@@ -3,14 +3,41 @@ class Site::Lafoka::GalleryController < Site::GalleryController
   SINGLE_PHOTO_MIN_WIDTH = 435 # Photos that are wider than this value are displayed on single page
 
   acts_as_page( :page,
-                :context_iterator => Proc.new {|vals| 1..max_page_number(vals[0])},
+                :context_iterator => Proc.new {|vals| 1..pages_count(vals[0])},
                 :sitemap_info =>
                 { :priority => '0.8',
                   :changefreq => 'daily' }
                 )
 
-  def page    
+  # Return total number of pages for gallery
+  def self.pages_count(gallery)
+    dummy_controller = self.new
+    dummy_controller.instance_eval do
+      @gallery = gallery
+      @page_num = 1
+      setup_page_info
+      @page_count
+    end
+  end
+
+  def page
     @page_num = params[:action_context].to_i || 1 # page number starting from 1
+    setup_page_info
+    
+    # @page_num = 1
+    # @page_count = 1
+    # @page_photos = []
+
+    # logger.info "--> using context: #{@page_num}"
+
+    render
+  end
+
+  protected
+
+  # Setup gallery page information. Requires @gallery and @page_num variable, 
+  # and sets @page_count and @page_pgotos attributes
+  def setup_page_info
     @page_count = 0
     @page_photos = []
     photos = @gallery.gallery_items.find(:all, :conditions => { :type => GalleryPhoto.name })
@@ -31,9 +58,7 @@ class Site::Lafoka::GalleryController < Site::GalleryController
         @page_photos << photo_right if photo_right
       end
     end
-    @page_count = 1 if @page_count == 0
-    render
+    @page_count = 1 if @page_count == 0    
   end
-
 
 end 

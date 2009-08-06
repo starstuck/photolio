@@ -52,10 +52,10 @@ module Publisher
       # Build page body
       page_params = page_info.merge(:published => true)
       page_controller = page_params.delete(:controller)
-      page_action = page_params.delete(:action)
+      page_action = page_params.delete(:action).to_s
       body = @context.render_component_as_string( :controller => page_controller,
-                                                    :action => page_action,
-                                                    :params => page_params )
+                                                  :action => page_action,
+                                                  :params => page_params )
       
       # Save and file only if differs, or was tested by modification time
       if not mtime and differ?(page_path, Digest::MD5.hexdigest(body))
