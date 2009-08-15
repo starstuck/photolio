@@ -56,7 +56,9 @@ class Site::SiteController < Site::BaseController
           base_location = {:site_name => site.name}
           base_location[:controller_context] = c_context if c_context
           if pinfo.context_iterator
-            c_context_vals = cinfo.context_extractor.call(site, c_context)
+            if cinfo.context_extractor
+              c_context_vals = cinfo.context_extractor.call(site, c_context)
+            end
             locations = pinfo.context_iterator.call(c_context_vals).map do |pc|
               location = base_location.dup
               location[:action_context] = pc

@@ -99,44 +99,13 @@ ActionController::Routing::Routes.draw do |map|
                    :site_name => site.name
                    )
       map.connect( "#{site.name}/:action/:action_context.:format",
-                   :controller => '/' + site_cinfo.path,
+                   :controller => site_cinfo.path,
                    :site_name => site.name
                    )
     end
     
   end
   
-
-  # Map public views published, live
-#  for controller, actions, id_method in [['site', ['show', 'index', 'sitemap'], ''],
-#                                         ['galleries', ['show'], ''],
-#                                         ['gallery', ['show'], 'name'],
-#                                         ['photo', ['show'], 'id'],
-#                                         ['topic', ['show'], 'name']
-#                                        ]
-#    for action in actions
-#      controller_name_part = controller != 'site' ? "_#{controller}" : ""
-#      controller_path_part = controller != 'site' ? "/#{controller}" : ""
-#      identifier_path_part = id_method != "" ? "/:#{controller}_#{id_method}" : ""
-#      if controller == 'site'
-#        if action == 'show'
-#          file_path_part = '/index'
-#        elsif action == 'index'
-#          file_path_part = ''
-#        else
-#          file_path_part = "/#{action}"
-#        end
-#      else
-#        file_path_part = action != 'show' ? "/#{action}" : ""
-#      end
-#      r_name = "#{action}_site#{controller_name_part}"
-#      r_path = ":site_name#{controller_path_part}#{identifier_path_part}#{file_path_part}.:format"
-#      r_params = {
-#        :controller => "site/#{controller}",
-#        :action => action }             
-#      map.send(r_name, r_path, r_params)
-#    end
-#  end
 
   # By default redirect to admin panel
   map.root :admin_root
