@@ -6,7 +6,7 @@
     <meta name="Description" content="La Foka, makup artist, fashion stylist, Aleksandra Przyłuska" />
     <meta name="Keywords" content="La Foka. makup artist, fashion stylist - Aleksandra Przyłuska." />
 
-    <style>
+    <style type="text/css">
       body {
         font-family: Helvetica, FreeSans, Arial, sans;
         margin: 0px;
@@ -35,17 +35,21 @@
 
   <body>
     <div id="content" style="width: 758px;">
-      <% link_to( show_default_gallery_path,
-		  :title => "Enter La Foka site"
-		  ) do -%> 
-        <div id="cover_page">
-	  <div id="cover_left_bar"></div>
-	  <%= image_tag "cover_page.jpg", :size => '366x550', :alt => "La Foka"-%>
-	</div>
-	<div id="left_page">
+      <div id="cover_page">
+        <div id="cover_left_bar"></div>
+        <% link_to( show_default_gallery_path,
+      	            :title => "Enter La Foka site"
+   	            ) do -%> 
+          <%= image_tag "cover_page.jpg", :size => '366x550', :alt => "La Foka"-%>
+        <% end %>
+      </div>
+      <div id="left_page">
+        <% link_to( show_default_gallery_path,
+  		    :title => "Enter La Foka site"
+		    ) do -%> 
 	  <%= image_tag "enter_page.jpg", :size => '366x550', :alt => "Enter" -%>
-	</div>
-      <% end -%>
+        <% end -%>
+      </div>
     </div>
   </body>
-</head>
+</html>

@@ -38,7 +38,7 @@
 		 :id => 'prev_page_switch'		 
 		 ) -%>
   <% elsif prev_gallery = prev_gallery_by_minor_label -%>
-    <%= link_to( '&lt&lt; Prev chapter',
+    <%= link_to( '&lt;&lt; Prev chapter',
 		 page_site_gallery_path(@site, prev_gallery, 1),
 		 :class => 'gallery_switch',
 		 :id => 'prev_chapter_switch'
@@ -54,7 +54,7 @@
 		 :id => 'next_page_switch'
 		 ) -%>
   <% elsif next_gallery = next_gallery_by_minor_label -%>
-    <%= link_to( 'Next chapter &gt&gt;',
+    <%= link_to( 'Next chapter &gt;&gt;',
 		 page_site_gallery_path(@site, next_gallery, 1),
 		 :class => 'gallery_switch',
 		 :id => 'next_chapter_switch'
