@@ -1,8 +1,8 @@
 /*****************************************************************
 
-typeface.js, version 0.11 | typefacejs.neocracy.org
+typeface.js, version 0.12 | typefacejs.neocracy.org
 
-Copyright (c) 2008, David Chester davidchester@gmx.net 
+Copyright (c) 2008 - 2009, David Chester davidchester@gmx.net 
 
 Permission is hereby granted, free of charge, to any person
 obtaining a copy of this software and associated documentation
@@ -48,18 +48,21 @@ var _typeface_js = {
 		face.loaded = true;
 	},
 
-	log: {
-		debug: function(message) {
-			var typefaceConsole = document.getElementById('typeface-console');
-			if (typefaceConsole) 
-				typefaceConsole.innerHTML += 'DEBUG: ' + message + "<br>";
-		},
-
-		error: function(message) {
-			var typefaceConsole = document.getElementById('typeface-console');
-			if (typefaceConsole) 
-				typefaceConsole.innerHTML += 'ERROR: ' + message + "<br>";
+	log: function(message) {
+		
+		if (this.quiet) {
+			return;
 		}
+		
+		message = "typeface.js: " + message;
+		
+		if (this.customLogFn) {
+			this.customLogFn(message);
+
+		} else if (window.console && window.console.log) {
+			window.console.log(message);
+		}
+		
 	},
 	
 	pixelsFromPoints: function(face, style, points, dimension) {
@@ -100,6 +103,25 @@ var _typeface_js = {
 	
 	fallbackCharacter: '.',
 
+	configure: function(args) {
+		var configurableOptionNames = [ 'customLogFn',  'customClassNameRegex', 'customTypefaceElementsList', 'quiet', 'verbose' ];
+		
+		for (var i = 0; i < configurableOptionNames.length; i++) {
+			var optionName = configurableOptionNames[i];
+			if (args[optionName]) {
+				if (optionName == 'customLogFn') {
+					if (typeof args[optionName] != 'function') {
+						throw "customLogFn is not a function";
+					} else {
+						this.customLogFn = args.customLogFn;
+					}
+				} else {
+					this[optionName] = args[optionName];
+				}
+			}
+		}
+	},
+
 	getTextExtents: function(face, style, text) {
 		var extentX = 0;
 		var extentY = 0;
@@ -119,7 +141,7 @@ var _typeface_js = {
 		};
 	},
 
-	pixelsFromCssAmount: function(cssAmount, defaultValue) {
+	pixelsFromCssAmount: function(cssAmount, defaultValue, element) {
 
 		var matches = undefined;
 
@@ -129,20 +151,47 @@ var _typeface_js = {
 		} else if (matches = cssAmount.match(/([\-\d+\.]+)px/)) {
 			return matches[1];
 
-		} else if (matches = cssAmount.match(/([\-\d\.]+)pt/)) {
-			return matches[1] * 100 / 75;
 		} else {
-			return defaultValue;
+			// thanks to Dean Edwards for this very sneaky way to get IE to convert 
+			// relative values to pixel values
+			
+			var pixelAmount;
+			
+			var leftInlineStyle = element.style.left;
+			var leftRuntimeStyle = element.runtimeStyle.left;
+
+			element.runtimeStyle.left = element.currentStyle.left;
+			if (cssAmount.match(/\d(em|%)$/)) {
+				element.style.left = '1em';
+			} else {
+				element.style.left = cssAmount || 0;
+			}
+
+			pixelAmount = element.style.pixelLeft;
+		
+			element.style.left = leftInlineStyle;
+			element.runtimeStyle.left = leftRuntimeStyle;
+			
+			return pixelAmount || defaultValue;
+		}
+	},
+
+	capitalizeText: function(text) {
+		return text.replace(/(^|\s)[a-z]/g, function(match) { return match.toUpperCase() } ); 
+	},
+
+	getElementStyle: function(e) {
+		if (window.getComputedStyle) {
+			return window.getComputedStyle(e, '');
+		
+		} else if (e.currentStyle) {
+			return e.currentStyle;
 		}
 	},
 
 	getRenderedText: function(e) {
 
-		var browserStyle = window.getComputedStyle ? 
-			document.defaultView.getComputedStyle(e.parentNode, '') : 
-			e.parentNode.currentStyle ? 
-				e.parentNode.currentStyle : 
-				{ color: '#ff0000', fontSize: 12, fontFamily: 'arial' };
+		var browserStyle = this.getElementStyle(e.parentNode);
 
 		var inlineStyleAttribute = e.parentNode.getAttribute('style');
 		if (inlineStyleAttribute && typeof(inlineStyleAttribute) == 'object') {
@@ -164,37 +213,86 @@ var _typeface_js = {
 		var style = { 
 			color: browserStyle.color, 
 			fontFamily: browserStyle.fontFamily.split(/\s*,\s*/)[0].replace(/(^"|^'|'$|"$)/g, '').toLowerCase(), 
-			fontSize: this.pixelsFromCssAmount(browserStyle.fontSize, 12),
+			fontSize: this.pixelsFromCssAmount(browserStyle.fontSize, 12, e.parentNode),
 			fontWeight: this.cssFontWeightMap[browserStyle.fontWeight],
 			fontStyle: browserStyle.fontStyle ? browserStyle.fontStyle : 'normal',
 			fontStretchPercent: this.cssFontStretchMap[inlineStyle && inlineStyle['font-stretch'] ? inlineStyle['font-stretch'] : 'default'],
 			textDecoration: browserStyle.textDecoration,
-			lineHeight: this.pixelsFromCssAmount(browserStyle.lineHeight, 'normal'),
-			letterSpacing: this.pixelsFromCssAmount(browserStyle.letterSpacing, 0)
+			lineHeight: this.pixelsFromCssAmount(browserStyle.lineHeight, 'normal', e.parentNode),
+			letterSpacing: this.pixelsFromCssAmount(browserStyle.letterSpacing, 0, e.parentNode),
+			textTransform: browserStyle.textTransform
 		};
 
 		var face;
 		if (
-			this.faces[style.fontFamily] && 
-			this.faces[style.fontFamily][style.fontWeight]
+			this.faces[style.fontFamily]  
+			&& this.faces[style.fontFamily][style.fontWeight]
 		) {
 			face = this.faces[style.fontFamily][style.fontWeight][style.fontStyle];
 		}
 
+		var text = e.nodeValue;
+		
+		if (
+			e.previousSibling 
+			&& e.previousSibling.nodeType == 1 
+			&& e.previousSibling.tagName != 'BR' 
+			&& this.getElementStyle(e.previousSibling).display.match(/inline/)
+		) {
+			text = text.replace(/^\s+/, ' ');
+		} else {
+			text = text.replace(/^\s+/, '');
+		}
+		
+		if (
+			e.nextSibling 
+			&& e.nextSibling.nodeType == 1 
+			&& e.nextSibling.tagName != 'BR' 
+			&& this.getElementStyle(e.nextSibling).display.match(/inline/)
+		) {
+			text = text.replace(/\s+$/, ' ');
+		} else {
+			text = text.replace(/\s+$/, '');
+		}
+		
+		text = text.replace(/\s+/g, ' ');
+	
+		if (style.textTransform && style.textTransform != 'none') {
+			switch (style.textTransform) {
+				case 'capitalize':
+					text = this.capitalizeText(text);
+					break;
+				case 'uppercase':
+					text = text.toUpperCase();
+					break;
+				case 'lowercase':
+					text = text.toLowerCase();
+					break;
+			}
+		}
+
 		if (!face) {
+			var excerptLength = 12;
+			var textExcerpt = text.substring(0, excerptLength);
+			if (text.length > excerptLength) {
+				textExcerpt += '...';
+			}
+		
+			var fontDescription = style.fontFamily;
+			if (style.fontWeight != 'normal') fontDescription += ' ' + style.fontWeight;
+			if (style.fontStyle != 'normal') fontDescription += ' ' + style.fontStyle;
+		
+			this.log("couldn't find typeface font: " + fontDescription + ' for text "' + textExcerpt + '"');
 			return;
 		}
 	
-		var text = e.nodeValue.replace(/(?:^\s+|\s+$)/g, '');
-		text = text.replace(/\s+/g, ' ');
-		var words = text.split(/\s/);
+		var words = text.split(/\b(?=\w)/);
 
 		var containerSpan = document.createElement('span');
-
+		
 		for (var i = 0; i < words.length; i++) {
 			var word = words[i];
-			var delimiter = i == words.length - 1 ? '' : ' ';
-			var vectorElement = this.renderWord(face, style, word + delimiter);
+			var vectorElement = this.renderWord(face, style, word);
 			if (vectorElement)
 				containerSpan.appendChild(vectorElement);
 		}
@@ -202,13 +300,8 @@ var _typeface_js = {
 		return containerSpan;
 	},
 
-	renderDocument: function(callback) { // args: onComplete
+	renderDocument: function(callback) { 
 		
-		if (this.renderDocumentLock) 
-			return;
-
-		this.renderDocumentLock = true;
-
 		if (!callback)
 			callback = function(e) { e.style.visibility = 'visible' };
 
@@ -226,14 +319,12 @@ var _typeface_js = {
 	},
 
 	replaceText: function(e) {
-		if (e.hasChildNodes()) {
-			var childNodes = [];
-			for (var i = 0; i < e.childNodes.length; i++) {
-				childNodes[i] = e.childNodes[i];
-			}
-			for (var i = 0; i < childNodes.length; i++) {
-				this.replaceText(childNodes[i]);
-			}
+
+		var childNodes = [];
+		var childNodesLength = e.childNodes.length;
+
+		for (var i = 0; i < childNodesLength; i++) {
+			this.replaceText(e.childNodes[i]);
 		}
 
 		if (e.nodeType == 3 && e.nodeValue.match(/\S/)) {
@@ -241,28 +332,44 @@ var _typeface_js = {
 		
 			var renderedText = this.getRenderedText(e);
 			
+			if (
+				parentNode.tagName == 'A' 
+				&& this.vectorBackend == 'vml'
+				&& this.getElementStyle(parentNode).display == 'inline'
+			) {
+				// something of a hack, use inline-block to get IE to accept clicks in whitespace regions
+				parentNode.style.display = 'inline-block';
+				parentNode.style.cursor = 'pointer';
+			}
+
+			if (this.getElementStyle(parentNode).display == 'inline') {
+				parentNode.style.display = 'inline-block';
+			}
+
 			if (renderedText) {	
-				parentNode.insertBefore(renderedText, e);
-				parentNode.removeChild(e);
-			}	
+				if (parentNode.replaceChild) {
+					parentNode.replaceChild(renderedText, e);
+				} else {
+					parentNode.insertBefore(renderedText, e);
+					parentNode.removeChild(e);
+				}
+				if (this.vectorBackend == 'vml') {
+					renderedText.innerHTML = renderedText.innerHTML;
+				}
+			}
 		}
 	},
 
 	applyElementVerticalMetrics: function(face, style, e) {
 
-		var boundingBoxAdjustmentTop = this.pixelsFromPoints(face, style, face.ascender - Math.max(face.boundingBox.yMax, face.ascender)); 
-		var boundingBoxAdjustmentBottom = this.pixelsFromPoints(face, style, Math.min(face.boundingBox.yMin, face.descender) - face.descender); 
-				
-		var cssLineHeightAdjustment = 0;
-		if (style.lineHeight != 'normal') {
-			cssLineHeightAdjustment = style.lineHeight - this.pixelsFromPoints(face, style, face.lineHeight);
+		if (style.lineHeight == 'normal') {
+			style.lineHeight = this.pixelsFromPoints(face, style, face.lineHeight);
 		}
-		
-		var marginTop = Math.round(boundingBoxAdjustmentTop + cssLineHeightAdjustment * 0.75);
-		var marginBottom = Math.round(boundingBoxAdjustmentBottom + cssLineHeightAdjustment * 0.25);
 
-		e.style.marginTop = marginTop + 'px';
-		e.style.marginBottom = marginBottom + 'px';
+		var cssLineHeightAdjustment = style.lineHeight - this.pixelsFromPoints(face, style, face.lineHeight);
+
+		e.style.marginTop = Math.round( cssLineHeightAdjustment / 2 ) + 'px';
+		e.style.marginBottom = Math.round( cssLineHeightAdjustment / 2) + 'px';
 	
 	},
 
@@ -277,11 +384,12 @@ var _typeface_js = {
 				var canvas = document.createElement('canvas');
 				canvas.innerHTML = text;
 
-				this.applyElementVerticalMetrics(face, style, canvas);
 				canvas.height = Math.round(this.pixelsFromPoints(face, style, face.lineHeight));
 
 				canvas.width = Math.round(this.pixelsFromPoints(face, style, extents.x, 'horizontal'));
 	
+				this.applyElementVerticalMetrics(face, style, canvas);
+
 				if (extents.x > extents.ha) 
 					canvas.style.marginRight = Math.round(this.pixelsFromPoints(face, style, extents.x - extents.ha, 'horizontal')) + 'px';
 
@@ -353,8 +461,7 @@ var _typeface_js = {
 
 				var chars = text.split('');
 				for (var i = 0; i < chars.length; i++) {
-					var char = chars[i];
-					this.renderGlyph(ctx, face, char, style);
+					this.renderGlyph(ctx, face, chars[i], style);
 				}
 
 				ctx.fill();
@@ -382,8 +489,7 @@ var _typeface_js = {
 
 				var extents = this.getTextExtents(face, style, text);
 				
-				shape.style.width = style.fontSize + 'px'; 
-				shape.style.height = style.fontSize + 'px'; 
+				shape.style.width = shape.style.height = style.fontSize + 'px'; 
 
 				if (extents.x > extents.ha) {
 					shape.style.marginRight = this.pixelsFromPoints(face, style, extents.x - extents.ha, 'horizontal') + 'px';
@@ -391,7 +497,8 @@ var _typeface_js = {
 
 				this.applyElementVerticalMetrics(face, style, shape);
 
-				shape.coordsize = (face.resolution * 100 / style.fontStretchPercent / 72 ) + "," + (face.resolution * 100 / 72);
+				var resolutionScale = face.resolution * 100 / 72;
+				shape.coordsize = (resolutionScale / style.fontStretchPercent) + "," + resolutionScale;
 				
 				shape.coordorigin = '0,' + face.ascender;
 				shape.style.flip = 'y';
@@ -404,73 +511,85 @@ var _typeface_js = {
 				return shape;
 			},
 
-			_renderGlyph: function(shape, face, char, offsetX, style) {
+			_renderGlyph: function(shape, face, char, offsetX, style, vmlSegments) {
 
 				var glyph = face.glyphs[char];
 
 				if (!glyph) {
-					//this.log.error("glyph not defined: " + char);
+					this.log("glyph not defined: " + char);
 					this.renderGlyph(shape, face, this.fallbackCharacter, offsetX, style);
+					return;
 				}
 				
-				var vmlSegments = [];
+				vmlSegments.push('m');
 
 				if (glyph.o) {
 					
-					var outline;
+					var outline, outlineLength;
+					
 					if (glyph.cached_outline) {
 						outline = glyph.cached_outline;
+						outlineLength = outline.length;
 					} else {
 						outline = glyph.o.split(' ');
+						outlineLength = outline.length;
+
+						for (var i = 0; i < outlineLength;) {
+
+							switch(outline[i++]) {
+								case 'q':
+									outline[i] = Math.round(outline[i++]);
+									outline[i] = Math.round(outline[i++]);
+								case 'm':
+								case 'l':
+									outline[i] = Math.round(outline[i++]);
+									outline[i] = Math.round(outline[i++]);
+									break;
+							} 
+						}	
+
 						glyph.cached_outline = outline;
 					}
 
-					var prevAction, prevX, prevY;
-
-					var i;
-					for (i = 0; i < outline.length;) {
+					var prevX, prevY;
+					
+					for (var i = 0; i < outlineLength;) {
 
 						var action = outline[i++];
-						var vmlSegment = '';
 
-						var x = Math.round(outline[i++]) + offsetX;
-						var y = Math.round(outline[i++]);
+						var x = outline[i++] + offsetX;
+						var y = outline[i++];
 	
 						switch(action) {
 							case 'm':
-								vmlSegment = (vmlSegments.length ? 'x ' : '') + 'm ' + x + ',' + y;
+								vmlSegments.push('xm ', x, ',', y);
 								break;
 	
 							case 'l':
-								vmlSegment = 'l ' + x + ',' + y;
+								vmlSegments.push('l ', x, ',', y);
 								break;
 
 							case 'q':
-								var cpx = Math.round(outline[i++]) + offsetX;
-								var cpy = Math.round(outline[i++]);
+								var cpx = outline[i++] + offsetX;
+								var cpy = outline[i++];
 
 								var cp1x = Math.round(prevX + 2.0 / 3.0 * (cpx - prevX));
 								var cp1y = Math.round(prevY + 2.0 / 3.0 * (cpy - prevY));
 
 								var cp2x = Math.round(cp1x + (x - prevX) / 3.0);
 								var cp2y = Math.round(cp1y + (y - prevY) / 3.0);
-
-								vmlSegment = 'c ' + cp1x + ',' + cp1y + ',' + cp2x + ',' + cp2y + ',' + x + ',' + y;
+								
+								vmlSegments.push('c ', cp1x, ',', cp1y, ',', cp2x, ',', cp2y, ',', x, ',', y);
 								break;
 						}
-						
-						prevAction = action;
+
 						prevX = x;
 						prevY = y;
-				
-						if (vmlSegment.length) {
-							vmlSegments.push(vmlSegment);
-						}
 					}					
 				}
 
-				vmlSegments.push('x', 'e');
-				return vmlSegments.join(' ');
+				vmlSegments.push('x e');
+				return vmlSegments;
 			},
 
 			_renderWord: function(face, style, text) {
@@ -484,13 +603,16 @@ var _typeface_js = {
 
 				letterSpacingPoints = Math.round(letterSpacingPoints);
 				var chars = text.split('');
+				var vmlSegments = [];
 				for (var i = 0; i < chars.length; i++) {
 					var char = chars[i];
-					shape.path += this.renderGlyph(shape, face, char, offsetX, style) + ' ';
+					vmlSegments = this.renderGlyph(shape, face, char, offsetX, style, vmlSegments);
 					offsetX += face.glyphs[char].ha + letterSpacingPoints ;	
 				}
 
-				shape.style.marginRight = this.pixelsFromPoints(face, style, face.glyphs[' '].ha) + 'px';
+				// make sure to preserve trailing whitespace
+				shape.path += vmlSegments.join('') + 'm ' + offsetX + ' 0 l ' + offsetX + ' ' + face.ascender;
+				
 				return shape;
 			}
 
@@ -500,6 +622,7 @@ var _typeface_js = {
 
 	setVectorBackend: function(backend) {
 
+		this.vectorBackend = backend;
 		var backendFunctions = ['renderWord', 'initializeSurface', 'renderGlyph'];
 
 		for (var i = 0; i < backendFunctions.length; i++) {
@@ -521,19 +644,17 @@ if (document.createStyleSheet) {
 
 } else if (document.styleSheets && document.styleSheets.length) {
 	var styleSheet = document.styleSheets[0];
-	try {
-		document.styleSheets[0].insertRule(typefaceSelectors.join(',') + ' { visibility: hidden; }', styleSheet.cssRules.length);
-	} catch (e) {};
+	document.styleSheets[0].insertRule(typefaceSelectors.join(',') + ' { visibility: hidden; }', styleSheet.cssRules.length); 
 }
 
 var backend = !!(window.attachEvent && !window.opera) ? 'vml' : window.CanvasRenderingContext2D || document.createElement('canvas').getContext ? 'canvas' : null;
 
 if (backend == 'vml') {
-	
-	document.namespaces.add("v");
-	
+
+	document.namespaces.add("v","urn:schemas-microsoft-com:vml","#default#VML");
+
 	var styleSheet = document.createStyleSheet();
-	styleSheet.addRule('v\\:*', "behavior: url(#default#VML); display: inline-block;");
+	styleSheet.addRule('v\\:shape', "display: inline-block;");
 }
 
 _typeface_js.setVectorBackend(backend);
@@ -581,5 +702,7 @@ script.onreadystatechange = function() {
 };
 
 /*@end @*/
+
+try { console.log('initializing typeface.js') } catch(e) {};
 
 })();
