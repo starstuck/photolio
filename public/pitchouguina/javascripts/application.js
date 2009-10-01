@@ -219,8 +219,9 @@ function setup_galleries_list_scroll(){
 	}
       }
 
-      galleries_div.observe("mousewheel", scroll_on_mousewheel);
-      galleries_div.observe("DOMMouseScroll", scroll_on_mousewheel); //firefox
+      // Mouse wheel scrolling disabled, as body scroll is re-enabled
+      //galleries_div.observe("mousewheel", scroll_on_mousewheel);
+      //galleries_div.observe("DOMMouseScroll", scroll_on_mousewheel); //firefox
 
       setup_show_hide_buttons(galleries_div, [button_up, button_down]);
     }
@@ -325,8 +326,8 @@ function setup_gallery_photos_scroll(){
       button_right.observe('mouseup', stop_scroll);
       button_right.observe('mouseout', stop_scroll);
 
-      gallery_viewport.observe("mousewheel", start_scroll_on_wheel);
-      gallery_viewport.observe("DOMMouseScroll", start_scroll_on_wheel); //firefox
+      //gallery_viewport.observe("mousewheel", start_scroll_on_wheel);
+      //gallery_viewport.observe("DOMMouseScroll", start_scroll_on_wheel); //firefox
 
       setup_show_hide_buttons(gallery_viewport, [button_left, button_right]);
     }
@@ -383,8 +384,8 @@ function setup_topic_scroll(){
       button_down.observe('mouseup', stop_scroll);
       button_down.observe('mouseout', stop_scroll);
 
-      topic_viewport.observe("mousewheel", start_scroll_on_wheel);
-      topic_viewport.observe("DOMMouseScroll", start_scroll_on_wheel); //firefox
+      //topic_viewport.observe("mousewheel", start_scroll_on_wheel);
+      //topic_viewport.observe("DOMMouseScroll", start_scroll_on_wheel); //firefox
 
       setup_show_hide_buttons(topic_viewport, [button_up, button_down]);
     }
