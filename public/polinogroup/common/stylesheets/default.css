@@ -1,0 +1,188 @@
+/* Colors setup
+ *
+ * used:
+ *   
+ * #000000 - black (content backround)
+ * #303232 - gray 1 (frame color)
+ * #393a3c - gray 2 (content text) 
+ * #c6c8ca - gray 3 (highlighted text)
+ */
+
+body{
+    color: #4f4f4f;
+    border-color: #303232;
+}
+
+body,
+hr
+{
+    background-color: #303232;
+}
+
+a {
+    color: #c6c8ca;
+}
+
+a:hover {
+    color: #d6d8da;
+}
+
+pre{
+    background-color: #111111;
+}  
+
+#content,
+#content_preloading
+{
+    background-color: #000000;
+}
+
+#header,
+#gallery_switches span
+{
+    color: #8f8f8f;
+}
+
+div.gallery_switch a:hover,
+div#footer{
+    color: #7f7f7f;
+}
+
+
+#gallery_switches .gallery_switch.active, 
+#gallery_controls,
+#site_menu .site_menu_topic{
+    background-color: #2f2f2f;
+}
+
+
+/*
+ * Generic text styles 
+ */
+
+body, a, h1, h2, h3, h4, p, ol, ul, td {
+    font-family: helvetica, arial, sans-serif;
+    font-weight: normal;
+}
+
+body, a, p, ol, ul, td {
+    font-size: 14px;
+}
+
+body b{
+    font-weight: bold;
+}
+
+a {
+    text-decoration: none;
+}
+
+a img{
+    border: 0px none;
+}
+
+h1, h2, h3, h4{
+    margin-left: 1em; 
+}
+
+h1{
+    font-family: 'Good Times', helvetica, arial, sans-serif;
+    font-size: 32px;
+    text-transform: uppercase;
+    line-height: 32px;
+}
+
+h2{
+    font-size: 24px;
+}
+
+h3{
+    font-size: 18px;
+}
+
+h4{
+    font-size: 16px;
+}
+
+p{
+    margin: 0.25em 1em 0.75em 1em;
+}
+
+hr {
+    border: 0px;
+    height: 1px;
+    width: 99%;
+}
+
+pre {
+    padding: 10px;
+    font-size: 11px;
+}
+
+
+/* 
+ * Common text styles 
+ */
+
+.typeface-js{
+    font-family: 'Venus Rising', helvetica, arial, sans-serif;
+}
+
+
+/*
+ * Topic text styles
+ */
+
+.topic_body p{
+    margin-left: 0em;
+}
+
+
+/*
+ * Common table styles
+ */
+
+table{
+    border-spacing: 0px;
+}
+
+
+/*
+ * Errors styles
+ */
+
+.fieldWithErrors {
+  padding: 2px;
+  background-color: red;
+  display: table;
+}
+
+#errorExplanation {
+  width: 400px;
+  border: 2px solid red;
+  padding: 7px;
+  padding-bottom: 12px;
+  margin-bottom: 20px;
+  background-color: #f0f0f0;
+}
+
+#errorExplanation h2 {
+  text-align: left;
+  font-weight: bold;
+  padding: 5px 5px 5px 15px;
+  font-size: 12px;
+  margin: -7px;
+  background-color: #c00;
+  color: #fff;
+}
+
+#errorExplanation p {
+  color: #333;
+  margin-bottom: 0;
+  padding: 5px;
+}
+
+#errorExplanation ul li {
+  font-size: 12px;
+  list-style: square;
+}

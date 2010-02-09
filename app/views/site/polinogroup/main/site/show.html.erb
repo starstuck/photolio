@@ -1,0 +1,13 @@
+<div id="home">
+
+  <h2>Polino Studio group</h2>
+  
+  <p>Welcome to group master page</p>
+
+  <ul>
+    <% for child in @site.children -%>
+      <li><%= link_to child.name, show_site_path(child) ,:title => child.name -%>
+    <% end -%>
+  </ul>
+
+</div>

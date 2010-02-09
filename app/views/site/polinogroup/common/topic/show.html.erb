@@ -1,0 +1,18 @@
+<div id="topic">
+
+  <div id="topic_header">
+    <h2><%=h @topic.title -%></h2>
+    <div id="close_button">
+      <%= link_to( image_tag( 'x.png', :size => '12x11', :alt => 'X' ), 
+		   site_default_path(@site),
+		   :title => 'back',
+		   :onClick => 'return(go_back());')
+	  -%>
+    </div>
+  </div>
+
+  <div id="topic_viewport" class="topic_body">
+    <%= render_topic @topic -%>
+  </div>
+  
+</div>

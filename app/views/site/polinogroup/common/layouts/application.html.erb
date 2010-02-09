@@ -1,0 +1,59 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <title>Polino Studio</title>
+
+    <meta http-equiv="content-type" content="text/html;charset=UTF-8" />
+    <meta name="Keywords" content="" />
+    <meta name="Description" content="" />
+
+    <%= stylesheet_link_tag('layout',
+                           'default')
+    -%>
+
+    <%= javascript_include_tag('loader',
+                               'application')
+    -%>
+
+    <!--[if gte IE 7]>
+      <%= stylesheet_link_tag 'ie7fix' %>
+    <![endif]-->
+    <!--[if lte IE 6]>
+      <%= stylesheet_link_tag 'ie6fix' %>
+    <![endif]-->
+  </head>
+
+  <body>
+
+    <div id="header">
+      <h1>
+	<span id="header_studio">Polino Studio</span>
+      </h1>
+    </div>
+
+    <!--
+    <div id="content_preloading">
+      <img alt="Loading..." src="" style="margin: 250px 450px;"/>
+      <span class="content_corner_tl"></span>
+      <span class="content_corner_tr"></span>
+      <span class="content_corner_bl"></span>
+      <span class="content_corner_br"></span>
+    </div>
+    -->
+
+    <div id="content">
+
+      <%= yield %>
+
+      <span class="content_corner_tl"></span>
+      <span class="content_corner_tr"></span>
+      <span class="content_corner_bl"></span>
+      <span class="content_corner_br"></span>
+    </div>
+
+    <div id="footer">
+      <p>&copy; Polino Studio - All rights reserved.</p>
+    </div>
+
+  </body>
+</html>

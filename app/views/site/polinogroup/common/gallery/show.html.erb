@@ -1,0 +1,50 @@
+<div id="gallery">
+
+  <ul id="gallery_menu">
+    <% for menu_item in @site.get_menu('galleries').menu_items -%>
+      <% gallery = menu_item.target -%>
+      <% active_class = (gallery.id == @gallery.id) ? ' active' : '' -%>
+      <% link_to(show_site_gallery_path(@site, gallery),
+		 { :class => "typeface-js gallery_switch#{active_class}", 
+		   :title => gallery.title }) do -%>
+	<%= menu_item.label_or_target_title -%>
+	<% if gallery.mark_as_new -%>
+	  <span class="new_mark">N</span>
+	<% end -%>
+      <% end -%>
+    <% end -%>
+  </ul>
+
+  <ul id="site_menu">
+    <% for menu_item in @site.get_menu('topics').menu_items -%>
+      <li class="site_menu_topic">
+	<%= link_to menu_item.label_or_target_title, 
+	    show_site_topic_path(@site, menu_item.target) -%>
+      </li>
+    <% end -%>
+  </ul>
+  
+  <div id="gallery_photos_viewport">
+    <p id="gallery_photos" style="width: <%= total_gallery_items_width(@gallery) -%>px;">
+      <% for item in @gallery.gallery_items -%>
+	<% if item.is_a? GalleryPhoto -%>
+	  <span class="gallery_photo">
+	    <%= link_to( photo_image_tag(item.photo, :size => 'x400'),
+			 show_site_photo_path( @site, item.photo ),
+			 { :title => item.photo.alt_text })
+		-%>
+	  </span>
+	<% elsif item.is_a? GallerySeparator -%>
+	  <span class="gallery_separator">&nbsp;</span>
+	<% end -%>
+      <% end -%>
+    </p>
+  </div>
+
+  <div id="gallery_scrollbar"></div>
+
+  <div id="gallery_controls">
+    <button id="gallery_play_button"></button>
+  </div>
+  
+</div>
