@@ -7,6 +7,7 @@
       <th>Preview</th>
       <th>File name</th>
       <th>Title</th>
+      <th>State</th>
     </tr>
   </thead>
 
@@ -16,10 +17,20 @@
 	<td><%= photo_image_tag photo, :size => 'x32', :alt => photo.title -%></td>
 	<td><%=h photo.file_name %></td>
 	<td><%=h photo.title %></td>
+	<td>
+	  <% if photo.site_id != @site.id -%>
+	    Included from
+	    <%= link_to photo.site.name, admin_site_path(photo.site) -%>
+	  <% end -%>
+	</td>
 	<td class="actions">
-	  <%= link_to 'Show', admin_site_photo_path(@site, photo) %> |
-	  <%= link_to 'Edit', edit_admin_site_photo_path(@site, photo) %> |
-	  <%= link_to 'Destroy', admin_site_photo_path(@site, photo), :confirm => 'Are you sure?', :method => :delete %>
+	  <% if photo.site_id == @site.id -%>
+	    <%= link_to 'Show', admin_site_photo_path(@site, photo) %> |
+	    <%= link_to 'Edit', edit_admin_site_photo_path(@site, photo) %> |
+	    <%= link_to 'Destroy', admin_site_photo_path(@site, photo), :confirm => 'Are you sure?', :method => :delete %>
+	  <% else -%>
+	    <%= link_to 'Exclude', remove_external_admin_site_photo_path(@site, photo), :confirm => 'Are you sure?', :method => :delete %>
+	  <% end -%>
         </td>
       </tr>
     <% end %>

@@ -96,7 +96,7 @@ class Admin::PhotosController < Admin::BaseController
 
     respond_to do |format|
       if not included.empty?
-        flash[:notice] = 'Photo was successfully created.'
+        flash[:notice] = '#{included.size} photos were succesfully included in current site.'
         format.html { redirect_to admin_site_photos_path(@site) }
         format.xml  { render :xml => nil, :status => :created, :location => admin_site_photos_path(@site) }
       else

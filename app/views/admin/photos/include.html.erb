@@ -1,6 +1,6 @@
 <h2>Select photos to include in <%= @site.name -%></h2>
 
-<form method="POST" action="<%= add_externals_admin_site_photos_path(@site) -%>">
+<% form_tag add_externals_admin_site_photos_path(@site) do -%>
   <table class="listing">
 
     <thead>
@@ -16,7 +16,9 @@
     <tbody>
       <% for photo in @photos %>
 	<tr>
-	  <td><input type="select" name="ids[]" value="<%=h photo.id -%>" /></td>
+	  <td>
+	    <%= check_box_tag "ids[]", photo.id, false, :id => "photo_id_#{photo.id}" -%>
+	  </td>
 	  <td>
 	    <label for="photo_id_<%=h photo.id -%>">
 	      <%= photo_image_tag photo, :size => 'x32', :alt => photo.title -%>
@@ -43,8 +45,8 @@
     
   </table>
   
-  <input type="submit" name="action" value="include" />
-</form>
+  <%= submit_tag "Include" -%>
+<% end -%>
 
 <hr />
 
