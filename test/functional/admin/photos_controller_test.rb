@@ -11,7 +11,7 @@ class Admin::PhotosControllerTest < ActionController::TestCase
   def test_should_get_index
     get :index, :site_id => 1
     assert_response :success
-    assert_not_nil assigns(:photos)
+    assert_equal 4, assigns(:photos).size
   end
 
   def test_should_get_new

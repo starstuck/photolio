@@ -5,7 +5,7 @@ class Admin::PhotosController < Admin::BaseController
   # GET /admin_photos
   # GET /admin_photos.xml
   def index
-    @photos = @site.photos.find
+    @photos = @site.photos
 
     respond_to do |format|
       format.html # index.html.erb

@@ -3,20 +3,18 @@ require 'test_helper'
 class Site::SiteControllerTest < ActionController::TestCase
 
   def test_should_show_google_sitemap
-    get( 'dispatch',
-         { :site_name => sites(:polinostudio).name,
-           :method_name => 'sitemap',
-           :format => 'xml'
-         } )
+    get( :sitemap,
+         :site_name => sites(:polinostudio).name,
+         :format => 'xml' )
     assert_response :success
   end
 
   def test_site_pages
     sitemap = Site::SiteController.site_pages(sites(:polinostudio), true)
-    assert_equal 7, sitemap.size #sitemap.map{|x| x[:loc][:controller]}.join(", \n")
+    assert_equal 8, sitemap.size #sitemap.map{|x| x[:loc][:controller]}.join(", \n")
 
-    assert_equal 'site/gallery', sitemap[0][:loc][:controller]
-    assert_equal '1', sitemap[0][:loc][:gallery_name]
+    assert_equal 'site/polinostudio/photo', sitemap[0][:loc][:controller]
+    assert_equal 1, sitemap[0][:loc][:controller_context]
     # Currently modification time is not supported
     #assert_equal DateTime.new(2008, 1, 1), sitemap[0][:lastmod]
   end
