@@ -75,12 +75,15 @@ module SiteParams
     # managed directly for gallery and topic page
     def_param :menus
 
+    # Theme - controller to use for rendering site. If not provide used name based
+    # on site name
+    # Use theme controllers and views relative path
+    def_param :theme
+
   end
 
 
   class DefaultParams < Params
-
-    photo_store_size 'x400'
 
     def publish_assets_location
       publish_location
@@ -95,6 +98,7 @@ module SiteParams
 
   class PolinostudioParams < DefaultParams
 
+    photo_store_size 'x400'
     publish_location '/var/www/polinostudio'
     published_url_prefix 'http://www.polinostudio.com'
     menus ['galleries', 'topics']
@@ -126,6 +130,41 @@ module SiteParams
   end
 
 
+  class PolinogroupCommonParams < DefaultParams
+    
+    theme 'polinogroup/common'
+    photo_store_size 'noresize'
+    menus ['galleries', 'topics']
+    
+  end
+
+
+  class PolinogroupParams < DefaultParams
+
+    theme 'polinogroup/main'
+    publish_location '/var/www/polinogroup'
+    published_url_prefix 'http://www.polinostudio.com'
+    menus ['topics',]
+
+  end
+
+
+  class PolinobeautyParams < PolinogroupCommonParams
+
+    publish_location '/var/www/polinobeauty'
+    published_url_prefix 'http://www.beauty.polinostudio.com'
+
+  end
+
+
+  class PolinofashionParams < PolinogroupCommonParams
+
+    publish_location '/var/www/polinohashion'
+    published_url_prefix 'http://www.fashion.polinostudio.com'
+
+  end
+
+
   def self.for_site(site)
     if site.name == 'polinostudio'
       params_factory = PolinostudioParams
@@ -133,6 +172,12 @@ module SiteParams
       params_factory = PitchouguinaParams
     elsif site.name == 'lafoka'
       params_factory = LafokaParams
+    elsif site.name == 'polinogroup'
+      params_factory = PolinogroupParams
+    elsif site.name == 'polinobeauty'
+      params_factory = PolinobeautyParams
+    elsif site.name == 'polinofashion'
+      params_factory = PolinofashionParams
     else
       params_factory = DefaultParams
     end

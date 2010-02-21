@@ -1,33 +1,33 @@
 <h2>Listing sites</h2>
 
-<table class="listing">
+<ul>
+  <% list_site = lambda do |site| -%>
+    <li>
+      <%=h site.name %> - 
+      <span class="actions">
+	<%= link_to 'Show', admin_site_path(site) %> |
+	<%= link_to 'Photos', admin_site_photos_path(site) %> |
+	<%= link_to 'Galleries', admin_site_galleries_path(site) %> | 
+	<%= link_to 'Layout', layout_admin_site_path(site) %> |
+	<%= link_to 'Topics', admin_site_topics_path(site) %> |
+	<%= link_to 'Edit', edit_admin_site_path(site) %> |
+	<%= link_to 'Destroy', admin_site_path(site), :confirm => 'Are you sure?', :method => :delete %>
+      </span>
+      
+      <% if site.children.size > 0 -%>
+	<ul>
+	  <% for child in site.children -%>
+	    <% list_site.call(child) -%>
+	  <% end -%>
+	</ul>
+      <% end -%>
+    </li>
+  <% end -%>
 
-  <thead>
-    <tr>
-      <th>Brand</th>
-      <th>Name</th>
-    </tr>
-  </thead>
-
-  <tbody>
-    <% for site in @sites %>
-      <tr>
-	<td><%=h site.brand %></td>
-	<td><%=h site.name %></td>
-	<td class="actions">
-	  <%= link_to 'Show', admin_site_path(site) %> |
-	  <%= link_to 'Photos', admin_site_photos_path(site) %> |
-	  <%= link_to 'Galleries', admin_site_galleries_path(site) %> | 
-	  <%= link_to 'Layout', layout_admin_site_path(site) %> |
-	  <%= link_to 'Topics', admin_site_topics_path(site) %> |
-	  <%= link_to 'Edit', edit_admin_site_path(site) %> |
-	  <%= link_to 'Destroy', admin_site_path(site), :confirm => 'Are you sure?', :method => :delete %>
-	</td>
-      </tr>
-    <% end %>
-  </tbody>
-
-</table>
+  <% for site in Site.find(:all, :conditions => {:parent_id => nil}) %>
+    <% list_site.call(site) %>
+  <% end %>
+</ul>
 
 <hr />
 

@@ -3,11 +3,27 @@
 polinostudio:
   id: 1
   name: polinostudio
+  users: aaron
 
 syscenter:
   id: 2
   name: syscenter
+  users: aaron
   
 pitchouguina:
   id: 3
   name: pitchouguina
+
+polinogroup:
+  name: polinogroup
+  external_photos: p2, p3
+  users: aaron
+  
+polinobeauty:
+  name: polinobeauty
+  parent: polinogroup
+  external_photos: p5
+
+polinofashion:
+  name: polinofashion
+  parent: polinogroup

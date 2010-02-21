@@ -64,3 +64,39 @@ pitchouguina_welcome:
   image_height: 450
   created_at: 2009-02-01
   updated_at: 2009-02-01
+
+p1:
+  site: polinobeauty
+  file_name: beauty/p1.png
+  image_width: 100
+  image_height: 100
+
+p2:
+  site: polinobeauty
+  file_name: beauty/p2.png
+  image_width: 100
+  image_height: 100
+
+p3:
+  site: polinofashion
+  file_name: fashtion/p3.png
+  image_width: 100
+  image_height: 100
+
+p4:
+  site: polinogroup
+  file_name: group/p4.png
+  image_width: 100
+  image_height: 100
+
+p5:
+  site: polinogroup
+  file_name: group/p5.png
+  image_width: 100
+  image_height: 100
+
+p6:
+  site: polinofashion
+  file_name: fashion/p6.png
+  image_width: 100
+  image_height: 100

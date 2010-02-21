@@ -8,43 +8,39 @@ class Site::PolinostudioControllerExtensionsTest < ActionController::TestCase
   end
 
   test 'show site' do
-    @controller = Site::SiteController.new
-    get( 'dispatch',
-         :method_name => 'show',
+    @controller = Site::Polinostudio::SiteController.new
+    get( 'show',
          :site_name => @site.name
          )
     assert_response 307
   end
 
   test 'show gallery' do
-    @controller = Site::GalleryController.new
+    @controller = Site::Polinostudio::GalleryController.new
     @gallery = @site.galleries[0]
-    get( 'dispatch',
-         :method_name => 'show',
+    get( 'show',
          :site_name => @site.name,
-         :gallery_name => @gallery.name
+         :controller_context => @gallery.name
          )
     assert_response :success
   end
 
   test 'show topic' do
-    @controller = Site::TopicController.new
+    @controller = Site::Polinostudio::TopicController.new
     @topic = @site.topics[0]
-    get( 'dispatch',
-         :method_name => 'show',
+    get( 'show',
          :site_name => @site.name,
-         :topic_name => @topic.name
+         :controller_context => @topic.name
          )
     assert_response :success
   end
 
   test 'show photo' do
-    @controller = Site::PhotoController.new
+    @controller = Site::Polinostudio::PhotoController.new
     @photo = @site.photos[0]
-    get( 'dispatch',
-         :method_name => 'show',
+    get( 'show',
          :site_name => @site.name,
-         :photo_id => @photo.id
+         :controller_context => @photo.id
          )
     assert_response :success
   end

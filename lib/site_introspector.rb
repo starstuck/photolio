@@ -29,7 +29,10 @@ module SiteIntrospector
     private :initialize
 
     def theme_name
-      site.name
+      if ! @theme_name
+        @theme_name =  SiteParams.for_site(site).theme || site.name
+      end
+      return @theme_name
     end
 
     # Return array of Controller info objects for controller defined for site      

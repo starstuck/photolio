@@ -48,7 +48,7 @@ module ModelExtensions::HasFile
     
     private
     def read_mime_types
-      for file in ['/etc/mime.types', '/etc/httpd/mime.types']
+      for file in ['/etc/mime.types', '/etc/httpd/mime.types', '/etc/apache2/mime.types']
         if File.exists? file
           break
         end

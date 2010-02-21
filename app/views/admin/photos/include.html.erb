@@ -1,0 +1,53 @@
+<h2>Select photos to include in <%= @site.name -%></h2>
+
+<form method="POST" action="<%= add_externals_admin_site_photos_path(@site) -%>">
+  <table class="listing">
+
+    <thead>
+      <tr>
+	<th><abbr title="Select">S.</abbr></th>
+	<th>Preview</th>
+	<th>File name</th>
+	<th>Site</th>
+	<th>Title</th>
+      </tr>
+    </thead>
+    
+    <tbody>
+      <% for photo in @photos %>
+	<tr>
+	  <td><input type="select" name="ids[]" value="<%=h photo.id -%>" /></td>
+	  <td>
+	    <label for="photo_id_<%=h photo.id -%>">
+	      <%= photo_image_tag photo, :size => 'x32', :alt => photo.title -%>
+	    </label>
+	  </td>
+	  <td>
+	    <label for="photo_id_<%=h photo.id -%>">
+	      <%=h photo.file_name %>
+	    </label>
+	  </td>
+	  <td>
+	    <label for="photo_id_<%=h photo.id -%>">
+	      <%=h photo.site.name %>
+	    </label>
+	  </td>
+	  <td>
+	    <label for="photo_id_<%=h photo.id -%>">
+	      <%=h photo.title %>
+	    </label>
+	  </td>
+	</tr>
+      <% end %>
+    </tbody>
+    
+  </table>
+  
+  <input type="submit" name="action" value="include" />
+</form>
+
+<hr />
+
+<div class="page_actions">
+  <%= link_to 'Back to site', admin_site_photos_path(@site) -%>
+</div>

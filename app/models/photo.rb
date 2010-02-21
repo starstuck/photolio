@@ -88,12 +88,14 @@ class Photo < ActiveRecord::Base
 
   def resize_on_upload
     if @uploaded_data
-      image = MiniMagick::Image.from_blob(@uploaded_data, file_name_extension)
       photo_store_size = site.site_params.photo_store_size
-      if not image.match_max_size(photo_store_size)
-        image.resize(photo_store_size)
-        @uploaded_data = image.to_blob
-        update_image_meta
+      if photo_store_size
+        image = MiniMagick::Image.from_blob(@uploaded_data, file_name_extension)
+        if not image.match_max_size(photo_store_size)
+          image.resize(photo_store_size)
+          @uploaded_data = image.to_blob
+          update_image_meta
+        end
       end
     end      
   end

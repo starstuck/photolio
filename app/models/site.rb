@@ -2,22 +2,18 @@ class Site < ActiveRecord::Base
 
   has_attachment
 
-  BRANDS = ['artists', 'models']
-  
+  belongs_to :parent, :class_name => 'Site'
+  has_many :children, :class_name => 'Site', :foreign_key => 'parent_id', :dependent => :nullify, :order => 'name'
   has_many :assets, :dependent => :destroy, :order => 'file_name'
   has_many :galleries, :dependent => :destroy, :order => 'name' 
-  has_many :photos, :dependent => :destroy, :order => 'file_name'
   has_many :topics, :dependent => :destroy, :order => 'title'
   has_many :menus, :dependent => :destroy, :order => 'name'
   has_and_belongs_to_many :users, :order => 'name, login', :uniq => true
 
+  has_shared :photos, :dependent => :destroy, :order => 'file_name'
+
   validates_length_of :name, :in => 3..255
   validates_uniqueness_of :name
-  validates_inclusion_of :brand, :in => BRANDS, :allow_blank => true
-
-  def self.brands_selection
-    return [nil] + BRANDS
-  end
 
   # List of photos not assigned to any gallery
   def unassigned_photos
@@ -41,6 +37,12 @@ class Site < ActiveRecord::Base
     self
   end
 
+  # Site theme name
+  def theme_name
+    @theme_name ||= SiteIntrospector.introspect(self).theme_name
+    return @theme_name
+  end
+  
   # Check if site has menu with provided name
   def has_menu?(name)
     return(site_params.menus and site_params.menus.include? name)
@@ -53,6 +55,22 @@ class Site < ActiveRecord::Base
       raise Menu::NameError.new(menu.errors.full_messages.join(', '))
     end
     menu
+  end
+
+  # Pool of sitest which can share items with curent site
+  def share_pool
+    if parent
+      sites = parent.share_pool.reject{|s| s.id == id}
+      sites.unshift parent
+    else
+      sites = []
+      def collect_children (sites, c)
+        c.children.map{|s| sites << s}
+      end
+      collect_children(sites, self)
+    end
+
+    return sites
   end
 
 end

@@ -34,9 +34,37 @@ class Admin::PhotosControllerTest < ActionController::TestCase
 
     created_path = File.expand_path(@temp_dir + "/polinostudio/files/photos/x.png")
     assert((File.exists? created_path), "Does not exists: " + created_path)
-    assert_redirected_to admin_site_photo_path(assigns(:site), assigns['photo'])
+    assert_redirected_to admin_site_photos_path(assigns(:site))
 
     FileUtils.rm_rf @temp_dir
+  end
+
+  def test_should_get_include
+    get :include, :site_id => sites(:polinogroup).id
+    assert_equal [photos(:p1), photos(:p6)], assigns(:photos)
+    assert_response :success
+  end
+
+  def test_should_add_externals
+    assert_difference('sites(:polinogroup).photos.count') do
+      post( :add_externals, 
+            :site_id => sites(:polinogroup).id , 
+            :ids => [photos(:p1).id]
+            )
+    end
+    assert_equal [photos(:p1), photos(:p2), photos(:p3)], sites(:polinogroup).external_photos
+    assert_redirected_to admin_site_photos_path(assigns(:site))
+  end
+
+  def test_should_remove_external
+    assert_difference('sites(:polinogroup).photos.count', -1) do
+      post( :remove_external, 
+            :site_id => sites(:polinogroup).id , 
+            :id => [photos(:p2).id]
+            )
+    end
+    assert_equal [photos(:p3)], sites(:polinogroup).external_photos
+    assert_redirected_to admin_site_photos_path(assigns(:site))
   end
 
   def test_should_show_photo

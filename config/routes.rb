@@ -53,7 +53,11 @@ ActionController::Routing::Routes.draw do |map|
                     ) do |site|
       site.resources :assets
       site.resources :galleries
-      site.resources :photos do |photo|
+      site.resources(:photos,
+                     :collection => ['include',
+                                     'add_externals'],
+                     :member => ['remove_external']
+                     ) do |photo|
         photo.resources :photo_keywords, :as => 'keywords', :name_prefix => 'admin_site_'
         photo.resources :photo_participants, :as => 'participants', :name_prefix => 'admin_site_'
       end
@@ -62,7 +66,12 @@ ActionController::Routing::Routes.draw do |map|
   end
 
   # Map routes for each site
-  for site in Site.find(:all)
+  begin
+    sites = Site.find(:all)
+  rescue ActiveRecord::ActiveRecordError
+    sites = [] 
+  end
+  for site in sites
     site_cinfo = nil
       
     # All controllers exept site controller pages

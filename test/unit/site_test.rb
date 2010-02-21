@@ -20,4 +20,9 @@ class SiteTest < ActiveSupport::TestCase
     end
   end
 
+  def test_parent
+    assert_equal 'polinogroup', sites(:polinobeauty).parent.name
+    assert_match /polinobeauty,.*polinofashion/, sites(:polinogroup).children.map{|s| s.name}.join(',')
+  end
+
 end

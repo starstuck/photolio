@@ -9,6 +9,12 @@
       <%= f.text_field :name %>
     </p>
 
+    <% if @current_user -%>
+      <p>
+	<%= f.label :parent_id, 'Parent'  -%><br />
+	<%= f.select :parent_id, Site.find(:all, :order => "name").collect{|s| [s.name, s.id]}, :include_blank => true -%>
+      </p>
+    <% end -%>
 
     <% slots = @site.attachment_slots_with_empty -%>
     <% if slots.size > 0 -%>

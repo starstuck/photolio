@@ -8,12 +8,13 @@ module Site::BaseHelper
   #   action_name
   #   action_context
   #   options that will be forwarde to underlying url_for command
-  def page_url(site, controller, action, *args)
-
+  def page_path(site, controller, action, *args)
+    
+    site_controller_base_path = SiteIntrospector.introspect(site).theme_name
     options = {
       :format => 'html',
       :only_path => true,
-      :controller => "/site/#{site.name}/#{controller}",
+      :controller => "/site/#{site_controller_base_path}/#{controller}",
       :site_name => site.name,
       :action => action }
 
@@ -53,7 +54,8 @@ module Site::BaseHelper
   end
 
   def compute_public_path(source, dir, ext=nil)
-    path = compute_public_path_without_photolio(source, "#{@site.name}/#{dir}", ext)
+    theme_path = SiteIntrospector.introspect(@site).theme_name
+    path = compute_public_path_without_photolio(source, "#{theme_path}/#{dir}", ext)
     if params[:published]
       site_prefix = "/#{@site.name}"
       if host = ActionController::Base.asset_host

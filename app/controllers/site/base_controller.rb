@@ -16,8 +16,9 @@ class Site::BaseController < ApplicationController
 
   def setup_site_helpers
     h_modules = [build_named_routes_module]
+    theme_name = SiteIntrospector.introspect(@site).theme_name
     begin
-      h_modules << eval("Site::#{@site.name.camelize}::BaseHelper")
+      h_modules << eval("Site::#{theme_name.camelize}::BaseHelper")
     rescue NameError; end
     for h_module in h_modules
       response.template.helpers.send(:include, h_module)
@@ -25,8 +26,13 @@ class Site::BaseController < ApplicationController
   end
 
   # Coumpute site layout
+  def site_views_path
+    theme_name = SiteIntrospector.introspect(@site).theme_name
+    "site/#{theme_name}"
+  end
+
   def site_layout
-    "site/#{@site.name}/layouts/application"
+    site_views_path + '/layouts/application'
   end
 
   # Call block only if request last modified is older then argument. It also records
@@ -45,11 +51,11 @@ class Site::BaseController < ApplicationController
 
   # Build module with named routes paths methods
   def build_named_routes_module
-    theme_name = @site.name
+    site_name = @site.name
     if Rails.configuration.cache_classes
       @@cached_named_routes_helpers ||= {}
-      if @@cached_named_routes_helpers.key? theme_name
-        return @@cached_named_routes_helpers[theme_name]
+      if @@cached_named_routes_helpers.key? site_name
+        return @@cached_named_routes_helpers[site_name]
       end
     end
     
@@ -61,13 +67,13 @@ class Site::BaseController < ApplicationController
         if cinfo.name == 'site'
           cmd = <<-EOS
           def #{pinfo.name}_site_path(site, *args)
-            page_url(site, 'site', '#{pinfo.name}', *args)
+            page_path(site, 'site', '#{pinfo.name}', *args)
           end
         EOS
         else
           cmd = <<-EOS
             def #{pinfo.name}_site_#{cinfo.name}_path(site, *args)
-              page_url(site, '#{cinfo.name}', '#{pinfo.name}', *args)
+              page_path(site, '#{cinfo.name}', '#{pinfo.name}', *args)
             end
           EOS
         end
@@ -77,7 +83,7 @@ class Site::BaseController < ApplicationController
     end
 
     if Rails.configuration.cache_classes
-      @@cached_named_routes_helpers[theme_name] = mod
+      @@cached_named_routes_helpers[site_name] = mod
     end
 
     mod

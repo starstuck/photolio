@@ -16,6 +16,22 @@
     <b>Name</b><br />
     <%=h @site.name %>
   </p>
+  <% if @site.parent -%>
+    <p>
+      <b>Parent site</b><br />
+      <%= link_to @site.parent.name, admin_site_path(@site.parent) -%>
+    </p>
+  <% end -%>
+  <% if @site.children.size -%>
+    <p>
+      <b>Children sites</b>
+    </p>
+    <ul>
+      <% for child in @site.children -%>
+	<li><%= link_to child.name, admin_site_path(child) -%></li>
+      <% end -%>
+    </ul>
+  <% end -%>
 
   <% slots = @site.attachment_slots_with_empty -%>
   <% if slots.size > 0 -%>
