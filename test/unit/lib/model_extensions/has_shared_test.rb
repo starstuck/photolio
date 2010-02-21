@@ -32,6 +32,8 @@ class HasSharedTest < ActiveSupport::TestCase
 
   def test_find_available_external_for_share
     assert_equal [photos(:p1), photos(:p6)], @site.find_available_external_photos(:order => 'file_name')
+    # require test for sites, that does not have shared items
+    assert_equal [photos(:p1), photos(:p2), photos(:p4), photos(:p5)], sites(:polinofashion).find_available_external_photos(:order => 'file_name')
   end
 
 end

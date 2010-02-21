@@ -54,9 +54,13 @@ module ModelExtensions::HasShared
     def available_external_for_share_conditions type, options={}
       cls = eval(type.to_s.classify)
       foreign_key = self.class.table_name.singularize + '_id'
-      return [ "#{foreign_key} IN (?) AND id NOT IN (?)",
-               share_pool.map{|o| o.id},
-               send("external_#{type.singularize}_ids".to_sym) ]
+      excluded_ids = send("external_#{type.singularize}_ids".to_sym)
+      if excluded_ids.size > 0
+        return [ "#{foreign_key} IN (?) AND id NOT IN (?)",
+                 share_pool.map{|o| o.id}, excluded_ids ]
+      else
+        return [ "#{foreign_key} IN (?)", share_pool.map{|o| o.id} ]
+      end
     end
 
   end
