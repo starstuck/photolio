@@ -133,7 +133,6 @@ module SiteParams
   class PolinogroupCommonParams < DefaultParams
     
     theme 'polinogroup/common'
-    photo_store_size 'noresize'
     menus ['galleries', 'topics']
     
   end
