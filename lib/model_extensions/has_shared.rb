@@ -10,11 +10,11 @@ module ModelExtensions::HasShared
     end
     item_foreign_key = association_name.singularize + '_id'
     owner_foreign_key = self.table_name.singularize + '_id'
-    finder_sql = "SELECT \"#{association_name}\".* FROM \"#{association_name}\"" +
-      " LEFT OUTER JOIN \"#{join_table}\"" +
-      "  ON \"#{association_name}\".id = \"#{join_table}\".\"#{item_foreign_key}\"" +
-      " WHERE \"#{join_table}\".\"#{owner_foreign_key}\" = \#{id}" +
-      "  OR \"#{association_name}\".\"#{owner_foreign_key}\" = \#{id}"
+    finder_sql = "SELECT `#{association_name}`.* FROM `#{association_name}`" +
+      " LEFT OUTER JOIN `#{join_table}`" +
+      "  ON `#{association_name}`.id = `#{join_table}`.`#{item_foreign_key}`" +
+      " WHERE `#{join_table}`.`#{owner_foreign_key}` = \#{id}" +
+      "  OR `#{association_name}`.`#{owner_foreign_key}` = \#{id}"
     if options[:order]
       finder_sql += " ORDER BY #{options[:order]}"
     end
