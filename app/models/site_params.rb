@@ -148,19 +148,15 @@ module SiteParams
   end
 
 
-  class PolinobeautyParams < PolinogroupCommonParams
+  for name in ['beauty', 'business', 'collection', 'fashion', 'weddings']
+    eval <<-EOS
+  class Polino#{name}Params < PolinogroupCommonParams
 
-    publish_location '/var/www/polinobeauty'
-    published_url_prefix 'http://www.beauty.polinostudio.com'
+    publish_location '/var/www/polino#{name}'
+    published_url_prefix 'http://www.#{name}.polinostudio.com'
 
-  end
-
-
-  class PolinofashionParams < PolinogroupCommonParams
-
-    publish_location '/var/www/polinohashion'
-    published_url_prefix 'http://www.fashion.polinostudio.com'
-
+  end 
+EOS
   end
 
 
@@ -175,8 +171,14 @@ module SiteParams
       params_factory = PolinogroupParams
     elsif site.name == 'polinobeauty'
       params_factory = PolinobeautyParams
+    elsif site.name == 'polinobusiness'
+      params_factory = PolinobusinessParams
+    elsif site.name == 'polinocollection'
+      params_factory = PolinocollectionParams
     elsif site.name == 'polinofashion'
       params_factory = PolinofashionParams
+    elsif site.name == 'polinoweddings'
+      params_factory = PolinoweddingsParams
     else
       params_factory = DefaultParams
     end
