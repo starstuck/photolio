@@ -52,10 +52,10 @@ module ApplicationHelper
       if args.size > 0
         if macro_name == 'asset_image_path'
           file_name = args[0]
-          compute_site_public_path(topic.site, file_name, Asset.files_folder)
+          compute_site_files_public_path(topic.site, file_name, Asset.files_folder)
         elsif macro_name == 'photo_image_path'
           file_name = args[0]
-          compute_site_public_path(topic.site, file_name, Photo.files_folder)
+          compute_site_files_public_path(topic.site, file_name, Photo.files_folder)
         else
           ''
         end
@@ -68,19 +68,23 @@ module ApplicationHelper
 
   protected 
 
-  def compute_site_public_path(site, source, dir, ext=nil)
-    compute_public_path_without_photolio(source, "#{site.name}/#{dir}", ext)
+  def compute_site_files_public_path(site, source, dir, ext=nil)
+    if (site.id != @site.id and not @site.share_pool.include? site)
+      raise RuntimeError.new("Access to #{site.name} assets files is denied")
+    end
+
+    compute_public_path_without_photolio(source, "#{ModelExtensions::HasFile::BASE_FOLDER_NAME}/#{site.name}/#{dir}", ext)
   end
 
   def compute_mixin_file_path(obj)
-    compute_site_public_path(obj.site, obj.file_name, obj.class.files_folder)
+    compute_site_files_public_path(obj.site, obj.file_name, obj.class.files_folder)
   end
 
   def compute_resized_mixin_file_path(obj, size=nil)
     if not size
       compute_mixin_file_path(obj)
     else
-      compute_site_public_path(obj.site, obj.resized_file_name(size), obj.class.files_folder)
+      compute_site_files_public_path(obj.site, obj.resized_file_name(size), obj.class.files_folder)
     end
   end
 

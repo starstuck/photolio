@@ -59,6 +59,13 @@ class Site < ActiveRecord::Base
 
   # Pool of sitest which can share items with curent site
   def share_pool
+    @share_pool ||= compute_share_pool
+    return @share_pool
+  end
+
+  private
+
+  def compute_share_pool
     if parent
       sites = parent.share_pool.reject{|s| s.id == id}
       sites.unshift parent

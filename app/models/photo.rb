@@ -17,7 +17,7 @@ class Photo < ActiveRecord::Base
   validates_length_of :description, :maximum => 255, :allow_nil => true
   validates_associated :photo_participants, :photo_keywords
 
-  set_files_folder 'files/photos'
+  set_files_folder 'photos'
 
   
   # Update keywords values from array of hashes, having keywords data

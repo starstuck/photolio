@@ -8,7 +8,7 @@ class Asset < ActiveRecord::Base
   validates_length_of :label, :maximum => 255, :allow_nil => true
   validates_length_of :image_alt, :maximum => 255, :allow_nil => true
 
-  set_files_folder 'files/assets'
+  set_files_folder 'assets'
 
 end
 

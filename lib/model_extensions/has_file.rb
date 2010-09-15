@@ -4,6 +4,8 @@ require 'mini_magick_utils'
 
 module ModelExtensions::HasFile
 
+  BASE_FOLDER_NAME = 'files' # Folder relative to public
+
   def self.resized_file_mode
     0644
   end
@@ -139,7 +141,7 @@ module ModelExtensions::HasFile
       if not file_name_extension.empty?
         resized_file_name += ".#{file_name_extension}"
       end
-      resized_file_path = "#{files_folder_disk_path}/#{resized_file_name}"
+      resized_file_path = "#{file_folder_disk_path}/#{resized_file_name}"
 
       if ( not File.exists? resized_file_path ) and File.exists? file_disk_path
         File.makedirs(File.dirname(resized_file_path))
@@ -154,13 +156,17 @@ module ModelExtensions::HasFile
     
 
     protected
-    
-    def files_folder_disk_path
-      File.join(self.class.public_path, site.name, self.class.files_folder)
+
+    def file_folder_relative_to_public
+      File.join(ModelExtensions::HasFile::BASE_FOLDER_NAME, site.name, self.class.files_folder)
+    end
+
+    def file_folder_disk_path
+      File.join(self.class.public_path, file_folder_relative_to_public)
     end
     
     def file_disk_path
-      File.join(files_folder_disk_path, self.file_name)
+      File.join(file_folder_disk_path, self.file_name)
     end
     
     # Resized images path prefix relative to master files folder
@@ -169,7 +175,7 @@ module ModelExtensions::HasFile
     end
     
     def resized_folder_disk_path
-      "#{files_folder_disk_path}/#{resized_path_prefix}"
+      "#{file_folder_disk_path}/#{resized_path_prefix}"
     end
     
     def update_file_meta

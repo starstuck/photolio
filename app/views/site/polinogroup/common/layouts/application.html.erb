@@ -4,16 +4,14 @@
     <title>Polino Studio</title>
 
     <meta http-equiv="content-type" content="text/html;charset=UTF-8" />
-    <meta name="Keywords" content="" />
-    <meta name="Description" content="" />
 
-    <%= stylesheet_link_tag('layout',
-                           'default')
-    -%>
+    <!-- <meta name="Keywords" content="" /> -->
+    <!-- <meta name="Description" content="" /> -->
 
-    <%= javascript_include_tag('loader',
-                               'application')
-    -%>
+    <%= stylesheet_link_tag('default', :media => "all") -%>
+    <%= stylesheet_link_tag('screen', :media => "screen") -%>
+
+    <%= javascript_include_tag('jquery-1.4.2.min', 'jquery-ui-custom-1.8.min', 'reflection', 'application') -%>
 
     <!--[if gte IE 7]>
       <%= stylesheet_link_tag 'ie7fix' %>
@@ -21,34 +19,19 @@
     <!--[if lte IE 6]>
       <%= stylesheet_link_tag 'ie6fix' %>
     <![endif]-->
+    <script type="text/javascript" src="http://use.typekit.com/oii4ufp.js"></script>
+    <script type="text/javascript">try{Typekit.load();}catch(e){}</script>
   </head>
 
   <body>
 
     <div id="header">
-      <h1>
-	<span id="header_studio">Polino Studio</span>
-      </h1>
+      <h1>Polino Studio</h1>
     </div>
-
-    <!--
-    <div id="content_preloading">
-      <img alt="Loading..." src="" style="margin: 250px 450px;"/>
-      <span class="content_corner_tl"></span>
-      <span class="content_corner_tr"></span>
-      <span class="content_corner_bl"></span>
-      <span class="content_corner_br"></span>
-    </div>
-    -->
 
     <div id="content">
-
       <%= yield %>
-
-      <span class="content_corner_tl"></span>
-      <span class="content_corner_tr"></span>
-      <span class="content_corner_bl"></span>
-      <span class="content_corner_br"></span>
+      <div id="content-frame"></div>
     </div>
 
     <div id="footer">

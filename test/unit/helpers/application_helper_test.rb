@@ -17,21 +17,21 @@ class ApplicationHelperTest < ActionView::TestCase
 
   def test_asset_image_topic_macro
     @topic.body = 'Some [[asset_image_path(smart.jpg)]] asset.'
-    assert_equal 'Some /pitchouguina/files/assets/smart.jpg asset.', render_topic(@topic)
+    assert_equal 'Some /files/pitchouguina/assets/smart.jpg asset.', render_topic(@topic)
     # Existing file
     @topic.body = 'Some [[ asset_image_path ( love_stories.jpg ) ]] asset.'
-    assert_equal 'Some /pitchouguina/files/assets/love_stories.jpg asset.', render_topic(@topic)
+    assert_equal 'Some /files/pitchouguina/assets/love_stories.jpg asset.', render_topic(@topic)
     # Many macros in the same line
     @topic.body = 'Some [[asset_image_path(love_stories.jpg )]] and '\
                   '[[asset_image_path(smart.jpg)]] assets.'
-    assert_equal('Some /pitchouguina/files/assets/love_stories.jpg and '\
-                 '/pitchouguina/files/assets/smart.jpg assets.',
+    assert_equal('Some /files/pitchouguina/assets/love_stories.jpg and '\
+                 '/files/pitchouguina/assets/smart.jpg assets.',
                  render_topic(@topic))
   end
 
   def test_photo_image_topic_macro
     @topic.body = 'Some [[photo_image_path(smart.jpg)]] asset.'
-    assert_equal 'Some /pitchouguina/files/photos/smart.jpg asset.', render_topic(@topic)
+    assert_equal 'Some /files/pitchouguina/photos/smart.jpg asset.', render_topic(@topic)
   end
 
 end

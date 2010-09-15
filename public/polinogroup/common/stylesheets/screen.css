@@ -1,0 +1,515 @@
+/*
+ * =colours
+ */
+
+body{
+    color: #444;
+    border-color: #333;
+}
+
+body,
+hr
+{
+    /*background-color: #333; */
+    background-color: #333;
+}
+
+a {
+    color: #ccc;
+}
+
+a:hover {
+    color: #ddd;
+}
+
+#header h1 {
+    color: #888;
+}
+
+#content,
+#content-preloading
+{
+    background-color: #111;
+}
+
+#footer{ 
+   color: #777;
+}
+
+#galleries-menu {
+    color: #777;
+}
+
+#galleries-menu a,
+#topics-menu a {
+    color: #777;
+}
+
+#galleries-menu a:hover,
+#topics-menu a:hover{
+   color: #888;
+}
+
+#breadcrumbs {
+    color: #333;
+    background-color: #777;
+}
+
+#breadcrumbs a {
+    color: #111;
+}
+
+#breadcrumbs a:hover {
+    color: #222;
+}
+
+#gallery .ui-scroller-extra {
+    color: #222;
+}
+
+#gallery .ui-scroller-inner {
+   background-color: #777;
+}
+
+/*
+ * =typography
+ */
+body {
+    font-family: helvetica, arial, sans-serif;
+    font-weight: 200;
+    font-size: 14px;
+}
+
+h1, h2, h3, h4, h5, h6,
+#galleries-menu,
+#topics-menu,
+#breadcrumbs {
+    /*font-family: "divulge-1", "divulge-2", "Tahoma", sans-serif;*/
+    /*font-weight: normal; */
+
+    /*
+    font-family: "museo-sans-1", "museo-sans-2", "Tahoma", sans-serif;
+    font-weight: lighter;
+    */
+
+    font-family: "luxi-sans-1", "luxi-sans-2", "Tahoma", sans-serif;
+    font-weight: normal;
+    text-transform: uppercase;
+
+    /*text-transform: uppercase;*/
+
+}
+
+#header h1 {
+    font-family: "good-times-1", "good-times-2", Helvetica, Arial, sans-serif;
+    text-transform: uppercase;
+    font-weight: lighter;
+    text-shadow: 0px 0px 5px #000;
+}
+
+a {
+    text-decoration: none;
+}
+
+/*
+ * =generic text sizes
+ */
+
+h1, h2, h3, h4{
+    margin-left: 1em; 
+}
+
+h1{
+    font-size: 30px;
+}
+
+h2{
+    font-size: 24px;
+}
+
+h3{
+    font-size: 18px;
+}
+
+h4{
+    font-size: 16px;
+}
+
+p{
+    margin: 0.25em 1em 0.75em 1em;
+}
+
+hr {
+    border: 0px;
+    height: 1px;
+    width: 99%;
+}
+
+pre {
+    padding: 10px;
+    font-size: 11px;
+}
+
+table{
+    border-spacing: 0px;
+}
+
+a img{
+    border: 0px none;
+}
+
+
+/*
+ * =main sections layout
+ */
+
+html, body{
+    overflow: hidden; /* Hide window scrollbars, as they brake gallery scrolling */
+}
+
+body {
+    margin: 0px;
+    padding: 0px;
+}
+
+#header,
+#content,
+#footer {
+    width:805px;
+    margin: 0 auto;
+}
+
+#header{
+    height: 35xpx;
+    padding-top: 5px;
+    padding-left: 65px;
+}
+
+/*
+ * =header
+ */
+
+#header h1{
+    padding: 0px;
+    margin: 0px;
+}
+
+/* 
+ * =content box
+ */
+
+#content,
+#content-frame{
+    border-radius: 13px;
+    -moz-border-radius:13px;
+    -webkit-border-radius:13px;
+}
+
+#content{
+    position: relative;
+    overflow: hidden;
+    padding: 10px;
+}
+
+#content-frame{
+    position: absolute;
+    top:0;
+    left:0;
+    right:0;
+    bottom:0;
+    pointer-events:none;
+    /* TODO: CSS shadow seems to slow on Firefox, try background images */
+   /*  
+    box-shadow: inset rgba(0, 0, 0, 1) 0 0 100px;
+    -moz-box-shadow: inset rgba(0, 0, 0, 1) 0 0 80px 5px;
+    -webkit-box-shadow: inset rgba(0, 0, 0, 1) 0 0 100px;    
+  */  
+}
+
+/*
+#content .corner_tl,
+#content .corner_tr, 
+#content .corner_bl, 
+#content .corner_br{
+    position: absolute;
+    width: 13px;
+    height: 13px;
+    display: block;
+    background-repeat: no-repeat;
+}
+
+#content .corner_tl{
+    top: 0px;
+    left: 0px;
+    background-image: url(../images/content-corner-tl.gif);
+}
+
+#content .corner_tr{
+    top: 0px;
+    right: 0px;
+    background-image: url(../images/content-corner-tr.gif);
+}
+
+#content .corner_bl{
+    bottom: 0px;
+    left: 0px;
+    background-image: url(../images/content-corner-bl.gif); 
+}
+
+#content .corner_br{
+    bottom: 0px;
+    right: 0px;
+    background-image: url(../images/content-corner-br.gif); 
+}
+*/
+
+/*
+ * =footer 
+ */
+
+#footer{
+    padding-right: 15px;
+    text-align: right;
+}
+
+div#footer p{
+    font-size: 7pt;
+}
+
+/* =galleries-menu */
+
+#galleries-menu {
+    margin: 0;
+    font-size: 12px;
+    white-space: nowrap;
+    padding: 3px 0 10px 3px;
+    text-align: left;
+    border-bottom: 1px solid;
+}
+
+#galleries-menu li{
+    display: inline-block;
+    margin: 0;
+    padding-right: 16px;
+}
+
+#galleries-menu li.active {
+    /*font-size: 1.3em;*/
+}
+
+#galleries-menu li.new_mark{
+    font-size: 8px;
+    position: relative;
+    top: -4px;
+    left: 2px;
+}
+
+/* =breadcrumbs */
+
+#breadcrumbs {
+    display:block;
+    margin:5px 0;
+    padding:0px;
+    line-height: 15px;
+    height: 15px;
+    font-size: .8em;
+    font-weight: bold;
+}
+
+#breadcrumbs li {
+    display:inline-block;
+    margin:0;
+    padding:0 8px;
+}
+
+#breadcrumbs .separator{
+    padding-left:16px;
+}
+
+/* =topics-menu */
+
+#topics-menu {
+    margin: 0;
+    font-size: 12px;
+    white-space: nowrap;
+    padding: 5px 0 5px;
+    text-align: right;
+    /*border-top: 2px solid;*/
+}
+
+#topics-menu li {
+    display: inline-block;
+    margin: 0;
+    padding-left: 16px;
+}
+
+/* =gallery-photos */
+
+#gallery-photos-viewport{
+    position: relative;
+    clear:both;
+    overflow-x: auto;
+    overflow-y: hidden;
+    width: 100%;
+    height: 500px;
+}
+
+#gallery-photos{
+    display: block;
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    width: 10000px; /*This should be overwritten to correct value on item style attribute */
+    padding: 0px;
+    margin: 0px;
+}
+
+#gallery-photos .photo,
+#gallery-photos .separator,
+#gallery-photos .initial-separator,
+#gallery-photos .final-separator {
+    float: left;
+}
+
+#gallery-photos .photo {
+    float: left;
+    margin: 0px 2px 0px 2px;
+}
+
+#gallery-photos .separator{
+    width: 100px;
+}
+
+#gallery-photos img{
+    height: 400px;
+}
+
+
+/* =gallery .ui-scrollbar */
+
+#gallery .ui-scrollbar {
+    position: absolute;
+    bottom: 45px;
+    width: 805px;
+    height: 6px;
+    opacity:0.5;
+    padding:6px 0;
+}
+
+#gallery .ui-scrollbar-extra {
+    border-bottom:2px solid;
+    position:relative;
+    top:6px;
+}
+
+#gallery .ui-scroller {
+    position: absolute;
+    top:0;
+    width: 66px;
+    padding: 6px 0;
+    cursor: ew-resize;
+}
+
+#gallery .ui-scroller-inner {
+    height:6px;
+    border-radius: 2px 2px 0 0;
+    -moz-border-radius:2px 2px 0 0;
+    -webkit-border-radius: 2px 2px 0 0;
+}
+
+
+
+/* =gallery-controlls */
+
+#gallery-controls {
+    display: none; /* Is changed by js controls initialization script */
+    position: absolute;
+    bottom: 30px;
+    left: 0px;
+    width: 50px;
+    height: 20px;
+    z-index: 10;
+    opacity: 0.6;
+}
+
+#gallery_play_button {
+    width: 14px;
+    height: 14px;
+    margin-top: 3px;
+    margin-left: 32px;
+    background-image: url(../images/button-play.png);
+    cursor: pointer;
+}
+
+.playing#gallery_play_button {
+    background-image: url(../images/button-pause.png);
+}
+
+/* 
+ * =topic page 
+ */
+/* TODO: finish me */
+
+#topic_header{
+    height: 40px;
+    padding: 5px 25px 5px 25px;
+}
+
+#topic_header h2{
+    margin-top: 10px;
+}
+
+#close_button{
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    width: 14px;
+    height: 11px;
+}
+
+#topic_viewport{
+    height: 475px;
+    margin: 0px 25px 25px 25px;
+    overflow: auto;
+}
+
+/*
+ * =topic-content
+ */
+
+.topic_body p{
+    margin-left: 0em;
+}
+
+
+/* 
+ * =photo page 
+ */
+/* TODO: finish me */
+
+.photo_title{
+    padding-top: 8px;
+    text-align: center;
+    font-size: 15px;
+}
+
+#photo_box{
+    height: 500px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.photo_description{
+    margin-top: 10px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.photo_description td {
+    padding: 0px 5px 0px 5px;
+    font-size: 11px;
+}
+
+.photo_description .description {
+    padding-top: 3px;
+}

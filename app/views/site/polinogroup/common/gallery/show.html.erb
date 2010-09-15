@@ -1,50 +1,55 @@
 <div id="gallery">
 
-  <ul id="gallery_menu">
+  <ul id="galleries-menu">
     <% for menu_item in @site.get_menu('galleries').menu_items -%>
-      <% gallery = menu_item.target -%>
-      <% active_class = (gallery.id == @gallery.id) ? ' active' : '' -%>
-      <% link_to(show_site_gallery_path(@site, gallery),
-		 { :class => "typeface-js gallery_switch#{active_class}", 
-		   :title => gallery.title }) do -%>
-	<%= menu_item.label_or_target_title -%>
-	<% if gallery.mark_as_new -%>
-	  <span class="new_mark">N</span>
+      <li<%= (menu_item.target.id == @gallery.id) ? ' class="active"' : '' -%>>
+	<% link_to(show_site_gallery_path(@site, menu_item.target),
+		   { :title => menu_item.target.title }) do -%>
+	  <%= menu_item.label_or_target_title -%>
+	  <% if menu_item.target.mark_as_new -%>
+	    <span class="new-mark">N</span>
+	  <% end -%>
 	<% end -%>
-      <% end -%>
-    <% end -%>
-  </ul>
-
-  <ul id="site_menu">
-    <% for menu_item in @site.get_menu('topics').menu_items -%>
-      <li class="site_menu_topic">
-	<%= link_to menu_item.label_or_target_title, 
-	    show_site_topic_path(@site, menu_item.target) -%>
       </li>
     <% end -%>
   </ul>
-  
-  <div id="gallery_photos_viewport">
-    <p id="gallery_photos" style="width: <%= total_gallery_items_width(@gallery) -%>px;">
+
+  <ul id="breadcrumbs">
+    <li><a href="#">Photos</a><span class="separator">&nbsp;&gt;</class></li>
+    <li><a href="#">Bio</a><span class="separator">&nbsp;&gt;</class></li>
+    <li><a href="#">Videos</a></li>
+  </ul>
+
+  <div id="gallery-photos-viewport">
+    <p id="gallery-photos" style="width: <%= total_gallery_items_width(@gallery) -%>px;">
+      <span class="initial-separator">&nbsp;</span>
       <% for item in @gallery.gallery_items -%>
 	<% if item.is_a? GalleryPhoto -%>
-	  <span class="gallery_photo">
+	  <span class="photo">
 	    <%= link_to( photo_image_tag(item.photo, :size => 'x400'),
 			 show_site_photo_path( @site, item.photo ),
 			 { :title => item.photo.alt_text })
 		-%>
 	  </span>
 	<% elsif item.is_a? GallerySeparator -%>
-	  <span class="gallery_separator">&nbsp;</span>
+	  <span class="separator">&nbsp;</span>
 	<% end -%>
       <% end -%>
+      <span class="final-separator">&nbsp;</span>
     </p>
   </div>
 
-  <div id="gallery_scrollbar"></div>
-
-  <div id="gallery_controls">
-    <button id="gallery_play_button"></button>
+  <div id="gallery-controls">
+    <button id="gallery-play-button"></button>
   </div>
-  
+
+  <ul id="topics-menu">
+    <% for menu_item in @site.get_menu('topics').menu_items -%>
+      <li>
+	<%= link_to menu_item.label_or_target_title, 
+	    show_site_topic_path(@site, menu_item.target) -%>
+      </li>
+    <% end -%>
+  </ul>
+    
 </div>

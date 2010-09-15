@@ -56,8 +56,25 @@ module Site::BaseHelper
   def compute_public_path(source, dir, ext=nil)
     theme_path = SiteIntrospector.introspect(@site).theme_name
     path = compute_public_path_without_photolio(source, "#{theme_path}/#{dir}", ext)
+    return fix_published_path(@site, path)
+  end
+
+  def compute_site_files_public_path(site, source, dir, ext=nil)
+    if (site.id != @site.id and not @site.share_pool.include? site)
+      raise RuntimeError.new("Access to #{site.name} assets files is denied")
+    end
     if params[:published]
-      site_prefix = "/#{@site.name}"
+      base_dir = "#{site.name}/#{ModelExtensions::HasFile::BASE_FOLDER_NAME}"
+    else
+      base_dir = "#{ModelExtensions::HasFile::BASE_FOLDER_NAME}/#{site.name}"
+    end
+    path = compute_public_path_without_photolio(source, "#{base_dir}/#{dir}", ext)
+    return fix_published_path(site, path)
+  end
+
+  def fix_published_path(site, path)
+    if params[:published]
+      site_prefix = "/#{site.name}"
       if host = ActionController::Base.asset_host
         site_prefix = host + site_prefix
       end
@@ -65,19 +82,11 @@ module Site::BaseHelper
       if path[site_prefix_range] == site_prefix
         path[site_prefix_range] = ''
       end
-      if @site.site_params.published_assets_url_prefix
-        path = @site.site_params.published_assets_url_prefix + path
+      if site.site_params.published_assets_url_prefix
+        path = site.site_params.published_assets_url_prefix + path
       end
     end
     path
-  end
-
-  def compute_site_public_path(site, source, dir, ext=nil)
-    if site.id == @site.id
-      compute_public_path(source, dir, ext=nil)
-    else
-      raise RuntimeError.new('Using assets from foreign sites is currently unsupported')
-    end
   end
 
 end
