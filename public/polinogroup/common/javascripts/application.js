@@ -99,14 +99,8 @@ GalleryController.prototype = $.extend(GalleryController.prototype, {
     });
 
     $(t.photosEl).find('.final-separator:first').each(function(){
-      this.style.with = '0px';
-
-      console.debug('Reported left: ' + this.offsetLeft);
-
       var lastWidth = this.offsetLeft - t.separatorsPositions[2 * i - 1];
       var newWidth = 0;
-
-      console.debug('Reported last screen width: ' + lastWidth);
 
       if (lastWidth < t.viewportWidth) {
 	newWidth = (t.viewportWidth - lastWidth) / 2;
