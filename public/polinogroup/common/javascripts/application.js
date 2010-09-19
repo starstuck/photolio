@@ -61,16 +61,16 @@ GalleryController.prototype = $.extend(GalleryController.prototype, {
     t.separatorsPositions = [];
     t.sections = [];
 
-    contentWidth = t.photosEl.offsetWidth;
+    //contentWidth = t.photosEl.offsetWidth;
+    t.photosEl.style.width = '99999px';
 
     function updSepWidth(pos, el, width){
-      contentWidth += (width - el.offsetWidth);
+      //contentWidth += (width - el.offsetWidth);
       el.style.width = width + 'px';
-      t.photosEl.style.width = contentWidth + 'px';
       t.separatorsPositions.push(el.offsetLeft, el.offsetLeft + width);
       t.sections[pos] = {start: el.offsetLeft + width};
       if (window.console)
-	console.debug('Updating separator:' + pos + ', ' + width + ', ' + contentWidth);
+	console.debug('Updating separator:', pos, el, width);
       if (pos > 0) {
 	with({s: t.sections[pos-1]}){
 	  s.end = el.offsetLeft;
@@ -99,8 +99,15 @@ GalleryController.prototype = $.extend(GalleryController.prototype, {
     });
 
     $(t.photosEl).find('.final-separator:first').each(function(){
-      var lastWidth = this.offsetLeft - (t.separatorsPositions[i - 1] + t.viewportWidth);
+      this.style.with = '0px';
+
+      console.debug('Reported left: ' + this.offsetLeft);
+
+      var lastWidth = this.offsetLeft - t.separatorsPositions[2 * i - 1];
       var newWidth = 0;
+
+      console.debug('Reported last screen width: ' + lastWidth);
+
       if (lastWidth < t.viewportWidth) {
 	newWidth = (t.viewportWidth - lastWidth) / 2;
       }
@@ -108,6 +115,8 @@ GalleryController.prototype = $.extend(GalleryController.prototype, {
       t.sections.pop(); // Removed stacked begining on nonexistent section
       t.finalSeparatorWidth = newWidth;
     });
+
+    //t.photosEl.style.width = contentWidth + 'px';
   },
 
   /* Must be after viewport width update */
@@ -190,7 +199,7 @@ GalleryController.prototype = $.extend(GalleryController.prototype, {
 	      viewPos += posOffset * t.scrollRatio;
 	    }
 
-	    if (window.console) console.log('Dyn margin: ' + pos);
+	    if (window.console) console.log('Dyn scroll position: ' + pos);
 
 	    // Continue running section switch animation if still in the same section,
 	    // otherwise brake

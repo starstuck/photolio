@@ -378,20 +378,26 @@ div#footer p{
     position: absolute;
     top: 0px;
     left: 0px;
-    width: 10000px; /*This should be overwritten to correct value on item style attribute */
+    width: 99999px; /*This should be overwritten to correct value on item style attribute */
     padding: 0px;
     margin: 0px;
 }
 
+#gallery-photos > * {
+    display: block;
+    float: left;
+}
+/*
 #gallery-photos .photo,
 #gallery-photos .separator,
 #gallery-photos .initial-separator,
 #gallery-photos .final-separator {
+    display: block;
     float: left;
 }
+*/
 
 #gallery-photos .photo {
-    float: left;
     margin: 0px 2px 0px 2px;
 }
 
