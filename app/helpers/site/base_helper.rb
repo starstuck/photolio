@@ -54,9 +54,13 @@ module Site::BaseHelper
   end
 
   def compute_public_path(source, dir, ext=nil)
-    theme_path = SiteIntrospector.introspect(@site).theme_name
-    path = compute_public_path_without_photolio(source, "#{theme_path}/#{dir}", ext)
-    return fix_published_path(@site, path)
+    for theme_path in SiteIntrospector.introspect(@site).theme_public_paths
+      path = compute_public_path_without_photolio(source, "#{theme_path}/#{dir}", ext)
+      if File.exists?( File.join(ActionView::Helpers::AssetTagHelper::ASSETS_DIR, path.split('?').first) )
+        return fix_published_path(@site, path)
+      end
+    end
+    raise ArgumentError.new("Asset '#{source}' not found in public path: #{path}" )
   end
 
   def compute_site_files_public_path(site, source, dir, ext=nil)

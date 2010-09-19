@@ -48,4 +48,10 @@ class SiteIntrospectorTest < Test::Unit::TestCase
     assert_equal 'First gallery', controller.gallery.title
   end
 
+  def test_theme_public_paths
+    site = Site.find_by_name('polinogroup')
+    info = SiteIntrospector.introspect(site)
+    assert_equal %w(polinogroup/main polinogroup/common), info.theme_public_paths
+  end
+
 end

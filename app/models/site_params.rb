@@ -138,7 +138,7 @@ module SiteParams
   end
 
 
-  class PolinogroupParams < DefaultParams
+  class PolinogroupParams < PolinogroupCommonParams
 
     theme 'polinogroup/main'
     publish_location '/var/www/polinogroup'
