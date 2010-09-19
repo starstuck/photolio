@@ -1,0 +1,8 @@
+<ul id="topics-menu">
+  <% for menu_item in @site.get_menu('topics').menu_items -%>
+    <li>
+      <%= link_to menu_item.label_or_target_title, 
+	  show_site_topic_path(@site, menu_item.target) -%>
+    </li>
+  <% end -%>
+</ul>

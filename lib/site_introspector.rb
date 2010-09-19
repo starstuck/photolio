@@ -34,6 +34,23 @@ module SiteIntrospector
       end
       return @theme_name
     end
+    
+    # Theme public path in order by preference, starting with prefered one
+    def theme_public_paths
+      if ! @theme_public_paths
+        @theme_public_paths = []
+        template_obj = SiteParams.for_site(site)
+        template_class = template_obj.class
+        while template_class and template_class != SiteParams::DefaultParams
+          @theme_public_paths << template_obj.theme
+          template_class = template_class.superclass
+          template_obj = template_class.new(site)
+        end
+        @theme_public_paths.uniq!
+      end
+      
+      return @theme_public_paths
+    end
 
     # Return array of Controller info objects for controller defined for site      
     def controllers_infos

@@ -11,8 +11,6 @@
     <%= stylesheet_link_tag('default', :media => "all") -%>
     <%= stylesheet_link_tag('screen', :media => "screen") -%>
 
-    <%= javascript_include_tag('jquery-1.4.2.min', 'jquery-ui-custom-1.8.min', 'reflection', 'application') -%>
-
     <!--[if gte IE 7]>
       <%= stylesheet_link_tag 'ie7fix' %>
     <![endif]-->
@@ -25,8 +23,15 @@
 
   <body>
 
+    <div id="loader">
+    </div>
+    <%= javascript_include_tag(
+      'jquery-1.4.2.min',
+      'loader')
+    -%>
+    
     <div id="header">
-      <h1>Polino Studio</h1>
+      <h1>Polino Studio <span class="brand">beauty</span></h1>
     </div>
 
     <div id="content">
@@ -37,6 +42,13 @@
     <div id="footer">
       <p>&copy; Polino Studio - All rights reserved.</p>
     </div>
+
+    <%= javascript_include_tag(
+      'jquery-1.4.2.min',
+      'jquery-ui-custom-1.8.min',
+      'reflection',
+      'application')
+    -%>
 
   </body>
 </html>

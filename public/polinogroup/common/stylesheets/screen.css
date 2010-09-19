@@ -26,10 +26,13 @@ a:hover {
     color: #888;
 }
 
-#content,
-#content-preloading
-{
+#header .brand {
+    color: #111;
+}
+
+#content {
     background-color: #111;
+    border-color: #444;
 }
 
 #footer{ 
@@ -38,6 +41,7 @@ a:hover {
 
 #galleries-menu {
     color: #777;
+    border-color: #555;
 }
 
 #galleries-menu a,
@@ -65,6 +69,7 @@ a:hover {
 
 #gallery .ui-scroller-extra {
     color: #222;
+    border-color: #444;
 }
 
 #gallery .ui-scroller-inner {
@@ -100,11 +105,16 @@ h1, h2, h3, h4, h5, h6,
 
 }
 
-#header h1 {
+#header h1,
+.siteslist h3 {
     font-family: "good-times-1", "good-times-2", Helvetica, Arial, sans-serif;
     text-transform: uppercase;
     font-weight: lighter;
     text-shadow: 0px 0px 5px #000;
+}
+
+#header .brand {
+    text-shadow: 0px 0px 3px #222;
 }
 
 a {
@@ -120,7 +130,7 @@ h1, h2, h3, h4{
 }
 
 h1{
-    font-size: 30px;
+    font-size: 42px;
 }
 
 h2{
@@ -164,7 +174,7 @@ a img{
  */
 
 html, body{
-    overflow: hidden; /* Hide window scrollbars, as they brake gallery scrolling */
+    overflow-x: hidden; 
 }
 
 body {
@@ -179,19 +189,23 @@ body {
     margin: 0 auto;
 }
 
-#header{
-    height: 35xpx;
-    padding-top: 5px;
-    padding-left: 65px;
-}
-
 /*
  * =header
  */
 
+#header{ 
+    padding-left: 65px;
+    margin-top: 20px;
+    margin-bottom: 5px;
+}
+
 #header h1{
     padding: 0px;
     margin: 0px;
+}
+
+#header .brand {
+    font-size: 66%;
 }
 
 /* 
@@ -209,6 +223,10 @@ body {
     position: relative;
     overflow: hidden;
     padding: 10px;
+    border-width: 2px;
+    border-style: solid;
+}
+
 }
 
 #content-frame{
@@ -219,11 +237,11 @@ body {
     bottom:0;
     pointer-events:none;
     /* TODO: CSS shadow seems to slow on Firefox, try background images */
-   /*  
-    box-shadow: inset rgba(0, 0, 0, 1) 0 0 100px;
-    -moz-box-shadow: inset rgba(0, 0, 0, 1) 0 0 80px 5px;
-    -webkit-box-shadow: inset rgba(0, 0, 0, 1) 0 0 100px;    
-  */  
+     
+    box-shadow: inset rgba(0, 0, 0, 1) 0 0 50px;
+    -moz-box-shadow: inset rgba(0, 0, 0, .3) 0 0 50px 10px;
+    -webkit-box-shadow: inset rgba(0, 0, 0, 1) 0 0 200px;    
+  
 }
 
 /*
@@ -282,9 +300,10 @@ div#footer p{
     margin: 0;
     font-size: 12px;
     white-space: nowrap;
-    padding: 3px 0 10px 3px;
+    padding: 5px 0 8px 3px;
     text-align: left;
-    border-bottom: 1px solid;
+    border-bottom-width: 1px;
+    border-bottom-style: solid;
 }
 
 #galleries-menu li{
@@ -397,7 +416,8 @@ div#footer p{
 }
 
 #gallery .ui-scrollbar-extra {
-    border-bottom:2px solid;
+    border-bottom-width:2px;
+    border-bottom-style:solid;
     position:relative;
     top:6px;
 }
@@ -512,4 +532,45 @@ div#footer p{
 
 .photo_description .description {
     padding-top: 3px;
+}
+
+/*
+ * Galleries listing page 
+ */
+.siteslist {
+    margin:0;
+    padding:0;
+    list-style:none;
+    overflow-x:hidden;
+}
+
+.siteslist li {
+    position: relative;
+    padding:0;
+    margin:10px 0;
+    height:120px;
+    overflow:hidden;
+    width:150%;
+}
+
+.siteslist h3 {
+    position: absolute;
+    bottom: 0px;
+    left: 0;
+    padding:0 20px;
+    margin:0;
+    height: 40px;
+    width: 300px;
+    font-size: 32px;
+    line-height: 40px;
+    background-color:rgba(63, 63, 63, 0.6);
+    opacity: 0.8
+}
+
+.siteslist img {
+    display:block;
+    float:left;
+    padding:0;
+    margin:0;
+    display:
 }

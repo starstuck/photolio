@@ -7,6 +7,7 @@ class Site::Polinogroup::Main::SiteController < Site::Polinogroup::Common::SiteC
                 )
   
   def show
+    render :layout => 'site/polinogroup/common/layouts/application'
   end
 
 end 
