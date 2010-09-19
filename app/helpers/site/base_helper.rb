@@ -56,7 +56,8 @@ module Site::BaseHelper
   def compute_public_path(source, dir, ext=nil)
     for theme_path in SiteIntrospector.introspect(@site).theme_public_paths
       path = compute_public_path_without_photolio(source, "#{theme_path}/#{dir}", ext)
-      if File.exists?( File.join(ActionView::Helpers::AssetTagHelper::ASSETS_DIR, path.split('?').first) )
+      filepath = path.sub(/^https?:\/\/[^\/]*/, '')
+      if File.exists?( File.join(ActionView::Helpers::AssetTagHelper::ASSETS_DIR, filepath.split('?').first) )
         return fix_published_path(@site, path)
       end
     end
