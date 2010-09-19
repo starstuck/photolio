@@ -28,27 +28,38 @@ module SiteIntrospector
 
     private :initialize
 
+    
     def theme_name
       if ! @theme_name
         @theme_name =  SiteParams.for_site(site).theme || site.name
       end
       return @theme_name
     end
+
+    def iterate_inherited_themes
+        template_obj = SiteParams.for_site(site)
+        template_class = template_obj.class
+        while template_class and template_class != SiteParams::DefaultParams
+          yield(template_obj)
+          template_class = template_class.superclass
+          template_obj = template_class.new(site)
+        end
+    end
+
+    # return list of inherited themes info objects, starting from current object
+    def inherited_themes
+      result = []
+      iterate_inherited_themes { |t| result << t }
+      return result
+    end
     
     # Theme public path in order by preference, starting with prefered one
     def theme_public_paths
       if ! @theme_public_paths
         @theme_public_paths = []
-        template_obj = SiteParams.for_site(site)
-        template_class = template_obj.class
-        while template_class and template_class != SiteParams::DefaultParams
-          @theme_public_paths << template_obj.theme
-          template_class = template_class.superclass
-          template_obj = template_class.new(site)
-        end
-        @theme_public_paths.uniq!
       end
-      
+      iterate_inherited_themes { |t| @theme_public_paths << t.theme }
+      @theme_public_paths.uniq!
       return @theme_public_paths
     end
 

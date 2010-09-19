@@ -16,10 +16,11 @@ class Site::BaseController < ApplicationController
 
   def setup_site_helpers
     h_modules = [build_named_routes_module]
-    theme_name = SiteIntrospector.introspect(@site).theme_name
-    begin
-      h_modules << eval("Site::#{theme_name.camelize}::BaseHelper")
-    rescue NameError; end
+    for template in SiteIntrospector.introspect(@site).inherited_themes.reverse
+      begin
+        h_modules << eval("Site::#{template.theme.camelize}::BaseHelper")
+      rescue NameError; end
+    end
     for h_module in h_modules
       response.template.helpers.send(:include, h_module)
     end
