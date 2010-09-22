@@ -17,38 +17,48 @@
     <!--[if lte IE 6]>
       <%= stylesheet_link_tag 'ie6fix' %>
     <![endif]-->
-    <script type="text/javascript" src="http://use.typekit.com/oii4ufp.js"></script>
-    <script type="text/javascript">try{Typekit.load();}catch(e){}</script>
   </head>
 
   <body>
 
-    <div id="loader">
-    </div>
-    <%= javascript_include_tag(
-      'jquery-1.4.2.min',
-      'loader')
-    -%>
-    
-    <div id="header">
+    <% loader_with_intro({ :scripts => [
+					'jquery-ui-custom-1.8.min',
+					'reflection',
+					'application'
+				       ],
+			   :images => [
+				       '/files/polinobeauty/photos/D03_5609_E.jpg',
+				       '/files/polinofashion/photos/D04_2869_E.jpg',
+				       '/files/polinofashion/photos/D04_2912_E.jpg',
+				       '/files/polinofashion/photos/D04_3091_E.jpg',
+				       '/files/polinobeauty/photos/D03_5697_E.jpg'
+				      ]}) do -%>
+      <div id="loader" style="display:none;">
+	<div id="loader-slides"></div>
+	<div id="loader-labels">
+          <div class="toplevelbox">
+	    <h1>Polino Studio</h1>
+	  </div>
+	  <p>
+	    <span>Loading ...</span>
+	    <a href="javascript:false" title="Go to gallery">Skip intro</a>
+	  </p>
+	</div>
+      </div>
+    <% end -%>
+
+    <div id="header" class="toplevelbox">
       <h1>Polino Studio <span class="brand"><%=h brand_name(@site) -%></span></h1>
     </div>
 
-    <div id="content">
+    <div id="content" class="toplevelbox">
       <%= yield %>
       <div id="content-frame"></div>
     </div>
 
-    <div id="footer">
+    <div id="footer" class="toplevelbox">
       <p>&copy; Polino Studio - All rights reserved.</p>
     </div>
-
-    <%= javascript_include_tag(
-      'jquery-1.4.2.min',
-      'jquery-ui-custom-1.8.min',
-      'reflection',
-      'application')
-    -%>
 
   </body>
 </html>
