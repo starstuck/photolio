@@ -15,7 +15,12 @@ module Site::Polinogroup::Common::BaseHelper
         options = content_or_options_with_block if content_or_options_with_block.is_a?(Hash)
         capture(&block)
       else
-        content_or_options_with_block
+        if content_or_options_with_block.is_a? Hash
+          options = content_or_options_with_block
+          ''
+        else
+          content_or_options_with_block
+        end
       end
 
     jquery_path = path_to_javascript("jquery-1.4.2.min")
@@ -25,7 +30,6 @@ module Site::Polinogroup::Common::BaseHelper
       loader.bootstrap(#{array_or_string_for_javascript jquery_path});
       loader.addSlides(#{array_or_string_for_javascript options[:images]});
       loader.loadScripts(#{array_or_string_for_javascript scripts_paths});
-
     EOS
 
     output = javascript_include_tag('loader') + "\n" + javascript_tag(jscontent)

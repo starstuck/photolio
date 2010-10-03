@@ -8,18 +8,30 @@
   var slidesLoadStarted = false;
   var lastSlideTime;
   var availableSlides = [];
+  var contentDisabled = true;
+  var loaderBasePath = window.location.pathname.match(/^(.*\/)[^\/]*$/)[1]; // Only paths relative to this base will be handled by content loader
+
+  function formatLogMessage(a){
+    var d = new Date();
+    var args = a;
+    args[0] = d.getYear() + '-' + (d.getMonth() + 1) + '-' +
+      d.getDate() + ' ' + d.getHours() + ':' +
+      d.getMinutes() + ':' + d.getSeconds() + '.' + d.getMilliseconds() +
+      ' ' + args[0];
+    return args;
+  }
 
   function log(message){
     // Coment-out line below for debugging output
     //return;
     if (window.console) {
-      var d = new Date();
-      var args = arguments;
-      args[0] = d.getYear() + '-' + (d.getMonth() + 1) + '-' +
-	d.getDate() + ' ' + d.getHours() + ':' +
-	d.getMinutes() + ':' + d.getSeconds() + '.' + d.getMilliseconds() +
-	' ' + args[0];
-      console.debug.apply(console, args);
+      console.debug.apply(console, formatLogMessage(arguments));
+    }
+  }
+
+  function logError(message){
+    if (window.console) {
+      console.error.apply(console, formatLogMessage(arguments));
     }
   }
 
@@ -83,8 +95,47 @@
   function initialize(){
     $ = jQuery;
 
-    $(document).bind('ready', function(){
+    $(document).ready(function(){
       log('Dom ready');
+    });
+
+    var urlMatch = window.location.hash.match(/\#(.*)$/);
+    if ( urlMatch ) {
+      loadContent( urlMatch[1] );
+    } else {
+      logError('No page content hash, nothing to load');
+    }
+
+    /* TODO: handle computation havy functions like below in moment, when no
+     * animation is beeing done, because this will pause it in visible way
+     */
+    /* Change links on loaded content, to loader handled pages */
+    $('#content-inner').bind('change',function() {
+      var loc = window.location;
+      $(this).find('a').each(function(){
+	var tMatch = this.href.match( /^(([a-z]+:)\/\/([^/:]+)(:([0-9]+))?)?(\/[^?#]*)(\#[^?]*)?(\?.*)?$/);
+	var prot = tMatch[2];
+	if (prot && prot != loc.protocol) return true;
+	var host = tMatch[3];
+	if (host && host != loc.hostname) return true;
+	var port = tMatch[5];
+	if (port && port != loc.port) return true;
+	var path = tMatch[6], query = tMatch[8];
+	if (path.match(/^\//)) {
+	  if ( path.indexOf(loaderBasePath) === 0) {
+	    var targetContent = ( path.slice(loaderBasePath.length) ).replace(/\.html$/, '');
+	    this.href = '#' + targetContent + (query || '');
+	    $(this).bind('click', function(){
+	      // TODO: record browser history to allow going back
+	      loadContent(targetContent + '.parthtml');
+	    });
+	  }
+	} else {
+	  // TODO: add handling relative paths
+	  logError('Relative paths not supported in loaded content', this.href);
+	}
+      });
+      log('Links replaced in loaded content');
     });
 
     $(window).bind('load',function(){
@@ -103,7 +154,6 @@
     });
 
     /* TODO: handle resize in slideshow */
-
     log('Loader initialized');
   }
 
@@ -115,6 +165,39 @@
       $('#loader').remove();
     });
     log('Loader closed');
+  }
+
+  /* Content switching */
+  function loadContent(url){
+    url = url.replace(/\.html$/, '.parthtml');
+    if ( ! url.match(/\.parthtml$/) )
+      url += '.parthtml';
+    log('Start loading page content');
+    hideContent();
+    $('#content-inner').load(url, null, function(response,status){
+      log('Page content loaded');
+      $('#content-inner').trigger('change');
+      showContent();
+    });
+  }
+
+  /* disable content switvhing untill enabled */
+  function disableContent(){
+    contentDisabled = true;
+  }
+
+  function enableContent(){
+    contentDisabled = true;
+  }
+
+  function hideContent(callback){
+
+  }
+
+  function showContent(callback){
+    if (callback) {
+      callback();
+    }
   }
 
   /* Slides handling */

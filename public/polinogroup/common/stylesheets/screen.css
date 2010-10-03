@@ -262,7 +262,7 @@ body {
     margin-bottom: 5px;
 }
 
-#header h1,
+#header h1 {
     padding: 0px;
     margin: 0px;
 }
@@ -276,7 +276,8 @@ body {
  */
 
 #content,
-#content-frame{
+#content-frame,
+#content-curtain {
     border-radius: 13px;
     -moz-border-radius:13px;
     -webkit-border-radius:13px;
@@ -292,7 +293,8 @@ body {
 
 }
 
-#content-frame{
+#content-frame,
+#content-curtain{
     position: absolute;
     top:0;
     left:0;
@@ -304,7 +306,6 @@ body {
     box-shadow: inset rgba(0, 0, 0, 1) 0 0 50px;
     -moz-box-shadow: inset rgba(0, 0, 0, .3) 0 0 50px 10px;
     -webkit-box-shadow: inset rgba(0, 0, 0, 1) 0 0 200px;    
-  
 }
 
 /*

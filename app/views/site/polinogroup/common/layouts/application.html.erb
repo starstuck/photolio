@@ -3,6 +3,12 @@
   <head>
     <title>Polino Studio</title>
 
+    <!-- TODO: add checks, to exclude simple or old browsers, which will not
+         support ajax loaded content fully -->
+    <% javascript_tag do -%>
+      window.location = "<%= load_site_path(@site) -%>#" + window.location.pathname.replace(/\.html$/, '');
+    <% end -%>
+    
     <meta http-equiv="content-type" content="text/html;charset=UTF-8" />
 
     <!-- <meta name="Keywords" content="" /> -->
@@ -17,42 +23,21 @@
     <!--[if lte IE 6]>
       <%= stylesheet_link_tag 'ie6fix' %>
     <![endif]-->
+
+    
+    <%= javascript_include_tag('jquery-1.4.2.min','jquery-ui-custom-1.8.min', 'reflection', 'application') -%>
   </head>
 
   <body>
-
-    <% loader_with_intro({ :scripts => [
-					'jquery-ui-custom-1.8.min',
-					'reflection',
-					'application'
-				       ],
-			   :images => [
-				       '/files/polinobeauty/photos/D03_5609_E.jpg',
-				       '/files/polinofashion/photos/D04_2869_E.jpg',
-				       '/files/polinofashion/photos/D04_2912_E.jpg',
-				       '/files/polinofashion/photos/D04_3091_E.jpg',
-				       '/files/polinobeauty/photos/D03_5697_E.jpg'
-				      ]}) do -%>
-      <div id="loader" style="display:none;">
-	<div id="loader-slides"></div>
-	<div id="loader-labels">
-          <div class="toplevelbox">
-	    <h1>Polino Studio</h1>
-	  </div>
-	  <p>
-	    <span>Loading ...</span>
-	    <a href="javascript:false" title="Go to gallery">Skip intro</a>
-	  </p>
-	</div>
-      </div>
-    <% end -%>
 
     <div id="header" class="toplevelbox">
       <h1>Polino Studio <span class="brand"><%=h brand_name(@site) -%></span></h1>
     </div>
 
     <div id="content" class="toplevelbox">
-      <%= yield %>
+      <div id="content-inner">
+        <%= yield %>
+      </div>
       <div id="content-frame"></div>
     </div>
 

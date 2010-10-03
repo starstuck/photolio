@@ -7,6 +7,10 @@ class Site::Polinogroup::Common::GalleryController < Site::GalleryController
                 )
 
   def show
+    if params[:format] == 'parthtml'
+      params[:format] = 'html'
+      render :layout => false, :format => 'html'
+    end
   end
 
 end 
