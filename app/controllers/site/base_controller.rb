@@ -70,11 +70,17 @@ class Site::BaseController < ApplicationController
           def #{pinfo.name}_site_path(site, *args)
             page_path(site, 'site', '#{pinfo.name}', *args)
           end
+          def #{pinfo.name}_site_url(site, *args)
+            page_url(site, 'site', '#{pinfo.name}', *args)
+          end
         EOS
         else
           cmd = <<-EOS
             def #{pinfo.name}_site_#{cinfo.name}_path(site, *args)
               page_path(site, '#{cinfo.name}', '#{pinfo.name}', *args)
+            end
+            def #{pinfo.name}_site_#{cinfo.name}_url(site, *args)
+              page_url(site, '#{cinfo.name}', '#{pinfo.name}', *args)
             end
           EOS
         end

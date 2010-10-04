@@ -15,9 +15,18 @@
   </ul>
 
   <ul id="breadcrumbs">
-    <li><a href="#">Photos</a><span class="separator">&nbsp;&gt;</class></li>
-    <li><a href="#">Bio</a><span class="separator">&nbsp;&gt;</class></li>
-    <li><a href="#">Videos</a></li>
+    <li>
+      <%= link_to 'Polino Studio group', url_for( :site_name => 'polinogroup',
+						  :controller => 'site/polinogroup/main/site',
+						  :action => 'show',
+						  :format => 'html' ) -%>
+      <span class="separator">&nbsp;&gt;</span>
+    </li>
+    <li>
+      <%= link_to brand_name(@site), site_default_path(@site) -%>
+      <span class="separator">&nbsp;&gt;</span>
+    </li>
+    <li><%= @gallery.title -%></li>
   </ul>
 
   <div id="gallery-photos-viewport">

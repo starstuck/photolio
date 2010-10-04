@@ -53,6 +53,15 @@ module Site::BaseHelper
     path    
   end
 
+  def page_url(site, controller, action, *args)
+    if args[-1].is_a? Hash
+      args[-1] = args[-1].merge(:only_path => false)
+    else
+      args << {:only_path => false}
+    end
+    page_path(site, controller, action, *args)
+  end
+
   def compute_public_path(source, dir, ext=nil)
     for theme_path in SiteIntrospector.introspect(@site).theme_public_paths
       path = compute_public_path_without_photolio(source, "#{theme_path}/#{dir}", ext)

@@ -24,7 +24,7 @@
 			  }] -%>
       <% child = child_data[:obj] -%>
       <li>
-	<% link_to show_site_path(child) ,:title => child_data[:title]  do -%>
+	<% link_to show_site_url(child) ,:title => child_data[:title]  do -%>
 	  <h3>
 	    <%=h child_data[:label] -%>
 	  </h3>
