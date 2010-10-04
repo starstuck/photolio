@@ -90,4 +90,15 @@ class Site::BaseController < ApplicationController
     mod
   end
 
+  alias :render_without_parthtml :render
+
+  def render(opts)
+    if params[:format] == 'parthtml'
+      params[:format] = 'html'
+      opts[:layout] = false
+      opts[:format] = 'html'
+    end
+    render_without_parthtml opts
+  end
+
 end

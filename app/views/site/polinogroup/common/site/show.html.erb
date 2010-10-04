@@ -1,15 +1,15 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
   <head>
-    <title>Polino Studio</title>
+    <title>Polino Studio <%=h brand_name(@site) -%></title>
 
     <meta http-equiv="content-type" content="text/html;charset=UTF-8" />
-    <meta http-equiv="Refresh" content="0; URL=/polinobeauty/gallery/beauty.html">
+    <meta http-equiv="Refresh" content="0; URL=<%= site_default_path(@site) -%>">
     <script type="text/javascript">
-      window.location = "/polinobeauty/load.html#gallery/beauty.html";
+      window.location = "<%= load_site_path(@site) -%>#<%= path_relative_to_loader(site_default_path(@site)) -%>";
     </script>
   </head>
   <body>
-    Please wait for page loading ... 
+    Please wait for page beeing loaded ... 
   </body>
 </html>

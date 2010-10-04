@@ -1,33 +1,38 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
   <head>
-    <title>Polino Studio</title>
+    <title>Polino Studio <%=h brand_name(@site) -%></title>
 
     <!-- TODO: add checks, to exclude simple or old browsers, which will not
          support ajax loaded content fully -->
     <% javascript_tag do -%>
-      window.location = "<%= load_site_path(@site) -%>#" + window.location.pathname.replace(/\.html$/, '');
+      window.location = "<%= load_site_path(@site) -%>#<%= my_path_relative_to_loader(:format => 'parthtml') -%>";
     <% end -%>
     
     <meta http-equiv="content-type" content="text/html;charset=UTF-8" />
 
-    <!-- <meta name="Keywords" content="" /> -->
-    <!-- <meta name="Description" content="" /> -->
-
     <%= stylesheet_link_tag('default', :media => "all") -%>
     <%= stylesheet_link_tag('screen', :media => "screen") -%>
 
+    <% if false -%>
     <!--[if gte IE 7]>
-      <%= stylesheet_link_tag 'ie7fix' %>
+      <%= stylesheet_link_tag 'ie7fix' -%>
     <![endif]-->
     <!--[if lte IE 6]>
-      <%= stylesheet_link_tag 'ie6fix' %>
+      <%= stylesheet_link_tag 'ie6fix' -%>
     <![endif]-->
+    <% end -%>
 
-    
-    <%= javascript_include_tag('jquery-1.4.2.min','jquery-ui-custom-1.8.min', 'reflection', 'application') -%>
+    <%= javascript_include_tag(
+          'jquery-1.4.2.min',
+          'jquery-ui-custom-1.8.min',
+          'reflection',
+          'application')
+     -%>
+
+    <%-# <meta name="Keywords" content="" /> -%>
+    <%-# <meta name="Description" content="" /> -%>
   </head>
-
   <body>
 
     <div id="header" class="toplevelbox">
