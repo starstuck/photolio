@@ -73,7 +73,8 @@ module Publisher
 
     # Publish assets folder
     def copy_assets_folder()
-      src_base_path = File.join(RAILS_ROOT, 'public', @site.name)
+      theme_name = SiteParams.for_site(@site).theme || @site.name
+      src_base_path = File.join(RAILS_ROOT, 'public', theme_name)
       
       def copy_folder(src_base_path, folder)
         folder_path = File.join(src_base_path, folder)

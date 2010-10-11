@@ -252,7 +252,8 @@ class Admin::SitesController < Admin::BaseController
     end
 
     # Publish sitemap page
-    publisher.publish({ :controller => "site/#{@site.name}/site",
+    theme_name = SiteParams.for_site(@site).theme || @site.name
+    publisher.publish({ :controller => "site/#{theme_name}/site",
                         :action => 'sitemap',
                         :site_name => @site.name,
                         :format => 'xml',

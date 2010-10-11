@@ -1,7 +1,7 @@
 class Site::Polinogroup::Common::SiteController < Site::SiteController
 
   acts_as_page(:load, :skip_sitemap => true)
-  acts_as_page(:show, :skip_sitemap => true) # :no_publish => true)
+  acts_as_page(:show, :skip_sitemap => false) # :no_publish => true)
 
   def load
     render :layout => false
