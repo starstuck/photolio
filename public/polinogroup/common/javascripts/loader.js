@@ -8,6 +8,7 @@
   var slidesLoadStarted = false;
   var lastSlideTime;
   var availableSlides = [];
+  var skipSlidesShow = false;
   var contentDisabled = true;
   var loaderBasePath = window.location.pathname.match(/^(.*\/)[^\/]*$/)[1]; // Only paths relative to this base will be handled by content loader
 
@@ -142,7 +143,7 @@
       log('Document loaded');
       documentLoaded = true;
       $('#loader span').hide();
-      if (availableSlides.length > 0) {
+      if ( availableSlides.length > 0 && (! skipSlidesShow) ) {
 	$('#loader a').show()
 	  .bind('click', function(e){
 	    e.preventDefault();
@@ -191,7 +192,6 @@
   }
 
   function hideContent(callback){
-
   }
 
   function showContent(callback){
@@ -206,6 +206,13 @@
   function addSlides(slides){
     for (var i = 0; i < slides.length; i ++)
       availableSlides.push(slides[i]);
+
+    /* Do not load slides, when we are redirected among polinogroup sites */
+    if ( document.cookie.match(/(^| |;)slideShowPlayed=true(;|$)/) ) {
+      skipSlidesShow = true;
+      return;
+    }
+    document.cookie = "slideShowPlayed=true";
 
     /* Start loading first slide, as soon as available */
     if(! slidesLoadStarted) {
