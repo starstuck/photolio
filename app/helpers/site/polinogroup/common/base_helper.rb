@@ -10,10 +10,11 @@ module Site::Polinogroup::Common::BaseHelper
   end
 
   def my_path(opts)
+    my_controller_name = controller.class.to_s.underscore.sub(/_controller$/, '')
     options = {
       :format => 'html',
       :only_path => true,
-      :controller => params[:controller],
+      :controller => my_controller_name,
       :site_name => params[:site_name],
       :action => params[:action]
     }
@@ -26,11 +27,11 @@ module Site::Polinogroup::Common::BaseHelper
   end
 
   def path_relative_to_loader(path)
-    my_site_controller = params[:controller].sub(/[\/]+$/, 'site')
+    my_site_controller_name = controller.class.to_s.underscore.sub(/[^\/]+_controller$/, 'site')
     loader_path = url_for( :format => 'html',
                            :only_path => true,
                            :site_name => params[:site_name],
-                           :controller => my_site_controller,
+                           :controller => my_site_controller_name,
                            :action => 'load' )
     loader_base_path = loader_path.sub(/\/[^\/]+$/, '/')
     if path.index(loader_base_path) == 0
