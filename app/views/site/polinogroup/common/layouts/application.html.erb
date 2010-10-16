@@ -3,11 +3,7 @@
   <head>
     <title>Polino Studio <%=h brand_name(@site) -%></title>
 
-    <!-- TODO: add checks, to exclude simple or old browsers, which will not
-         support ajax loaded content fully -->
-    <% javascript_tag do -%>
-      window.location = "<%= load_site_path(@site) -%>#<%= my_path_relative_to_loader(:format => 'parthtml') -%>";
-    <% end -%>
+    <%= loader_redirect @site, my_path_relative_to_loader(:format => 'parthtml') -%>
     
     <meta http-equiv="content-type" content="text/html;charset=UTF-8" />
 
@@ -29,6 +25,10 @@
           'reflection',
           'application')
      -%>
+    <script type="text/javascript" src="http://use.typekit.com/oii4ufp.js"></script>
+    <script type="text/javascript">
+      try{Typekit.load();}catch(e){};
+    </script>
 
     <%-# <meta name="Keywords" content="" /> -%>
     <%-# <meta name="Description" content="" /> -%>

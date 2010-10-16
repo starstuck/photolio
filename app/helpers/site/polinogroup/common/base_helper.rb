@@ -60,6 +60,20 @@ module Site::Polinogroup::Common::BaseHelper
     images
   end
 
+  def loader_redirect(site, path)
+    javascript_tag <<-EOS
+      (function(){
+        var firefoxMatch = navigator.userAgent.match( /(^| )Firefox\\\/([0-9]+)\\\.([0-9]+)\\\.[0-9\\\.]*( |$)/ );
+        if (firefoxMatch){
+          var verMajor = parseInt(firefoxMatch[2]);
+          var verMinor = parseInt(firefoxMatch[3]);
+          if ( (verMajor > 3) || ( (verMajor == 3) && (verMinor >= 6) ) ) 
+            window.location = "#{load_site_path(site)}##{path}";
+        }
+      })();
+    EOS
+  end
+
   def loader_with_intro(content_or_options_with_block, options={}, &block)
     htmltemplate =
       if block_given?
