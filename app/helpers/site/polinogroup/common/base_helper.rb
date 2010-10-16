@@ -67,7 +67,7 @@ module Site::Polinogroup::Common::BaseHelper
         if (firefoxMatch){
           var verMajor = parseInt(firefoxMatch[2]);
           var verMinor = parseInt(firefoxMatch[3]);
-          if ( (verMajor > 3) || ( (verMajor == 3) && (verMinor >= 5) ) ) 
+          if ( verMajor >= 3 ) 
             window.location = "#{load_site_path(site)}##{path}";
         }
       })();
