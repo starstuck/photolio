@@ -71,9 +71,9 @@ class Site::SiteController < Site::BaseController
           for location in locations
             # TODO: add last_modified time calculation
             for format in page_formats
-              info[:loc] = location.update(:controller => cinfo.path,
-                                           :action => pinfo.name,
-                                           :format => format)
+              info[:loc] = location.merge(:controller => cinfo.path,
+                                          :action => pinfo.name,
+                                          :format => format)
               pages << info.dup
             end
           end

@@ -1,10 +1,12 @@
 class Site::Polinogroup::Main::SiteController < Site::Polinogroup::Common::SiteController
 
   acts_as_page(:show,
+                :formats => ['html', 'parthtml'],
                 :sitemap_info =>  
-                { :priority => '0.4',
+                { :priority => '0.9',
                   :changefreq => 'daily' }
                 )
+
   # TODO: this information should b inherited from master template
   acts_as_page(:load, :skip_sitemap => true)
   
