@@ -35,10 +35,9 @@
       <% for item in @gallery.gallery_items -%>
 	<% if item.is_a? GalleryPhoto -%>
 	  <span class="photo">
-	    <%= link_to( photo_image_tag(item.photo, :size => 'x400'),
-			 'javascript:return false;',
-			 { :title => item.photo.alt_text })
-		-%>
+	    <abbr ttile="item.photo.alt_text">
+	      <%= photo_image_tag(item.photo, :size => 'x400') -%>
+	    </abbr>
 	  </span>
 	<% elsif item.is_a? GallerySeparator -%>
 	  <span class="separator">&nbsp;</span>

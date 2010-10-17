@@ -55,12 +55,12 @@ a:hover {
 }
 
 #breadcrumbs {
-    color: #333;
-    background-color: #777;
+    color: #000;
+    background-color: #555;
 }
 
 #breadcrumbs a {
-    color: #111;
+    color: #000;
 }
 
 #breadcrumbs a:hover {
@@ -395,13 +395,13 @@ div#footer p{
     padding:0px;
     line-height: 15px;
     height: 15px;
-    font-size: .8em;
+    font-size: .7em;
 }
 
 #breadcrumbs li {
     display:inline-block;
     margin:0;
-    padding:0 8px;
+    padding:0 5px;
 }
 
 #breadcrumbs .separator{
@@ -466,6 +466,10 @@ div#footer p{
 
 #gallery-photos .separator{
     width: 100px;
+}
+
+#gallery-photos abbr{
+    cursor: help;
 }
 
 #gallery-photos img{
