@@ -135,7 +135,7 @@ module SiteParams
     theme 'polinogroup/common'
     menus ['galleries', 'topics']
     publish_assets_location '/var/www/polinogroup-assets'
-    published_assets_url_prefix 'http://assets.polinostudio.com/'
+    published_assets_url_prefix 'http://assets.polinostudio.com'
     
   end
 

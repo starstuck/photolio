@@ -2,6 +2,28 @@ module Site::BaseHelper
 
   protected
 
+  def published_url_for(options={})
+    if params[:published]
+      options[:only_path] = true
+    end
+
+    path = url_for(options)
+    
+    if params[:published]
+      path = url_for(options) 
+      site_prefix = "/#{site.name}"
+      site_prefix_range = 0..(site_prefix.size-1)
+      if path[site_prefix_range] == site_prefix
+        path[site_prefix_range] = ''
+      end
+      if site.site_params.published_url_prefix
+        path = site.site_params.published_url_prefix + path
+      end
+    end
+ 
+    path
+  end
+
   # Calculate page path, arguments are in order, can be skipped:
   #   controller_name
   #   controller_context
@@ -36,21 +58,7 @@ module Site::BaseHelper
     end
     arg = args.shift
     options[:action_context] = arg if arg
-
-    path = url_for(options)
-
-    if params[:published]
-      site_prefix = "/#{@site.name}"
-      site_prefix_range = 0..(site_prefix.size-1)
-      if path[site_prefix_range] == site_prefix
-        path[site_prefix_range] = ''
-      end
-      if @site.site_params.published_url_prefix
-        path = @site.site_params.published_url_prefix + path
-      end
-    end
- 
-    path    
+    published_url_for(options)
   end
 
   def page_url(site, controller, action, *args)

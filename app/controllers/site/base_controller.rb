@@ -6,6 +6,9 @@ class Site::BaseController < ApplicationController
   before_filter :setup_site_helpers
   layout :site_layout
 
+  attr_reader :site
+  helper_method :site
+
   protected
 
   def setup_site_context

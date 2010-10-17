@@ -23,16 +23,16 @@ module Site::Polinogroup::Common::BaseHelper
     if opts.is_a? Hash
       options.update(opts)
     end
-    return url_for(options)
+    return published_url_for(options)
   end
 
   def path_relative_to_loader(path)
     my_site_controller_name = controller.class.to_s.underscore.sub(/[^\/]+_controller$/, 'site')
-    loader_path = url_for( :format => 'html',
-                           :only_path => true,
+    loader_path = published_url_for( :format => 'html',
+                           :only_path => !( path =~ /http[s]?:\/\// ),
                            :site_name => params[:site_name],
                            :controller => my_site_controller_name,
-                           :action => 'load' )
+                           :action => 'load')
     loader_base_path = loader_path.sub(/\/[^\/]+$/, '/')
     if path.index(loader_base_path) == 0
       path = path.slice(loader_base_path.size, path.size)
