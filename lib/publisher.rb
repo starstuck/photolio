@@ -9,8 +9,53 @@ end
 
 module Publisher
 
-  class AbstractPublisher
+  class LocalFileWriter
+    attr_reader :base_path
 
+    def initialize(base_path)
+      validate_folder(base_path)
+      @base_path = base_path
+    end
+
+    def validate_folder(path)
+      if not (path and (path != '') and File.directory?(path))
+        raise ArgumentError.new("Invalid publisher destination path: #{path}. Folder  must already exists.")
+      elsif not File.writable?(path)
+        raise ArgumentError.new("Publisher destination path '#{path}' must be writable.")
+      end
+    end
+
+    def older?(path, time)
+      file_path = File.join(@base_path, path)
+      return (not (File.exists?(file_path) and (File.new(file_path).mtime >= time)))
+    end
+
+    def differ?(path, hex_md5sum)
+      file_path = File.join(@base_path, path)
+      return (not (File.exists?(file_path) and \
+                   (Digest::MD5.hexdigest(File.read(file_path)) == hex_md5sum)))
+    end
+    
+    def save!(path, content, mtime=nil)
+      file_path = File.join(@base_path, path)
+      FileUtils.mkdir_p( File.dirname( file_path ) )
+      File.open(file_path, "wb"){ |f| f.write(content) }
+      File.utime(Time.new, mtime, file_path) if mtime
+    end
+  end
+
+
+  class Publisher
+    
+    def initialize(context, site)
+      @context = context
+      @site = site
+      @asset_witer = @page_writer = LocalFileWriter.new(@site.site_params.publish_location)
+      if @site.site_params.publish_assets_location
+        @asset_writer = LocalFileWriter.new(@site.site_params.publish_assets_location)
+      end
+    end
+  
     def clenup_site_part_from_path(path)
       site_prefix = "/#{@site.name}"
       site_prefix_range = 0..(site_prefix.size-1)
@@ -47,7 +92,7 @@ module Publisher
       page_path = compute_page_path(page_info)
       
       # Skip if page last_modified time is provided and file is older
-      return if mtime and not older?(page_path, mtime)
+      return if mtime and not @page_writer.older?(page_path, mtime)
 
       # Prepare component rendering input
       page_params = page_info.merge(:published => true)
@@ -66,15 +111,15 @@ module Publisher
       PublisherRegistrar.instance.publisher = nil
       
       # Save and file only if differs, or was tested by modification time
-      if not mtime and differ?(page_path, Digest::MD5.hexdigest(body))
+      if not mtime and @page_writer.differ?(page_path, Digest::MD5.hexdigest(body))
         pmtime = mtime || 'unknown'
-        if File.exists?(File.join(@base_path, page_path))
-          fmtime = File.new(File.join(@base_path, page_path)).mtime
+        if File.exists?(File.join(@page_writer.base_path, page_path))
+          fmtime = File.new(File.join(@page_writer.base_path, page_path)).mtime
           @context.logger.info "Publisher: Updated file: #{page_path} (#{fmtime} < #{pmtime})"
         else
           @context.logger.info "Publisher: New file: #{page_path} (#{pmtime})"
         end
-        save!(page_path, body, mtime)
+        @page_writer.save!(page_path, body, mtime)
         page_path
       end
     end
@@ -94,10 +139,10 @@ module Publisher
               copy_folder(src_base_path, file_relative_path)
             elsif File.file? file_path
               mtime = File.new(file_path).mtime
-              if older?(file_relative_path, mtime)
+              if @asset_writer.older?(file_relative_path, mtime)
                 content = ''
                 File.open(file_path, "rb"){ |f| content = f.read() }
-                save!(file_relative_path, content, mtime)
+                @asset_writer.save!(file_relative_path, content, mtime)
               end
             end
           end
@@ -123,20 +168,15 @@ module Publisher
         path.sub!(/\?[^\?]*$/ , '')
         src_path = File.join(src_base_path, path)
         mtime = File.new(src_path).mtime
-        if older?(path, mtime)
+        if @asset_writer.older?(path, mtime)
           content = ''
           File.open(src_path, "rb"){ |f| content = f.read() }
-          save!(path, content, mtime)
+          @asset_writer.save!(path, content, mtime)
         end
       end
     end
 
     protected
-
-    def initialize(context, site)
-      @context = context
-      @site = site
-    end
 
     # Normalize time from various formats to unix type
     def normalize_time(time)
@@ -149,61 +189,6 @@ module Publisher
       end
     end
 
-    #
-    # Final classes must implement these
-    #
-
-    # Test if file last modification time is older than ctime
-    def older?(path, mtime)
-      raise RuntimeError('Unimplemented')
-    end
-
-    # Fallback modification check. used if page  does not provide its 
-    # modification time. Test if file md5 sum differs
-    def differ?(path, hex_md5sum)
-      raise RuntimeError('Unimplemented')
-    end
-
-    # Save content in path with last change time equivalent to last page modification time
-    def save!(path, content, mtime=nil)
-      raise RuntimeError('Unimplemented')
-    end
-
-  end
-
-
-  class LocalFilePublisher < AbstractPublisher
-    def initialize(context, site)
-      super(context, site)
-      @base_path = @site.site_params.publish_location
-      validate_folder(@base_path)
-    end
-
-    def validate_folder(path)
-      if not (path and (path != '') and File.directory?(path))
-        raise ArgumentError.new("Invalid publisher destination path: #{path}. Folder  must already exists.")
-      elsif not File.writable?(path)
-        raise ArgumentError.new("Publisher destination path '#{path}' must be writable.")
-      end
-    end
-
-    def older?(path, time)
-      file_path = File.join(@base_path, path)
-      return (not (File.exists?(file_path) and (File.new(file_path).mtime >= time)))
-    end
-
-    def differ?(path, hex_md5sum)
-      file_path = File.join(@base_path, path)
-      return (not (File.exists?(file_path) and \
-                   (Digest::MD5.hexdigest(File.read(file_path)) == hex_md5sum)))
-    end
-    
-    def save!(path, content, mtime=nil)
-      file_path = File.join(@base_path, path)
-      FileUtils.mkdir_p( File.dirname( file_path ) )
-      File.open(file_path, "wb"){ |f| f.write(content) }
-      File.utime(Time.new, mtime, file_path) if mtime
-    end
   end
 
 
@@ -212,8 +197,9 @@ module Publisher
     attr_accessor :publisher
   end
 
+
   def self.publisher_for_location(context, site)
-    return LocalFilePublisher.new(context, site)
+    return Publisher.new(context, site)
   end
 
   def self.active_publisher()

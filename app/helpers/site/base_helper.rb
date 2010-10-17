@@ -79,7 +79,7 @@ module Site::BaseHelper
     end    
     base_dir = "#{ModelExtensions::HasFile::BASE_FOLDER_NAME}/#{site.name}"
     path = compute_public_path_without_photolio(source, "#{base_dir}/#{dir}", ext)
-    return fix_published_path(site, path)
+    return fix_published_path(@site, path)
   end
 
   def fix_published_path(site, path)
