@@ -76,19 +76,22 @@ module Site::BaseHelper
   def compute_site_files_public_path(site, source, dir, ext=nil)
     if (site.id != @site.id and not @site.share_pool.include? site)
       raise RuntimeError.new("Access to #{site.name} assets files is denied")
-    end
-    if params[:published]
-      base_dir = "#{site.name}/#{ModelExtensions::HasFile::BASE_FOLDER_NAME}"
-    else
-      base_dir = "#{ModelExtensions::HasFile::BASE_FOLDER_NAME}/#{site.name}"
-    end
+    end    
+    base_dir = "#{ModelExtensions::HasFile::BASE_FOLDER_NAME}/#{site.name}"
     path = compute_public_path_without_photolio(source, "#{base_dir}/#{dir}", ext)
     return fix_published_path(site, path)
   end
 
   def fix_published_path(site, path)
     if params[:published]
-      site_prefix = "/#{site.name}"
+
+      if Publisher.active_publisher
+        Publisher.active_publisher.report_asset_path path
+      end
+      
+      # Do not cut site name, because now assets can be inported from various template prefixes
+      #site_prefix = "/#{site.name}" 
+      site_prefix = ""
       if host = ActionController::Base.asset_host
         site_prefix = host + site_prefix
       end
@@ -96,6 +99,7 @@ module Site::BaseHelper
       if path[site_prefix_range] == site_prefix
         path[site_prefix_range] = ''
       end
+
       if site.site_params.published_assets_url_prefix
         path = site.site_params.published_assets_url_prefix + path
       end

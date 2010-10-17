@@ -104,7 +104,12 @@ class Site::BaseController < ApplicationController
       opts[:layout] = false
       opts[:format] = 'html'
     end
-    render_without_parthtml opts
+
+    if opts
+      render_without_parthtml opts
+    else
+      render_without_parthtml
+    end
   end
 
 end

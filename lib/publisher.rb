@@ -49,13 +49,21 @@ module Publisher
       # Skip if page last_modified time is provided and file is older
       return if mtime and not older?(page_path, mtime)
 
-      # Build page body
+      # Prepare component rendering input
       page_params = page_info.merge(:published => true)
       page_controller = page_params.delete(:controller)
       page_action = page_params.delete(:action).to_s
+
+      # Register active publisher, for helpers so thay can notify it
+      # about staic files and other stuff
+      PublisherRegistrar.instance.publisher = self
+
       body = @context.render_component_as_string( :controller => page_controller,
                                                   :action => page_action,
                                                   :params => page_params )
+
+      # Clear active component as soon as rendering component done
+      PublisherRegistrar.instance.publisher = nil
       
       # Save and file only if differs, or was tested by modification time
       if not mtime and differ?(page_path, Digest::MD5.hexdigest(body))
@@ -82,7 +90,7 @@ module Publisher
           if file_name != '.' and file_name != '..'
             file_path = File.join(folder_path, file_name)
             file_relative_path = File.join(folder, file_name)
-            if File.directory? file_path
+            if Fil
               copy_folder(src_base_path, file_relative_path)
             elsif File.file? file_path
               mtime = File.new(file_path).mtime
@@ -97,6 +105,30 @@ module Publisher
       end
 
       copy_folder(src_base_path, '')
+    end
+
+    # Method called by helper calulating assets path, to report every
+    # assed used in template
+    def report_asset_path path
+      if ! @assets_paths
+        @assets_paths = []
+      end
+      @assets_paths << path.dup
+    end
+
+    # Publish assets collected, while rendering pages
+    def publish_assets(logger)
+      src_base_path = File.join(RAILS_ROOT, 'public')
+      for path in @assets_paths
+        path.sub!(/\?[^\?]*$/ , '')
+        src_path = File.join(src_base_path, path)
+        mtime = File.new(src_path).mtime
+        if older?(path, mtime)
+          content = ''
+          File.open(src_path, "rb"){ |f| content = f.read() }
+          save!(path, content, mtime)
+        end
+      end
     end
 
     protected
@@ -175,8 +207,17 @@ module Publisher
   end
 
 
+  class PublisherRegistrar
+    include Singleton
+    attr_accessor :publisher
+  end
+
   def self.publisher_for_location(context, site)
     return LocalFilePublisher.new(context, site)
+  end
+
+  def self.active_publisher()
+    return PublisherRegistrar.instance.publisher
   end
 
 end

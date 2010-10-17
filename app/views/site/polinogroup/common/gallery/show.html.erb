@@ -36,7 +36,7 @@
 	<% if item.is_a? GalleryPhoto -%>
 	  <span class="photo">
 	    <%= link_to( photo_image_tag(item.photo, :size => 'x400'),
-			 show_site_photo_path( @site, item.photo ),
+			 'javascript:return false;',
 			 { :title => item.photo.alt_text })
 		-%>
 	  </span>

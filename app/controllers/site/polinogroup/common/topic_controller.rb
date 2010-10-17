@@ -8,6 +8,7 @@ class Site::Polinogroup::Common::TopicController < Site::TopicController
                 )
 
   def show
+    render :action => 'show'
   end
 
 end 

@@ -260,8 +260,7 @@ class Admin::SitesController < Admin::BaseController
                       }, max_lastmod)
 
     # Publish site assets 
-    # Photo previews should be already generated after page displaying
-    publisher.copy_assets_folder
+    publisher.publish_assets(logger)
     
     flash[:notice] = "Site #{@site.name} is published. #{galleries_count} galleries, #{topics_count} topics, #{photos_count} photos and #{others_count} other pages updated."
 
