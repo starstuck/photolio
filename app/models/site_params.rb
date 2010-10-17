@@ -134,6 +134,8 @@ module SiteParams
     
     theme 'polinogroup/common'
     menus ['galleries', 'topics']
+    publish_assets_location '/var/www/polinogroup-assets'
+    published_assets_url_prefix 'http://assets.polinostudio.com/'
     
   end
 
@@ -142,7 +144,7 @@ module SiteParams
 
     theme 'polinogroup/main'
     publish_location '/var/www/polinogroup'
-    published_url_prefix 'http://www.polinostudio.com'
+    published_url_prefix 'http://group.polinostudio.com'
     menus ['topics',]
 
   end
@@ -153,7 +155,7 @@ module SiteParams
   class Polino#{name}Params < PolinogroupCommonParams
 
     publish_location '/var/www/polino#{name}'
-    published_url_prefix 'http://www.#{name}.polinostudio.com'
+    published_url_prefix 'http://#{name}.polinostudio.com'
 
   end 
 EOS
