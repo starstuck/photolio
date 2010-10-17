@@ -85,12 +85,6 @@ module Site::BaseHelper
   def fix_published_path(site, path)
     if params[:published]
 
-      if Publisher.active_publisher
-        Publisher.active_publisher.report_asset_path path
-      end
-      
-      # Do not cut site name, because now assets can be inported from various template prefixes
-      #site_prefix = "/#{site.name}" 
       site_prefix = ""
       if host = ActionController::Base.asset_host
         site_prefix = host + site_prefix
@@ -100,6 +94,10 @@ module Site::BaseHelper
         path[site_prefix_range] = ''
       end
 
+      if Publisher.active_publisher
+        Publisher.active_publisher.report_asset_path path
+      end
+      
       if site.site_params.published_assets_url_prefix
         path = site.site_params.published_assets_url_prefix + path
       end
