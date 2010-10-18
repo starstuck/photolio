@@ -6,8 +6,10 @@ class Site::BaseController < ApplicationController
   before_filter :setup_site_helpers
   layout :site_layout
 
-  attr_reader :site
-  helper_method :site
+  # If used, should be standarized and well defined
+  # can easilly cause naming collisions with local variables
+  #attr_reader :site
+  #helper_method :site
 
   protected
 

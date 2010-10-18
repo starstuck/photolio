@@ -11,11 +11,12 @@ module Site::BaseHelper
     
     if params[:published]
       path = url_for(options) 
-      site_prefix = "/#{site.name}"
+      site_prefix = "/#{options[:site_name]}"
       site_prefix_range = 0..(site_prefix.size-1)
       if path[site_prefix_range] == site_prefix
         path[site_prefix_range] = ''
       end
+      site = Site.find_by_name(options[:site_name])
       if site.site_params.published_url_prefix
         path = site.site_params.published_url_prefix + path
       end

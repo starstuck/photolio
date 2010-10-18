@@ -16,10 +16,7 @@
 
   <ul id="breadcrumbs">
     <li>
-      <%= link_to 'Polino Studio group', published_url_for( :site_name => 'polinogroup',
-						  :controller => 'site/polinogroup/main/site',
-						  :action => 'show',
-						  :format => 'html' ) -%>
+      <%= link_to 'Polino Studio group', site_default_path('polinogroup') -%>
       <span class="separator">&nbsp;&gt;</span>
     </li>
     <li>

@@ -1,8 +1,15 @@
 module Site::Polinogroup::Common::BaseHelper
 
   def site_default_path(site)
-    menu = site.get_menu('galleries')
-    show_site_gallery_path(site, menu.menu_items[0].target)
+    if site.is_a? String
+      site = Site.find_by_name(site)
+    end
+    if site.name == 'polinogroup'
+      return show_site_path(site)
+    else
+      menu = site.get_menu('galleries')
+      return show_site_gallery_path(site, menu.menu_items[0].target)
+    end
   end
 
   def brand_name(site)
