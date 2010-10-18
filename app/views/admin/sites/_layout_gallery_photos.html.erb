@@ -69,8 +69,24 @@
     <% index += 1 -%>
   <% end -%>
 
+  <% draggable_element "photo_#{gallery.id}_#{item.photo_id}",
+      :revert => draggable_revert_js,
+      :scroll => "'content_scrollframe'"
+  -%>
+
   <%= protomenu_tag "'.gallery_#{gallery.id}_photo'",
-      :menuItems => [{ :name => "'Add separator before'",
+      :menuItems => [{ :name => "'Copy'",
+		       :callback => "function(event){ drag_photo_copy(event) }"
+		     },
+		     { :name => "'Remove'",
+		       :callback => remote_callback(
+			 :url => { :action => 'layout_remove_gallery_photo', 
+	                           :id => @site,
+                                   :format => :js},
+                         :with => "'photo_id=' + encodeURIComponent(element.id)"
+                       )
+		     },
+		     { :name => "'Add separator before'",
 		       :callback => remote_callback(
                          :update => "gallery_#{gallery.id}_photos_list",
                          :with => "'position=' + encodeURIComponent(element.alt)",

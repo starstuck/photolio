@@ -112,7 +112,7 @@ class Admin::SitesController < Admin::BaseController
 
   def layout_add_gallery_photo
     @gallery = @site.galleries.find(params[:gallery_id])
-    source_gallery_id, photo_id = params[:photo_id].split('_')[-2..-1]
+    source_gallery_id, photo_id, copy = params[:photo_id].split('_')[1..-1]
     @photo = @site.photos.find(photo_id)
     if source_gallery_id != 'unassigned'
       @source_gallery = @site.galleries.find(source_gallery_id) 
@@ -120,7 +120,7 @@ class Admin::SitesController < Admin::BaseController
     position = params[:position].to_i
 
     if @gallery and @photo
-     @gallery.add_photo(@photo, position)
+     @gallery.add_photo(@photo, position, copy)
     end
       
     respond_to do |format|
@@ -131,15 +131,18 @@ class Admin::SitesController < Admin::BaseController
           page.replace_html( "gallery_#{@gallery.id}_photos_list", 
                              :partial => 'layout_gallery_photos', 
                              :locals => { :gallery => @gallery } )
-          if @source_gallery
+          if @source_gallery and not copy
             if @source_gallery.id != @gallery.id
               page.replace_html( "gallery_#{@source_gallery.id}_photos_list", 
                                  :partial => 'layout_gallery_photos', 
                                  :locals => { :gallery => @source_gallery } )
             end
-          else
+          elsif not copy
             page.replace_html( "unassigned_photos_list", 
                                :partial => 'layout_unassigned_photos' )
+          end
+          if copy
+            page.remove( params[:photo_id] )
           end
         end
       end

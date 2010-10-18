@@ -61,3 +61,27 @@ function add_photo_participant_tag(element, index){
   Element.insert(element, {before: content});
   last_photo_keyword_tag_index += 1;
 }
+
+
+function drag_photo_copy(event){
+  var element = Event.element(event);
+  var photo_id = element.id.split('_')[1];
+  var clone = element.cloneNode(false);
+  clone.id = element.id + '_copy';
+  clone.style.position = 'absolute';
+  element.parentNode.appendChild(clone);
+  $(clone).clonePosition(element);
+  $(clone).addClassName('copy');
+
+  var draggable = new Draggable( clone.id, {
+    revert:function(element){
+      if(!Droppables.last_active) {
+	return true;
+      } else {
+	return false;
+      }
+    },
+    scroll:'content_scrollframe'
+  });
+  /*draggable.startDrag();*/
+}

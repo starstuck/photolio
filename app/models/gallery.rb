@@ -57,7 +57,7 @@ class Gallery < ActiveRecord::Base
   # If photo is already assigned to gallery, it will be only repositioned
   # Please note, that when readding the same photo in gallery, indexes are 
   # calculated on photos before move
-  def add_photo(photo, position = nil)
+  def add_photo(photo, position = nil, copy = false)
     unless photo.is_a? Photo
       raise(ArgumentError, 'Expecting Photo instance instead of : #{photo.inspect}') 
     end
@@ -68,7 +68,9 @@ class Gallery < ActiveRecord::Base
     already_exists = false
     other_galleries_photos.each do |item| 
       if item.gallery_id != self.id
-        item.gallery.remove_photo(photo)
+        if not copy
+          item.gallery.remove_photo(photo)
+        end
       else
         already_exists = item
       end
