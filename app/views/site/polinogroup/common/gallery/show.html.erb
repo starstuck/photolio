@@ -32,7 +32,7 @@
       <% for item in @gallery.gallery_items -%>
 	<% if item.is_a? GalleryPhoto -%>
 	  <span class="photo">
-	    <abbr ttile="item.photo.alt_text">
+	    <abbr title="<%= item.photo.alt_text -%>">
 	      <%= photo_image_tag(item.photo, :size => 'x400') -%>
 	    </abbr>
 	  </span>
