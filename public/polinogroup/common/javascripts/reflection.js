@@ -11,7 +11,7 @@ var Reflection = {
 	add: function(image, options) {
 		Reflection.remove(image);
 
-		doptions = { "height" : Reflection.defaultHeight, "opacity" : Reflection.defaultOpacity }
+		doptions = { "height" : Reflection.defaultHeight, "opacity" : Reflection.defaultOpacity };
 		if (options) {
 			for (var i in doptions) {
 				if (!options[i]) {
@@ -31,7 +31,7 @@ var Reflection = {
 			for (j=0;j<classes.length;j++) {
 				if (classes[j] != "reflect") {
 					if (newClasses) {
-						newClasses += ' '
+					  newClasses += ' ';
 					}
 
 					newClasses += classes[j];

@@ -59,7 +59,13 @@ GalleryController = function(context){
     if (window.Reflection){
       var rimages = $('#gallery-photos img');
       for (i=0;i<rimages.length;i++) {
-	window.Reflection.add(rimages[i], { height: 0.25, opacity : null});
+	if ( typeof(rimages[i].complete) == 'undefined' || rimages[i].complete ) {
+	  window.Reflection.add(rimages[i], { height: 0.25, opacity : null});
+	} else {
+	  rimages[i].onload = function(){
+	    window.Reflection.add(this, { height: 0.25, opacity : null});
+	  };
+	}
       }
     }
   }
@@ -154,11 +160,6 @@ GalleryController = function(context){
 
     // TODO: clarify
     //jPhotos.css('width', viewportWidth + 'px');
-
-    if (window.console){
-      console.log('Got content width: ', viewportWidth);
-      console.log('Got sections: ', sections);
-    }
   }
 
   // Must be called after viewport width update
@@ -188,13 +189,6 @@ GalleryController = function(context){
       scrollSections[i].end /= scrollRatio;
       scrollSections[i].startMargin = scrollSections[i].start - marg;
       scrollSections[i].endMargin = scrollSections[i].end + marg;
-    }
-
-    if (window.console){
-      console.log('Got scroll sections: ', scrollSections);
-      console.log('Got scroll ratio: ', scrollRatio);
-      console.log('Got scroll range: ', scrollRange);
-      console.log('Got view range: ', start, separatorLength);
     }
   }
 
@@ -345,8 +339,8 @@ GalleryController = function(context){
     jPhotos = $('#gallery-photos');
     calculateContentSections();
     initializeScroller();
-    initializeReflections();
     initializeControlls();
+    initializeReflections();
     context.style.overflow = 'hidden';
   }
 
