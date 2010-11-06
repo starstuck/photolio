@@ -1,16 +1,24 @@
 (function(){
-  var $;
+  var
+   $,
 
-  var minSlideTime = 3000;
-  var minSlidesToGo = 3;
+   // Slideshow onfiguration
+   minSlideTime = 3000,
+   minSlidesToGo = 3,
 
-  var documentLoaded = false;
-  var slidesLoadStarted = false;
-  var lastSlideTime;
-  var availableSlides = [];
-  var skipSlidesShow = false;
-  var contentDisabled = true;
-  var loaderBasePath = window.location.pathname.match(/^(.*\/)[^\/]*$/)[1]; // Only paths relative to this base will be handled by content loader
+   // Only paths relative to this base will be handled by content loader
+   loaderBasePath = window.location.pathname.match(/^(.*\/)[^\/]*$/)[1],
+
+   // Loader and slideshow state
+   documentLoaded = false,
+   slidesLoadStarted = false,
+   skipSlidesShow = false,
+   contentDisabled = true,
+
+   // slideshow internal varibles
+   lastSlideTime,
+   availableSlides = [];
+
 
   function formatLogMessage(a){
     var d = new Date();
@@ -23,8 +31,8 @@
   }
 
   function log(message){
-    // Coment-out line below for debugging output
-    //return;
+    // Coment-out line below, to clear debugging output
+    return;
     if (window.console) {
       console.debug.apply(console, formatLogMessage(arguments));
     }
@@ -114,6 +122,7 @@
     $('#content-inner').bind('change',function() {
       var loc = window.location;
       $(this).find('a').each(function(){
+	if (this.href.match(/^javascript:/)) return; // Ignore links starting with javascript
 	var tMatch = this.href.match( /^(([a-z]+:)\/\/([^/:]+)(:([0-9]+))?)?(\/[^?#]*)(\#[^?]*)?(\?.*)?$/);
 	var prot = tMatch[2];
 	if (prot && prot != loc.protocol) return true;
@@ -289,13 +298,11 @@
 
   /* Slides handling end */
 
-  function makeUtil(methods){
-    var result = {};
-    for (var i = 0; i < methods.length; i ++){
+  window.loader = (function(methods){
+    for (var result = {}, i = 0; i < methods.length; i ++){
       result[methods[i]] = eval(methods[i]);
     }
     return result;
-  }
+  })(['bootstrap', 'loadScript', 'loadScripts', 'log', 'addSlides']);
 
-  window.loader = makeUtil(['bootstrap', 'loadScript', 'loadScripts', 'log', 'addSlides']);
 })();

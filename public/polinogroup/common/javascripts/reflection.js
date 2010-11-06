@@ -4,26 +4,6 @@
  * Freely distributable under MIT-style license.
  */
 
-/* From prototype.js */
-if (!document.myGetElementsByClassName) {
-	document.myGetElementsByClassName = function(className) {
-		var children = document.getElementsByTagName('*') || document.all;
-		var elements = new Array();
-
-		for (var i = 0; i < children.length; i++) {
-			var child = children[i];
-			var classNames = child.className.split(' ');
-			for (var j = 0; j < classNames.length; j++) {
-				if (classNames[j] == className) {
-					elements.push(child);
-					break;
-				}
-			}
-		}
-		return elements;
-	}
-}
-
 var Reflection = {
 	defaultHeight : 0.5,
 	defaultOpacity: 0.5,
@@ -146,30 +126,4 @@ var Reflection = {
 			image.parentNode.parentNode.replaceChild(image, image.parentNode);
 		}
 	}
-}
-
-function addReflections() {
-	var rimages = document.myGetElementsByClassName('reflect');
-	for (i=0;i<rimages.length;i++) {
-		var rheight = null;
-		var ropacity = null;
-
-		var classes = rimages[i].className.split(' ');
-		for (j=0;j<classes.length;j++) {
-			if (classes[j].indexOf("rheight") == 0) {
-				var rheight = classes[j].substring(7)/100;
-			} else if (classes[j].indexOf("ropacity") == 0) {
-				var ropacity = classes[j].substring(8)/100;
-			}
-		}
-
-		Reflection.add(rimages[i], { height: rheight, opacity : ropacity});
-	}
-}
-
-/* Disabled. Reflections onload handler is excuted by cusomized handlers in
- * application.js in order to have proper onload events execution
- *
- *var previousOnload = window.onload;
- *window.onload = function () { if(previousOnload) previousOnload(); addReflections(); }
- */
+};

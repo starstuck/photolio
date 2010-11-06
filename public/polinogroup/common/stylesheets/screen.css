@@ -335,6 +335,7 @@ body {
 
 div#footer p{
     font-size: 7pt;
+    margin: 0;
 }
 
 /* =galleries-menu */
@@ -438,7 +439,7 @@ div#footer p{
 }
 
 #gallery-photos abbr{
-    cursor: help;
+    /*cursor: help;*/
 }
 
 #gallery-photos img{
@@ -469,7 +470,7 @@ div#footer p{
     top:0;
     width: 66px;
     padding: 6px 0;
-    cursor: ew-resize;
+    cursor: move;
 }
 
 #gallery .ui-scroller-inner {
@@ -479,32 +480,51 @@ div#footer p{
     -webkit-border-radius: 2px 2px 0 0;
 }
 
-
-
 /* =gallery-controlls */
 
 #gallery-controls {
-    display: none; /* Is changed by js controls initialization script */
+    display: none;
     position: absolute;
-    bottom: 30px;
-    left: 0px;
-    width: 50px;
-    height: 20px;
+    bottom: 15px;
+    left: 10px;
+    height: 13px;
     z-index: 10;
     opacity: 0.6;
+    color: #aaa;
 }
 
-#gallery_play_button {
-    width: 14px;
-    height: 14px;
-    margin-top: 3px;
-    margin-left: 32px;
-    background-image: url(../images/button-play.png);
+#gallery-controls a{
+    display: inline-block;
+    float: left;
+    width: 13px;
+    height: 13px;
+    background-color: transparent;
+    background-image: url(../images/controls.png);
+    background-repeat: no-repeat;
+    border-width: 0;
+    padding: 0;
     cursor: pointer;
+    margin-right: 2px;
 }
 
-.playing#gallery_play_button {
-    background-image: url(../images/button-pause.png);
+#gallery-controls .disabled {
+    display:none;
+}
+
+#gallery-prev-button {
+    background-position: 0px 0px;
+}
+
+#gallery-pause-button {
+    background-position: -13px 0px;
+}
+
+#gallery-play-button {
+    background-position: -26px 0px;
+}
+
+#gallery-next-button {
+    background-position: -39px 0px;
 }
 
 /* 
@@ -542,7 +562,6 @@ div#footer p{
 .topic_body p{
     margin-left: 0em;
 }
-
 
 /* 
  * =photo page 

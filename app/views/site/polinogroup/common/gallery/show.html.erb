@@ -1,7 +1,22 @@
 <div id="gallery">
 
   <ul id="galleries-menu">
+    <% @prevGalleryMenuItem = nil 
+       @prevGalleryFound = false
+       @activeGalleryVisited = false
+       @nextGalleryMenuItem = nil
+       -%>
     <% for menu_item in @site.get_menu('galleries').menu_items -%>
+      <% if @activeGalleryVisited
+	   @nextGalleryMenuItem = menu_item 
+	   @activeGalleryVisited = false
+	 end
+	 if menu_item.target.id == @gallery.id 
+	   @prevGalleryFound = true
+	   @activeGalleryVisited = true
+	 end
+	 @prevGalleryMenuItem = menu_item if ! @prevGalleryFound
+	 -%>
       <li<%= (menu_item.target.id == @gallery.id) ? ' class="active"' : '' -%>>
 	<% link_to(show_site_gallery_path(@site, menu_item.target),
 		   { :title => menu_item.target.title }) do -%>
@@ -45,7 +60,16 @@
   </div>
 
   <div id="gallery-controls">
-    <button id="gallery-play-button"></button>
+    <% if @prevGalleryMenuItem -%>
+      <%= link_to "", show_site_gallery_path(@site, @prevGalleryMenuItem.target), 
+	  :id => "gallery-previous-button", :title => "Previous gallery" -%>
+    <% end -%>
+    <a id="gallery-pause-button" title="Pause" href="javascript:return false;"></a>
+    <a id="gallery-play-button" title="Play slideshow" href="javascript:return false;"></a>
+    <% if @nextGalleryMenuItem -%>
+      <%= link_to "", show_site_gallery_path(@site, @nextGalleryMenuItem.target),
+	  :id => "gallery-next-button", :title => "Next gallery" -%>
+    <% end -%>
   </div>
 
   <%= render 'site/polinogroup/common/partials/topics_menu' -%>

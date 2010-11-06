@@ -1,45 +1,57 @@
 GalleryController = function(context){
 
-  /* Algorith configuration constants */
-  var scrollSeparatorLength = 100;
-  var animationSpeed = 100;
+  var
+    // Configurations parameters
+    separatorLength = 200, // expressed in view pixels, may be changed on photos scaling
+    playbackSpeed = 0.07, // in view pixels per milisond
+    playbackFPS = 30,
 
-  var isInDrag = false;
-  var isInSectionSwitchAnimation = false;
+    // Gallery state
+    isInDrag = false,
+    isInSectionSwitchAnimation = false,
 
-  var photosEl;
-  var scrollbar;
-  var scroller;
-  var viewportWidth;
-  var separatorsPositions;
-  var sections;
-  var scrollPosition;
-  var position;
-  var scrollerSections;
-  var scrollRatio;
-  var scrollerRange;
-  var finalSeparatorWidth;
+    // Internal jQuery elements
+    jPhotos,
+    jScrollbar,
+    jScroller,
 
+    // Internal variable used in scrolling
+    viewportWidth,
+    sections,
+    scrollPosition, // scroller position from last update
+    scrollSections,
+    scrollRange,
+    scrollRatio,
+
+    // Internal variables used in playing scroll
+    playbackTimeout,
+    playbackLastFrameTime;
 
   function initializeScroller(){
-    scrollbar = $('<div class="ui-scrollbar"><div class="ui-scroller"><div class="ui-scroller-inner"></div></div><div class="ui-scrollbar-extra"></div></div>');
-    scrollbar.appendTo('#gallery');
-    scroller = scrollbar.find('.ui-scroller');
-    scroller.draggable({
+    jScrollbar = $('<div class="ui-scrollbar">' +
+		     '<div class="ui-scrollbar-extra"></div>' +
+		     '<div class="ui-scroller">' +
+		       '<div class="ui-scroller-inner"></div>' +
+		     '</div>' +
+		   '</div>');
+    jScrollbar.appendTo('#gallery');
+    jScroller = jScrollbar.find('.ui-scroller');
+    jScroller.draggable({
       axis: 'x',
-      cursor: 'ew-resize',
+      cursor: 'move',
       containment: 'parent',
       drag: function(event, ui){
-	setScrollerPosition(ui.position.left);
+	setScrollPosition(ui.position.left);
       },
       start: function(event, ui){
 	setIsInDrag(true);
+	pause();
       },
       stop: function(event, ui){
 	setIsInDrag(false);
       }
     });
-    handleScrollbarResize();
+    calculateScrollbarSections();
   }
 
   function initializeReflections(){
@@ -48,28 +60,58 @@ GalleryController = function(context){
       for (i=0;i<rimages.length;i++) {
 	window.Reflection.add(rimages[i], { height: 0.25, opacity : null});
       }
-      /* window.addReflections(); */
     }
   }
 
-  function updateViewportWidth(width){
-    var contentWidth, i = 0, width = context.offsetWidth;
+  function initializeControlls(){
+    scrollPosition = 0;
+    $('#gallery-play-button').bind('click', function(e){
+      e.preventDefault();
+      play();
+    });
+    $('#gallery-pause-button').hide().bind('click', function(e){
+      e.preventDefault();
+      pause();
+    });
+    $('#gallery-controls').show();
+
+    // Playback is CPU hungry, so halt it when window is not in focus
+    var stoppedOnWindowBlur = false;
+    $(window).blur(function(){
+      if (playbackTimeout) {
+	stoppedOnWindowBlur = true;
+	pause();
+      }
+    }).focus(function(){
+      if (stoppedOnWindowBlur) {
+	play();
+	stoppedOnWindowBlur = false;
+      }
+    });
+  }
+
+  // needs to be recalucalated on resize, because separators may change
+  function calculateContentSections(){
+    var i = 0,
+      width = context.offsetWidth,
+      separatorsPositions = [];
+
     if (width == viewportWidth)
       return;
-    viewportWidth = width;
-    separatorsPositions = [];
+
     sections = [];
+    viewportWidth = width;
 
-    //contentWidth = photosEl.offsetWidth;
-    photosEl.style.width = '99999px';
+    // TODO clarify
+    //viewportWidth = photosEl.offsetWidth;
+    jPhotos.css('width', '99999px');
 
+    // update each seprator width, according to surounding sections widths
     function updSepWidth(pos, el, width){
-      //contentWidth += (width - el.offsetWidth);
+      //viewportWidth += (width - el.offsetWidth);
       el.style.width = width + 'px';
       separatorsPositions.push(el.offsetLeft, el.offsetLeft + width);
       sections[pos] = {start: el.offsetLeft + width};
-      if (window.console)
-	console.debug('Updating separator:', pos, el, width);
       if (pos > 0) {
 	with({s: sections[pos-1]}){
 	  s.end = el.offsetLeft;
@@ -81,8 +123,8 @@ GalleryController = function(context){
       }
     };
 
-    var qInitalSep = $(photosEl).find('.initial-separator');
-    var qSepsList = $(photosEl).find('.separator');
+    var qInitalSep = jPhotos.find('.initial-separator');
+    var qSepsList = jPhotos.find('.separator');
     if ( qInitalSep.length > 0 && qSepsList.length > 0 &&
 	 (qSepsList[0].offsetLeft < viewportWidth)
        ) {
@@ -97,7 +139,8 @@ GalleryController = function(context){
       i ++;
     });
 
-    $(photosEl).find('.final-separator:first').each(function(){
+    // Update last separator with
+    jPhotos.find('.final-separator:first').each(function(){
       var lastWidth = this.offsetLeft - separatorsPositions[2 * i - 1];
       var newWidth = 0;
 
@@ -106,57 +149,64 @@ GalleryController = function(context){
       }
       updSepWidth(i, this, newWidth);
       sections.pop(); // Removed stacked begining on nonexistent section
-      finalSeparatorWidth = newWidth;
     });
 
-    //photosEl.style.width = contentWidth + 'px';
+    // TODO: clarify
+    //jPhotos.css('width', viewportWidth + 'px');
+
+    if (window.console){
+      console.log('Got content width: ', viewportWidth);
+      console.log('Got sections: ', sections);
+    }
   }
 
-  /* Must be after viewport width update */
-  function handleScrollbarResize(width){
-    var sectionsLength = 0;
-    scrollerRange = scrollbar.attr('offsetWidth') -
-      scroller.attr('offsetWidth');
+  // Must be called after viewport width update
+  function calculateScrollbarSections(width){
+    var start = 0, length;
 
-    // Start calculation scrollerSections in view pixels
-    scrollerSections = [];
-    var i, length, start = 0;
-    for (i = 0; i < sections.length; i++){
+    // Start calculation scrollSections in view pixels
+    scrollSections = [];
+    for (var i = 0; i < sections.length; i++){
       length = sections[i].end - sections[i].start - viewportWidth;
       if (length < 0) length = 0;
-      scrollerSections.push({
+      scrollSections.push({
 	start: start,
 	end: start + length
       });
-      start += length + scrollSeparatorLength;
+      start += length + separatorLength;
     };
 
-    var ratio = scrollerRange / (start - scrollSeparatorLength);
+    scrollRange = jScrollbar.attr('offsetWidth') - jScroller.attr('offsetWidth');
+    // 2 is to reduce effect of first photo margin
+    scrollRatio = (start - separatorLength - 2) / scrollRange;
 
     // Rescale scroller sections according to scroller width, and shift
-    var marg = scrollSeparatorLength * ratio / 2;
-    for (i = 0; i < scrollerSections.length; i ++) {
-      scrollerSections[i].start *= ratio;
-      scrollerSections[i].end *= ratio;
-      scrollerSections[i].startMargin = scrollerSections[i].start - marg;
-      scrollerSections[i].endMargin = scrollerSections[i].end + marg;
+    var marg = (separatorLength / 2) / scrollRatio;
+    for (i = 0; i < scrollSections.length; i ++) {
+      scrollSections[i].start /= scrollRatio;
+      scrollSections[i].end /= scrollRatio;
+      scrollSections[i].startMargin = scrollSections[i].start - marg;
+      scrollSections[i].endMargin = scrollSections[i].end + marg;
     }
 
-    scrollRatio = ratio;
+    if (window.console){
+      console.log('Got scroll sections: ', scrollSections);
+      console.log('Got scroll ratio: ', scrollRatio);
+      console.log('Got scroll range: ', scrollRange);
+      console.log('Got view range: ', start, separatorLength);
+    }
   }
 
-  function setScrollerPosition(pos, inAnimation){
-    var t = this;
-    var scrollWindow = viewportWidth * scrollRatio;
-    var viewPos, posOffset, a, b;
+  function setScrollPosition(pos){
+    var viewPos, posOffset, a;
 
-    for (var i = 0; i < scrollerSections.length; i ++){
-      var s = scrollerSections[i];
+    for (var i = 0; i < scrollSections.length; i ++){
+      var s = scrollSections[i];
       if (pos < s.endMargin) {
 	if (pos >= s.startMargin) {
 	  if ( (pos > s.start) && (pos < s.end) ) {
 	    // Scrolling in regular section
-	    viewPos = sections[i].start + (pos - s.start) / scrollRatio;
+	    viewPos = sections[i].start + (pos - s.start) * scrollRatio;
 	    // Cancel section switch animation, if one scrolled so far
 	    if (isInSectionSwitchAnimation) {
 	      stopSectionSwitchAnimation();
@@ -182,16 +232,13 @@ GalleryController = function(context){
 	    // Using expression: y = ln(x / a + 1) * a
 	    // 1 must be constant, to provide smooth join with lineral function
 	    // a - inclination, should be related with scroll separator length
-	    a = b = scrollSeparatorLength * 0.1;
-	    var orgOffset = posOffset;
-	    posOffset = Math.round( Math.log( (posOffset / a) + 1 ) * b );
+	    a = ((separatorLength / 2) / scrollRatio ) * 0.5;
+	    posOffset = Math.log( (posOffset / a) + 1 ) * a;
 	    if (pos <= s.start) {
 	      viewPos -= posOffset * scrollRatio;
 	    } else {
 	      viewPos += posOffset * scrollRatio;
 	    }
-
-	    if (window.console) console.log('Dyn scroll position: ' + pos);
 
 	    // Continue running section switch animation if still in the same section,
 	    // otherwise brake
@@ -199,7 +246,6 @@ GalleryController = function(context){
 	      if ( ( (pos <= s.start) && (scrollPosition > s.startMargin) ) ||
 	         ( (pos >= s.end) && (scrollPosition < s.endMargin) )
 	      ){
-		position = viewPos;
 		scrollPosition = pos;
 		return;
 	      };
@@ -207,16 +253,15 @@ GalleryController = function(context){
 
 	    // Animate switch between sections
 	    if ( ( (pos <= s.start) && (scrollPosition < s.startMargin) &&
-		   ( (i == 0) || (scrollPosition > scrollerSections[i - 1].startMargin)  ) ) ||
+		   ( (i == 0) || (scrollPosition > scrollSections[i - 1].startMargin)  ) ) ||
 	         ( (pos >= s.end) && (scrollPosition > s.endMargin) &&
-		   ( (i == scrollerSections.length - 1) || (scrollPosition < scrollerSections[i + 1].endMargin ) ) )
+		   ( (i == scrollSections.length - 1) || (scrollPosition < scrollSections[i + 1].endMargin ) ) )
 	       ){
 	      // Cancel eventual previous animations
 	      if (isInSectionSwitchAnimation) {
 		stopSectionSwitchAnimation();
 	      }
-	      startSectionSwitchAnimation(viewPos);
-	      position = viewPos;
+	      startSectionSwitchAnimation(Math.round(viewPos));
 	      scrollPosition = pos;
 	      return;
 	    };
@@ -228,7 +273,47 @@ GalleryController = function(context){
     };
 
     scrollPosition = pos;
-    context.scrollLeft = position = viewPos;
+    context.scrollLeft = Math.round(viewPos);
+  }
+
+  function play(){
+    var
+      scrollSpeed = playbackSpeed / scrollRatio,
+      frameDelay = Math.round(1000.0 / playbackFPS);
+
+    function playFrame(){
+      var
+	time = new Date(),
+	offset = (time - playbackLastFrameTime) * scrollSpeed;
+
+      setScrollPosition(scrollPosition + offset);
+      jScroller[0].style.left = Math.round(scrollPosition) + 'px';
+      playbackLastFrameTime = time;
+
+      if (scrollPosition < scrollRange) {
+	playbackTimeout = setTimeout(playFrame, frameDelay);
+      } else {
+	pause();
+      }
+    }
+
+    if (scrollPosition < scrollRange) {
+      playbackLastFrameTime = new Date();
+      //$(context).trigger('playbackStart');
+      $('#gallery-pause-button').show();
+      $('#gallery-play-button').hide();
+      playFrame();
+    }
+  }
+
+  function pause(){
+    if (playbackTimeout) {
+      clearTimeout(playbackTimeout);
+      playbackTimeout = null;
+      //$(context).trigger('playbackStop');
+      $('#gallery-pause-button').hide();
+      $('#gallery-play-button').show();
+    }
   }
 
   function setIsInDrag(value){
@@ -237,10 +322,8 @@ GalleryController = function(context){
 
   function startSectionSwitchAnimation(position){
     isInSectionSwitchAnimation = true;
-    if (window.console) console.log('-- Animation started');
     $(context).animate({scrollLeft: position}, 200, function(){
       isInSectionSwitchAnimation = false;
-      if (window.console) console.log('-- Animation stoped');
       // Correct eventual scroll differences after animation;
       context.scrollLeft = position;
     });
@@ -253,10 +336,11 @@ GalleryController = function(context){
   }
 
   function initialize(){
-    photosEl = $('#gallery-photos').get(0);
-    updateViewportWidth();
+    jPhotos = $('#gallery-photos');
+    calculateContentSections();
     initializeScroller();
     initializeReflections();
+    initializeControlls();
     context.style.overflow = 'hidden';
   }
 
