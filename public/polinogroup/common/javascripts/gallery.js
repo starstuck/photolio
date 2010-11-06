@@ -2,7 +2,7 @@ GalleryController = function(context){
 
   var
     // Configurations parameters
-    separatorLength = 200, // expressed in view pixels, may be changed on photos scaling
+    separatorLength = 160, // expressed in view pixels, may be changed on photos scaling
     playbackSpeed = 0.07, // in view pixels per milisond
     playbackFPS = 30,
 
