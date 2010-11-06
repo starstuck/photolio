@@ -34,7 +34,7 @@
     // Coment-out line below, to clear debugging output
     return;
     if (window.console) {
-      console.debug.apply(console, formatLogMessage(arguments));
+      console.info.apply(console, formatLogMessage(arguments));
     }
   }
 

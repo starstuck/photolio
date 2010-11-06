@@ -27,6 +27,7 @@ GalleryController = function(context){
     playbackTimeout,
     playbackLastFrameTime;
 
+
   function initializeScroller(){
     jScrollbar = $('<div class="ui-scrollbar">' +
 		     '<div class="ui-scrollbar-extra"></div>' +
@@ -273,7 +274,12 @@ GalleryController = function(context){
     };
 
     scrollPosition = pos;
-    context.scrollLeft = Math.round(viewPos);
+    if (! $.browser.opera) {
+      context.scrollLeft = Math.round(viewPos);
+    } else {
+      // Opera does not support scroll left, replace by movind content
+      jPhotos[0].style.left = '-' + viewPos + 'px';
+    }
   }
 
   function play(){
