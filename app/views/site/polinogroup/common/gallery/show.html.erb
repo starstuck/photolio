@@ -60,6 +60,7 @@
   </div>
 
   <div id="gallery-controls">
+    <% image_path('controls.png') # compute controls path to make sure it gets published -%>
     <% if @prevGalleryMenuItem -%>
       <%= link_to "", show_site_gallery_path(@site, @prevGalleryMenuItem.target), 
 	  :id => "gallery-previous-button", :title => "Previous gallery" -%>
