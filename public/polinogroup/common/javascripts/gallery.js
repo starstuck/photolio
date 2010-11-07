@@ -284,9 +284,11 @@ GalleryController = function(context){
     function playFrame(){
       var
 	time = new Date(),
-	offset = (time - playbackLastFrameTime) * scrollSpeed;
+	offset = (time - playbackLastFrameTime) * scrollSpeed,
+	newPos = scrollPosition + offset;
 
-      setScrollPosition(scrollPosition + offset);
+      if (newPos > scrollRange) newPos = scrollRange;
+      setScrollPosition(newPos);
       jScroller[0].style.left = Math.round(scrollPosition) + 'px';
       playbackLastFrameTime = time;
 
