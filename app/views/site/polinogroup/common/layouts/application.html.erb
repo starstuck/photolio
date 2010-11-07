@@ -19,20 +19,6 @@
     <![endif]-->
     <% end -%>
 
-    <%= javascript_include_tag(
-          'jquery-1.4.2.min',
-          'jquery-ui-custom-1.8.min',
-          'reflection',
-          'gallery',
-          'application')
-     -%>
-    <script type="text/javascript" src="http://use.typekit.com/oii4ufp.js"></script>
-    <script type="text/javascript">
-      try{Typekit.load();}catch(e){};
-    </script>
-
-    <%-# <meta name="Keywords" content="" /> -%>
-    <%-# <meta name="Description" content="" /> -%>
   </head>
   <body>
 
@@ -56,6 +42,18 @@
     <div id="footer" class="toplevelbox">
       <p>&copy; Polino Studio - All rights reserved.</p>
     </div>
+
+    <%= javascript_include_tag(
+      'jquery-1.4.2.min',
+      'jquery-ui-custom-1.8.min',
+      'reflection',
+      'gallery',
+      'application')
+    -%>
+    <script type="text/javascript" src="http://use.typekit.com/oii4ufp.js"></script>
+    <script type="text/javascript">
+      try{Typekit.load();}catch(e){};
+    </script>
 
   </body>
 </html>

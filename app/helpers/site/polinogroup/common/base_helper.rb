@@ -68,6 +68,7 @@ module Site::Polinogroup::Common::BaseHelper
   end
 
   def loader_redirect(site, path)
+    path = path.sub(/\.html$/, '')
     javascript_tag <<-EOS
       (function(){
         var firefoxMatch = navigator.userAgent.match( /(^| )Firefox\\\/([0-9]+)\\\.([0-9]+)\\\.[0-9\\\.]*( |$)/ );

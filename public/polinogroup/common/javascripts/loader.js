@@ -1,23 +1,24 @@
 (function(){
   var
-   $,
+    $,
 
-   // Slideshow onfiguration
-   minSlideTime = 3000,
-   minSlidesToGo = 3,
+    // Slideshow onfiguration
+    minSlideTime = 3000,
+    minSlidesToGo = 3,
 
-   // Only paths relative to this base will be handled by content loader
-   loaderBasePath = window.location.pathname.match(/^(.*\/)[^\/]*$/)[1],
+    // Only paths relative to this base will be handled by content loader
+    loaderBasePath = window.location.pathname.match(/^(.*\/)[^\/]*$/)[1],
 
-   // Loader and slideshow state
-   documentLoaded = false,
-   slidesLoadStarted = false,
-   skipSlidesShow = false,
-   contentDisabled = true,
+    // Loader and slideshow state
+    documentLoaded = false,
+    slidesLoadStarted = false,
+    skipSlidesShow = false,
+    contentDisabled = true,
 
-   // slideshow internal varibles
-   lastSlideTime,
-   availableSlides = [];
+    // slideshow internal varibles
+    lastSlideTime,
+    slideLoadTimeout,
+    availableSlides = [];
 
 
   function formatLogMessage(a){
@@ -233,7 +234,11 @@
   function handleSlideLoad(){
     var slideEl = this;
     var slideDelay;
+
     log('Slide loaded: ' + slideEl.src);
+
+    if (slideLoadTimeout)
+      clearTimeout(slideLoadTimeout);
 
     /* Find image size to cover whole page */
     var screenAspect = window.innerWidth / window.innerHeight;
@@ -285,8 +290,15 @@
     var slideImg = new Image();
     slideImg.src = nextSlideUrl;
     slideImg.onload = handleSlideLoad;
+    // TODO : add timeout, when photo is loaded for to long, especially if it is first photo
     //if (document.getElementById('loader-slides'))
     document.getElementById('loader-slides').appendChild(slideImg);
+
+    // Set timeout, in case image not get loaded and start loading another one
+    slideLoadTimeout = setTimeout(function(){
+      slideLoadTimeout = null;
+      loadNextSlide();
+    }, 2000);
   }
 
   function showSlide(slideEl){
