@@ -587,7 +587,7 @@ div#footer p{
  * Galleries listing page 
  */
 .siteslist {
-    margin:0;
+    margin:15px 0 0;
     padding:0;
     list-style:none;
     overflow-x:hidden;
