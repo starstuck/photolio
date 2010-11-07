@@ -40,12 +40,19 @@
       <h1>Polino Studio <span class="brand"><%=h brand_name(@site) -%></span></h1>
     </div>
 
-    <div id="content" class="toplevelbox">
-      <div id="content-inner">
-        <%= yield %>
+    <div id="content-wrapper" class="toplevelbox">
+      <div id="content">
+        <div id="content-inner">
+	  <%= yield %>
+	</div>
       </div>
+      <div class="corner-tl"></div>
+      <div class="corner-tr"></div>
+      <div class="corner-bl"></div>
+      <div class="corner-br"></div>
+      <%- image_path('contentcorners.png') # Force include image, when publishing -%>
     </div>
-
+    
     <div id="footer" class="toplevelbox">
       <p>&copy; Polino Studio - All rights reserved.</p>
     </div>

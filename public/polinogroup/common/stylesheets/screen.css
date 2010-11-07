@@ -232,8 +232,9 @@ body {
 }
 
 .toplevelbox {
-    width:805px;
+    width:829px;
     margin: 0 auto;
+    padding: 0 12px;
 }
 
 /*
@@ -241,7 +242,8 @@ body {
  */
 
 #header{
-    padding-left: 65px;
+    padding-left: 90px;
+    padding-right: 0px;
     margin-top: 20px;
     margin-bottom: 5px;
 }
@@ -259,66 +261,67 @@ body {
  * =content box
  */
 
-#content,
-#content-frame,
-#content-curtain {
-    border-radius: 13px;
-    -moz-border-radius:13px;
-    -webkit-border-radius:13px;
-}
-
 #content{
     position: relative;
     overflow: hidden;
     padding: 10px;
     border-width: 2px;
     border-style: solid;
+    /* Handled by corner images, becuse even webkit 
+       does not render corners properly
+    -moz-border-radius: 13px;
+    border-radius: 13px;
+    */
 }
 
-/*
-#content .corner_tl,
-#content .corner_tr, 
-#content .corner_bl, 
-#content .corner_br{
+#content-wrapper {
+    padding: 0;
+    position: relative;
+}
+
+#content-wrapper .corner-tl,
+#content-wrapper .corner-tr,
+#content-wrapper .corner-bl,
+#content-wrapper .corner-br {
     position: absolute;
+    background-image: url(../images/contentcorners.png);
+    background-repeat: no-repeat;
     width: 13px;
     height: 13px;
-    display: block;
-    background-repeat: no-repeat;
 }
 
-#content .corner_tl{
-    top: 0px;
-    left: 0px;
-    background-image: url(../images/content-corner-tl.gif);
+#content-wrapper .corner-tl {
+    background-position: 0 0;
+    top:0;
+    left:0;
 }
 
-#content .corner_tr{
-    top: 0px;
-    right: 0px;
-    background-image: url(../images/content-corner-tr.gif);
+#content-wrapper .corner-tr {
+    background-position: -13px 0;
+    top:0;
+    right:0;
 }
 
-#content .corner_bl{
-    bottom: 0px;
-    left: 0px;
-    background-image: url(../images/content-corner-bl.gif); 
+#content-wrapper .corner-bl {
+    background-position: 0 -13px;
+    left:0;
+    bottom:0;
 }
 
-#content .corner_br{
-    bottom: 0px;
-    right: 0px;
-    background-image: url(../images/content-corner-br.gif); 
+#content-wrapper .corner-br {
+    background-position: -13px -13px;
+    right:0;
+    bottom:0;
 }
-*/
 
 /*
  * =footer 
  */
 
 #footer{
-    padding-right: 15px;
+    padding:0 40px 0 0;
     text-align: right;
+    margin-bottom: 5px;
 }
 
 div#footer p{
