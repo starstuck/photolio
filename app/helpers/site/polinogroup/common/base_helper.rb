@@ -125,6 +125,10 @@ module Site::Polinogroup::Common::BaseHelper
       loader.addSlides(#{array_or_string_for_javascript options[:images]});
       loader.loadScripts(#{array_or_string_for_javascript scripts_paths});
     EOS
+    
+    if options[:gacode]:
+        jscontent += "\nloader.loadAnalytics(#{array_or_string_for_javascript options[:gacode]});"
+    end
 
     output = javascript_include_tag('loader') + "\n" + javascript_tag(jscontent)
     if block_called_from_erb?(block)

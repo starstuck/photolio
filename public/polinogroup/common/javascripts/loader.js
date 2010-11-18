@@ -18,6 +18,9 @@
     contentDisabled = true,
 
     // slideshow internal varibles
+    gaCode,
+    gaPageTracker,
+    lastContentUrl,
     lastSlideTime,
     slideLoadTimeout,
     availableSlides = [];
@@ -228,6 +231,9 @@
     url = url.replace(/\.html$/, '.parthtml');
     if ( ! url.match(/\.parthtml$/) )
       url += '.parthtml';
+    lastContentUrl = url;
+    if (gaPageTracker)
+      gaPageTracker._trackPageview(url.replace(/\.parthtml$/, '.html'));
     log('Start loading page content');
     hideContent();
     $('#content-inner').load(url, null, function(response,status){
@@ -253,6 +259,23 @@
     if (callback) {
       callback();
     }
+  }
+
+  /* Google analytics handling */
+  function loadAnalytics(code){
+    gaCode = code;
+    var gaJsHostPrefix = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+    loadScript(gaJsHostPrefix + "google-analytics.com/ga.js", function(){
+      gaPageTracker = _gat._getTracker('UA-4667059-1');
+      gaPageTracker._setSessionCookieTimeout('3600000');
+      gaPageTracker._setDomainName('polinostudio.com');
+      gaPageTracker._addIgnoredOrganic('polinostudio.com');
+
+      /* Report content page, when already loade, befor analytics get loaded */
+      if (lastContentUrl){
+	gaPageTracker._trackPageview(lastContentUrl.replace(/\.parthtml$/, '.html'));
+      }
+    });
   }
 
   /* Slides handling */
@@ -360,6 +383,6 @@
       result[methods[i]] = eval(methods[i]);
     }
     return result;
-  })(['bootstrap', 'loadScript', 'loadScripts', 'log', 'addSlides']);
+  })(['bootstrap', 'loadScript', 'loadScripts', 'log', 'addSlides', 'loadAnalytics']);
 
 })();
