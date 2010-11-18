@@ -99,8 +99,8 @@ module SiteParams
   class PolinostudioParams < DefaultParams
 
     photo_store_size 'x400'
-    publish_location '/var/www/polinostudio'
-    published_url_prefix 'http://www.polinostudio.com'
+    publish_location '/var/www/polinostudio-old'
+    published_url_prefix 'http://old.polinostudio.com'
     menus ['galleries', 'topics']
 
   end
