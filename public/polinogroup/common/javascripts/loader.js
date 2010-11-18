@@ -174,7 +174,7 @@
 	 * time, which may customize content */
 	if (!initialContentLoaded){
  	  initialContentLoaded = true;
-	  if (documentLoaded && availableSlides.length <= 0)
+	  if (documentLoaded && (availableSlides.length <= 0 || skipSlidesShow))
 	    setTimeout( finalize, 1);
 	}
 
