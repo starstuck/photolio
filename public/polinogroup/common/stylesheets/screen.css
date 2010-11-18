@@ -30,8 +30,7 @@ a:hover {
 }
 
 #content {
-    background-color: #000;
-    border-color: #373737;
+    background-color: #000;    border-color: #373737;
 }
 
 #footer{ 
@@ -172,8 +171,8 @@ a img{
     right:0;
     bottom:0;
     background-color: #fff;
-    color: #ccc;
-    z-index: 1;
+    color: #aaa;
+    z-index: 100;
 }
 
 #loader-slides img {
@@ -312,6 +311,10 @@ body {
     background-position: -13px -13px;
     right:0;
     bottom:0;
+}
+
+#content-inner {
+    min-height: 400px;
 }
 
 /*
@@ -479,7 +482,6 @@ div#footer p{
     bottom: 15px;
     left: 10px;
     height: 13px;
-    z-index: 10;
     opacity: 0.6;
     color: #aaa;
 }

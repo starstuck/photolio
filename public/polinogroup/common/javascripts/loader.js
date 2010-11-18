@@ -1,6 +1,7 @@
 (function(){
   var
     $,
+    toRunOnjQueryLoad = [],
 
     // Slideshow onfiguration
     minSlideTime = 3000,
@@ -11,6 +12,7 @@
 
     // Loader and slideshow state
     documentLoaded = false,
+    initialContentLoaded = false,
     slidesLoadStarted = false,
     skipSlidesShow = false,
     contentDisabled = true,
@@ -33,7 +35,7 @@
 
   function log(message){
     // Coment-out line below, to clear debugging output
-    return;
+    //return;
     if (window.console) {
       console.info.apply(console, formatLogMessage(arguments));
     }
@@ -42,6 +44,15 @@
   function logError(message){
     if (window.console) {
       console.error.apply(console, formatLogMessage(arguments));
+    }
+  }
+
+  /* Will run code after making sure that jQuery is loaded */
+  function runWithjQuery(func){
+    if (typeof($) != 'undefined') {
+      func($);
+    } else {
+      toRunOnjQueryLoad.push(func);
     }
   }
 
@@ -64,7 +75,7 @@
     if (loadImidiately) {
       doLoadScript();
     } else {
-      setTimeout(doLoadScript, 1);
+      runWithjQuery(doLoadScript);
     }
   }
 
@@ -75,13 +86,22 @@
   }
 
   function bootstrap(jQueryUrl){
+
+    // Do not load slides, when we are redirected among polinogroup sites
+    if ( document.cookie.match(/(^| |;)slideShowPlayed=true(;|$)/) ) {
+      skipSlidesShow = true;
+      log('Slideshow skipped because of cookie');
+    }
+
     scroll(0,0);
     document.documentElement.style.overflow = 'hidden';
     document.body.style.overflow = 'hidden';
     document.getElementById('loader').style.display = 'block';
+
+    // Further initialization, when jQuery gets loaded
     loadScript(jQueryUrl, initialize, true);
 
-    /* Start loading typekit fonts */
+    // Start loading typekit fonts
     loadScript('http://use.typekit.com/oii4ufp.js', function(){
       try{Typekit.load();}catch(e){};
       log('Typekit script loaded');
@@ -90,7 +110,9 @@
 	var verifyFont = function(){
 	  if ( document.documentElement.className.match(/(^| )wf-goodtimes1goodtimes2-n3-active( |$)/) ) {
 	    log('Typekit fonts initialized');
-	    $('#loader h1').show();
+	    runWithjQuery(function(){
+	      $('#loader h1').show();
+	    });
 	  } else {
 	    /*TODO: sort this out: if (! documentLoaded) */
 	    setTimeout(verifyFont, 100);
@@ -105,9 +127,9 @@
   function initialize(){
     $ = jQuery;
 
-    $(document).ready(function(){
-      log('Dom ready');
-    });
+    for (var i=0; i < toRunOnjQueryLoad.length; i++){
+      toRunOnjQueryLoad[i]($);
+    }
 
     var urlMatch = window.location.hash.match(/\#(.*)$/);
     if ( urlMatch ) {
@@ -123,6 +145,7 @@
     $('#content-inner').bind('change',function() {
       var loc = window.location;
       $(this).find('a').each(function(){
+
 	if (this.href.match(/^javascript:/)) return; // Ignore links starting with javascript
 	var tMatch = this.href.match( /^(([a-z]+:)\/\/([^/:]+)(:([0-9]+))?)?(\/[^?#]*)(\#[^?]*)?(\?.*)?$/);
 	var prot = tMatch[2];
@@ -145,12 +168,22 @@
 	  // TODO: add handling relative paths
 	  logError('Relative paths not supported in loaded content', this.href);
 	}
+
+	/* if initial content loded consider finalizing loder cover screen,
+	 * but set it in timeout to give time for other content loaded handlers
+	 * time, which may customize content */
+	if (!initialContentLoaded){
+ 	  initialContentLoaded = true;
+	  if (documentLoaded && availableSlides.length <= 0)
+	    setTimeout( finalize, 1);
+	}
+
       });
       log('Links replaced in loaded content');
     });
 
-    $(window).bind('load',function(){
-      log('Document loaded');
+    $(document).ready(function(){
+      log('Dom ready');
       documentLoaded = true;
       $('#loader span').hide();
       if ( availableSlides.length > 0 && (! skipSlidesShow) ) {
@@ -169,12 +202,24 @@
   }
 
   function finalize(){
-    $('#loader').fadeOut('slow', function(){
-      $('html,body').each(function(){
-	this.style.overflow = '';
-      });
+    // Delay finalization untill initial content is loaded
+    if (! initialContentLoaded) return;
+
+    function onFinalize(){
       $('#loader').remove();
-    });
+    }
+
+    if ( $('#loader:visible').length > 0 ) {
+      $('#loader').fadeOut('slow', function(){
+	$('html,body').each(function(){
+	  this.style.overflow = '';
+	  onFinalize();
+	});
+      });
+    } else {
+      onFinalize();
+    }
+
     log('Loader closed');
   }
 
@@ -217,11 +262,8 @@
     for (var i = 0; i < slides.length; i ++)
       availableSlides.push(slides[i]);
 
-    /* Do not load slides, when we are redirected among polinogroup sites */
-    if ( document.cookie.match(/(^| |;)slideShowPlayed=true(;|$)/) ) {
-      skipSlidesShow = true;
-      return;
-    }
+    if ( skipSlidesShow ) return;
+
     document.cookie = "slideShowPlayed=true";
 
     /* Start loading first slide, as soon as available */
@@ -267,11 +309,12 @@
   }
 
   function loadNextSlide(){
+
     /* Stop loading cycle if slides were closed */
     if (! document.getElementById('loader-slides')) return;
 
     /* if already shown required number of slides, and document loaded, then finish */
-    if (documentLoaded && minSlidesToGo <= 0) {
+    if (initialContentLoaded && documentLoaded && minSlidesToGo <= 0) {
       setTimeout(function(){
 	finalize();
       }, minSlideTime);
@@ -304,7 +347,9 @@
   function showSlide(slideEl){
     // TODO: make sure jQuery is loaded, or continue after its done
     lastSlideTime = new Date().getTime();
-    $(slideEl).fadeIn('slow');
+    runWithjQuery(function(){
+      $(slideEl).fadeIn('slow');
+    });
     loadNextSlide();
   }
 

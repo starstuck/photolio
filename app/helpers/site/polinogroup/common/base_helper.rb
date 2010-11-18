@@ -67,19 +67,39 @@ module Site::Polinogroup::Common::BaseHelper
     images
   end
 
-  def loader_redirect(site, path)
-    path = path.sub(/\.html$/, '')
-    javascript_tag <<-EOS
+  def loader_support_js()
+    snippet = <<-EOS
       (function(){
-        var firefoxMatch = navigator.userAgent.match( /(^| )Firefox\\\/([0-9]+)\\\.([0-9]+)\\\.[0-9\\\.]*( |$)/ );
-        if (firefoxMatch){
-          var verMajor = parseInt(firefoxMatch[2]);
-          var verMinor = parseInt(firefoxMatch[3]);
-          if ( verMajor >= 3 ) 
-            window.location = "#{load_site_path(site)}##{path}";
-        }
-      })();
+        try{
+          var ffMatch = navigator.userAgent.match(/(^| )Firefox\\\/([0-9]+)\\\.([0-9]+)\\\.[0-9\\\.]*( |$)/);
+          if(ffMatch) {
+            if( parseInt(ffMatch[2]) >= 3 ) return 1;
+          }
+          if(navigator.userAgent.match(/(^| )Safari\\\//)) return 1;
+        }catch(e){};
+        return 0;
+      })()
     EOS
+    return snippet.gsub(/\s+/, ' ')
+  end
+
+  def loader_redirect(site, path)
+    path = path.sub(/\.(part)?html$/, '')
+    javascript_tag "if(#{loader_support_js})window.location=\"#{load_site_path(site)}##{path}\";"
+  end
+
+  def loader_reverse_redirect()
+    snippet = <<-EOS
+      if(!#{loader_support_js}){
+        var p = window.location.hash.match(/\#(.*)$/);
+        if(p){
+          p = p[1].replace(/\.parthtml$/, '.html');
+          if(! p.match(/\\.[a-z]+$/)) p += '.html';
+          window.location = p;
+        }
+      }
+    EOS
+    javascript_tag snippet.gsub(/\s+/, ' ')
   end
 
   def loader_with_intro(content_or_options_with_block, options={}, &block)
