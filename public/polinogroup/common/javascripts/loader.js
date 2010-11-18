@@ -232,7 +232,8 @@
     if ( ! url.match(/\.parthtml$/) )
       url += '.parthtml';
     lastContentUrl = url;
-    // TODO require proper path prefixing
+    // TODO require proper path prefixing, becuse current ar relative to loader,
+    // which happens to be in site root
     if (gaPageTracker)
       gaPageTracker._trackPageview('/' + url.replace(/\.parthtml$/, '.html'));
     log('Start loading page content');
