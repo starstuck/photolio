@@ -232,8 +232,9 @@
     if ( ! url.match(/\.parthtml$/) )
       url += '.parthtml';
     lastContentUrl = url;
+    // TODO require proper path prefixing
     if (gaPageTracker)
-      gaPageTracker._trackPageview(url.replace(/\.parthtml$/, '.html'));
+      gaPageTracker._trackPageview('/' + url.replace(/\.parthtml$/, '.html'));
     log('Start loading page content');
     hideContent();
     $('#content-inner').load(url, null, function(response,status){
@@ -271,9 +272,9 @@
       gaPageTracker._setDomainName('polinostudio.com');
       gaPageTracker._addIgnoredOrganic('polinostudio.com');
 
-      /* Report content page, when already loade, befor analytics get loaded */
+      // Report content page, when already loade, befor analytics get loaded
       if (lastContentUrl){
-	gaPageTracker._trackPageview(lastContentUrl.replace(/\.parthtml$/, '.html'));
+	gaPageTracker._trackPageview('/' + lastContentUrl.replace(/\.parthtml$/, '.html'));
       }
     });
   }
