@@ -144,7 +144,7 @@ module SiteParams
 
     theme 'polinogroup/main'
     publish_location '/var/www/polinogroup'
-    published_url_prefix 'http://group.polinostudio.com'
+    published_url_prefix 'http://www.polinostudio.com'
     menus ['topics',]
 
   end
