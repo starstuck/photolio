@@ -126,7 +126,7 @@ module Site::Polinogroup::Common::BaseHelper
       loader.loadScripts(#{array_or_string_for_javascript scripts_paths});
     EOS
     
-    if options[:gacode]:
+    if options[:gacode]
         jscontent += "\nloader.loadAnalytics(#{array_or_string_for_javascript options[:gacode]});"
     end
 

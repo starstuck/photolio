@@ -1,5 +1,6 @@
 require 'find'
 require 'ftools'
+require 'fileutils'
 require 'mini_magick_utils'
 
 module ModelExtensions::HasFile
@@ -144,7 +145,7 @@ module ModelExtensions::HasFile
       resized_file_path = "#{file_folder_disk_path}/#{resized_file_name}"
 
       if ( not File.exists? resized_file_path ) and File.exists? file_disk_path
-        File.makedirs(File.dirname(resized_file_path))
+        FileUtils.mkdir_p(File.dirname(resized_file_path))
         mm = MiniMagick::Image.from_file(file_disk_path)
         mm.resize(size)
         mm.quality('85%')
