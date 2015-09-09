@@ -1,3 +1,5 @@
+require 'syslogger'
+
 # Settings specified here will take precedence over those in config/environment.rb
 
 # The production environment is meant for finished, "live" apps.
@@ -14,6 +16,7 @@ config.action_view.cache_template_loading            = true
 
 # Use a different logger for distributed setups
 # config.logger = SyslogLogger.new
+config.logger = Syslogger.new("photolio-v1")
 
 # Use a different cache store in production
 # config.cache_store = :mem_cache_store
