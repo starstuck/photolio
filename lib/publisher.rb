@@ -3,7 +3,7 @@ require 'digest/md5'
 
 
 class ActionController::Base
-  public :render_component_as_string
+  public :render_to_string
 end
 
 
@@ -103,7 +103,7 @@ module Publisher
       # about staic files and other stuff
       PublisherRegistrar.instance.publisher = self
 
-      body = @context.render_component_as_string( :controller => page_controller,
+      body = @context.render_to_string( :controller => page_controller,
                                                   :action => page_action,
                                                   :params => page_params )
 
@@ -162,7 +162,7 @@ module Publisher
     end
 
     # Publish assets collected, while rendering pages
-    def publish_assets(logger)
+    def publish_assets()
       src_base_path = File.join(RAILS_ROOT, 'public')
       for path in @assets_paths
         path.sub!(/\?[^\?]*$/ , '')

@@ -212,8 +212,8 @@ module ModelExtensions::HasFile
     
     def write_file
       if @uploaded_data
-        File.makedirs(File.dirname(file_disk_path))
-        File.open(file_disk_path, "w") do |f|
+        FileUtils.mkdir_p(File.dirname(file_disk_path))
+        File.open(file_disk_path, "wb") do |f|
           f.write(@uploaded_data)
         end
       end
