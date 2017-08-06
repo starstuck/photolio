@@ -1,5 +1,8 @@
 # Each site parameters witf default fallbacks
 
+SITE_BASE_PATH="/srv/www"
+
+
 module SiteParams
 
   class Params
@@ -95,92 +98,17 @@ module SiteParams
 
   end
 
-
   class PolinostudioParams < DefaultParams
-
     photo_store_size 'x400'
-    publish_location '/var/www/polinostudio-old'
+    publish_location "#{SITE_BASE_PATH}/polinostudio"
     published_url_prefix 'http://old.polinostudio.com'
     menus ['galleries', 'topics']
-
+    theme 'polinostudio'
   end
-
-
-  class PitchouguinaParams < DefaultParams
-    
-    photo_store_size 'x450'
-    publish_location '/var/www/pitchouguina'
-    menus ['galleries']
-
-    def_attachment_slot Site, 'welcome_photo', :valid_types => [Photo]
-
-    def_attachment_slot Gallery, 'banner', :valid_types => [Asset]
-    def_attachment_slot Gallery, 'menu_label', :valid_types => [Asset]
-    
-  end
-
-
-  class LafokaParams < DefaultParams
-    
-    photo_store_size 'x450'
-    publish_location '/var/www/lafoka'
-
-    menus ['galleries', 'topics']
-
-  end
-
-
-  class PolinogroupCommonParams < DefaultParams
-    
-    theme 'polinogroup/common'
-    menus ['galleries', 'topics']
-    publish_assets_location '/var/www/polinogroup-assets'
-    published_assets_url_prefix 'http://assets.polinostudio.com'
-    
-  end
-
-
-  class PolinogroupParams < PolinogroupCommonParams
-
-    theme 'polinogroup/main'
-    publish_location '/var/www/polinogroup'
-    published_url_prefix 'http://www.polinostudio.com'
-    menus ['topics',]
-
-  end
-
-
-  for name in ['beauty', 'business', 'collection', 'fashion', 'weddings']
-    eval <<-EOS
-  class Polino#{name}Params < PolinogroupCommonParams
-
-    publish_location '/var/www/polino#{name}'
-    published_url_prefix 'http://#{name}.polinostudio.com'
-
-  end 
-EOS
-  end
-
 
   def self.for_site(site)
     if site.name == 'polinostudio'
       params_factory = PolinostudioParams
-    elsif site.name == 'pitchouguina'
-      params_factory = PitchouguinaParams
-    elsif site.name == 'lafoka'
-      params_factory = LafokaParams
-    elsif site.name == 'polinogroup'
-      params_factory = PolinogroupParams
-    elsif site.name == 'polinobeauty'
-      params_factory = PolinobeautyParams
-    elsif site.name == 'polinobusiness'
-      params_factory = PolinobusinessParams
-    elsif site.name == 'polinocollection'
-      params_factory = PolinocollectionParams
-    elsif site.name == 'polinofashion'
-      params_factory = PolinofashionParams
-    elsif site.name == 'polinoweddings'
-      params_factory = PolinoweddingsParams
     else
       params_factory = DefaultParams
     end

@@ -1,0 +1,7 @@
+admin = User.create :login => "admin", :name => "Admin", :email => "admin@example.com", :must_change_password => true
+admin.password = "changeme"
+admin.password_confirmation = "changeme"
+admin.save()
+
+UserRole.create(:user => admin, :name => "users_manager").save()
+UserRole.create(:user => admin, :name => "sites_manager").save()

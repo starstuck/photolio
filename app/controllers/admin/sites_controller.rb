@@ -256,6 +256,7 @@ class Admin::SitesController < Admin::BaseController
 
     # Publish sitemap page
     theme_name = SiteParams.for_site(@site).theme || @site.name
+    logger.debug("Publishing site: #{theme_name}")
     publisher.publish({ :controller => "site/#{theme_name}/site",
                         :action => 'sitemap',
                         :site_name => @site.name,
@@ -263,7 +264,7 @@ class Admin::SitesController < Admin::BaseController
                       }, max_lastmod)
 
     # Publish site assets 
-    publisher.publish_assets(logger)
+    publisher.publish_assets()
     
     flash[:notice] = "Site #{@site.name} is published. #{galleries_count} galleries, #{topics_count} topics, #{photos_count} photos and #{others_count} other pages updated."
 

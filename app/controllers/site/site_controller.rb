@@ -1,5 +1,5 @@
 require 'publisher'
-require 'generator'
+#require 'generator'
 
 
 class Site::SiteController < Site::BaseController
